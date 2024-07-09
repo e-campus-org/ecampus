@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :backend, Backend.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "usgrant",
+  password: "",
   hostname: "localhost",
   database: "backend_dev",
   stacktrace: true,

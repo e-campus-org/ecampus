@@ -15,9 +15,9 @@ defmodule BackendWeb.Router do
   end
 
   scope "/", BackendWeb do
-    pipe_through :browser
+    pipe_through :api
 
-    get "/", PageController, :home
+    resources "/accounts", AccountController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.
