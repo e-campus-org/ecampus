@@ -33,8 +33,8 @@ services:
     image: quay.io/minio/minio
     restart: always
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9990:9000"
+      - "9991:9001"
     volumes:
       - e-campus-minio-data:/data
     environment:
