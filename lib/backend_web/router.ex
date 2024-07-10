@@ -14,10 +14,11 @@ defmodule BackendWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", BackendWeb do
+  scope "/api", BackendWeb do
     pipe_through :api
 
     resources "/accounts", AccountController, except: [:new, :edit]
+    resources "/groups", GroupController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.

@@ -6,14 +6,14 @@ defmodule Backend.Accounts.Account do
     field :email, :string
     field :last_name, :string
     field :first_name, :string
-
+    belongs_to :group, Backend.Groups.Group
     timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:email, :last_name, :first_name])
-    |> validate_required([:email, :last_name, :first_name])
+    |> cast(attrs, [:email, :last_name, :first_name, :group_id])
+    |> validate_required([:email, :last_name, :first_name, :group_id])
   end
 end
