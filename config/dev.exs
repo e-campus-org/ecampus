@@ -1,11 +1,14 @@
 import Config
 
+System.get_env("POSTGRES_HOSTNAME") |> IO.puts()
+
 # Configure your database
 config :backend, Backend.Repo,
-  username: "usgrant",
-  password: "",
-  hostname: "localhost",
-  database: "backend_dev",
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASSWORD"),
+  hostname: System.get_env("POSTGRES_HOSTNAME"),
+  port: System.get_env("POSTGRES_PORT"),
+  database: System.get_env("POSTGRES_DB"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -24,10 +27,7 @@ config :backend, BackendWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "u2wv5W+av0ydtH9VyK/67sm/8hpxkb8Zd2lVHE6xd1w2DDhDxV/XohR9+9qeC444",
-  watchers: [
-    esbuild: {Esbuild, :install_and_run, [:backend, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:backend, ~w(--watch)]}
-  ]
+  watchers: []
 
 # ## SSL Support
 #
