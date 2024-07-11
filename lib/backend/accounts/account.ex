@@ -15,6 +15,7 @@ defmodule Backend.Accounts.Account do
     account
     |> cast(attrs, [:email, :last_name, :first_name, :group_id])
     |> validate_required([:email, :last_name, :first_name])
-    |> unique_constraint(:email, message: "User with this email already exists")
+    |> unique_constraint(:email)
+    |> foreign_key_constraint(:group_id)
   end
 end

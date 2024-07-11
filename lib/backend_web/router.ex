@@ -19,6 +19,7 @@ defmodule BackendWeb.Router do
 
     resources "/accounts", AccountController, except: [:new, :edit]
     resources "/groups", GroupController, except: [:new, :edit]
+    resources "/specialities", SpecialityController, except: [:new, :edit]
   end
 
   # Other scopes may use custom stacks.

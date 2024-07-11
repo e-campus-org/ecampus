@@ -19,7 +19,8 @@ defmodule BackendWeb.GroupJSON do
     %{
       id: group.id,
       title: group.title,
-      description: group.description
+      description: group.description,
+      speciality_id: group.speciality_id
     }
   end
 end
