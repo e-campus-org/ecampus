@@ -14,6 +14,7 @@ defmodule Backend.Accounts.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:email, :last_name, :first_name, :group_id])
-    |> validate_required([:email, :last_name, :first_name, :group_id])
+    |> validate_required([:email, :last_name, :first_name])
+    |> unique_constraint(:email, message: "User with this email already exists")
   end
 end

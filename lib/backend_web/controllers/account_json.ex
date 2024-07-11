@@ -20,7 +20,8 @@ defmodule BackendWeb.AccountJSON do
       id: account.id,
       email: account.email,
       last_name: account.last_name,
-      first_name: account.first_name
+      first_name: account.first_name,
+      group_id: account.group_id
     }
   end
 end
