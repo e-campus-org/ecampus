@@ -1,0 +1,301 @@
+{
+  "info": {
+    "version": "1.0",
+    "title": "E-Campus"
+  },
+  "host": "localhost:4000",
+  "definitions": {
+    "Accounts": {
+      "description": "A collection of Account",
+      "items": {
+        "$ref": "#/definitions/Account"
+      },
+      "title": "List of accounts",
+      "type": "array"
+    },
+    "Account": {
+      "description": "An user account of the application",
+      "example": {
+        "email": "test@example.com",
+        "first_name": "John",
+        "group_id": 1,
+        "id": 1,
+        "inserted_at": "2024-07-11T05:47:50Z",
+        "last_name": "Doe",
+        "updated_at": "2024-07-11T05:47:50Z"
+      },
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "User first name",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Id od the user group, if exists",
+          "type": "number"
+        },
+        "id": {
+          "description": "Unique identifier",
+          "type": "number"
+        },
+        "inserted_at": {
+          "description": "Date and time of account creation",
+          "type": "datetime"
+        },
+        "last_name": {
+          "description": "User last name",
+          "type": "string"
+        },
+        "updated_at": {
+          "description": "Date and time of account last update",
+          "type": "datetime"
+        }
+      },
+      "required": [
+        "email",
+        "id"
+      ],
+      "title": "Account",
+      "type": "object"
+    },
+    "NewAccount": {
+      "description": "Data object to create new account",
+      "example": {
+        "email": "test@example.com",
+        "first_name": "John",
+        "group_id": 1,
+        "last_name": "Doe"
+      },
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "User first name",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Id od the user group, if exists",
+          "type": "number"
+        },
+        "last_name": {
+          "description": "User last name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "email"
+      ],
+      "title": "New account",
+      "type": "object"
+    },
+    "UpdateAccount": {
+      "description": "Data object to update new account",
+      "example": {
+        "first_name": "John",
+        "group_id": 1,
+        "last_name": "Doe"
+      },
+      "properties": {
+        "first_name": {
+          "description": "User first name",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Id od the user group, if exists",
+          "type": "number"
+        },
+        "last_name": {
+          "description": "User last name",
+          "type": "string"
+        }
+      },
+      "title": "Update existing account",
+      "type": "object"
+    }
+  },
+  "tags": [
+    {
+      "name": "Accounts",
+      "description": "Operations with Accounts"
+    },
+    {
+      "name": "Groups",
+      "description": "Operations with Groups"
+    },
+    {
+      "name": "Speciality",
+      "description": "Operations with Specialities"
+    }
+  ],
+  "basePath": "/api",
+  "paths": {
+    "/accounts": {
+      "get": {
+        "description": "Query for all accounts. This operation doesn't support pagination yet.",
+        "operationId": "BackendWeb.AccountController.index",
+        "parameters": [],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Accounts"
+            }
+          }
+        },
+        "summary": "Query for accounts",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "post": {
+        "description": "Create new account.",
+        "operationId": "BackendWeb.AccountController.create",
+        "parameters": [
+          {
+            "description": "Data to create account",
+            "in": "body",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewAccount"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Accounts"
+            }
+          }
+        },
+        "summary": "Create new account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/{id}": {
+      "delete": {
+        "description": "Delete account by id.",
+        "operationId": "BackendWeb.AccountController.delete",
+        "parameters": [
+          {
+            "description": "Account id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content (account deleted)"
+          },
+          "400": {
+            "description": "Bad request (Unknown error)"
+          },
+          "404": {
+            "description": "Not found (account doesn't exists)"
+          }
+        },
+        "summary": "Delete account by id",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "get": {
+        "description": "Query single account by id.",
+        "operationId": "BackendWeb.AccountController.show",
+        "parameters": [
+          {
+            "description": "Account id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "number"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Account"
+            }
+          },
+          "400": {
+            "description": "Bad request (Unknown error)"
+          },
+          "404": {
+            "description": "Not found (account doesn't exists)"
+          }
+        },
+        "summary": "Query single account by id",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "put": {
+        "description": "Update existing account.",
+        "operationId": "BackendWeb.AccountController.update",
+        "parameters": [
+          {
+            "description": "Account id",
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "number"
+          },
+          {
+            "description": "Data to create account",
+            "in": "body",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewAccount"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Accounts"
+            }
+          },
+          "400": {
+            "description": "Bad request (Unknown error)"
+          },
+          "404": {
+            "description": "Not found (account doesn't exists)"
+          },
+          "422": {
+            "description": "Unprocessable entity (something wrong with body)"
+          }
+        },
+        "summary": "Update existing account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    }
+  },
+  "swagger": "2.0"
+}

@@ -11,6 +11,16 @@ config :backend,
   ecto_repos: [Backend.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :backend, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: BackendWeb.Router,
+      endpoint: BackendWeb.Endpoint
+    ]
+  }
+
+config :phoenix_swagger, json_library: Jason
+
 # Configures the endpoint
 config :backend, BackendWeb.Endpoint,
   url: [host: "localhost"],
@@ -20,7 +30,14 @@ config :backend, BackendWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Backend.PubSub,
-  live_view: [signing_salt: "Jxwi2r0Q"]
+  live_view: [signing_salt: "Jxwi2r0Q"],
+  live_reload: [
+    patterns: [
+      ~r{priv/gettext/.*(po)$},
+      ~r{lib/backend_web/controllers/.*(ex)$}
+    ]
+  ],
+  reloadable_compilers: [:gettext, :phoenix, :elixir, :phoenix_swagger]
 
 # Configures the mailer
 #

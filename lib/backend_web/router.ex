@@ -22,6 +22,10 @@ defmodule BackendWeb.Router do
     resources "/specialities", SpecialityController, except: [:new, :edit]
   end
 
+  scope "/api/swagger" do
+    forward "/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :backend, swagger_file: "swagger.json"
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", BackendWeb do
   #   pipe_through :api
@@ -42,5 +46,20 @@ defmodule BackendWeb.Router do
       live_dashboard "/dashboard", metrics: BackendWeb.Telemetry
       forward "/mailbox", Plug.Swoosh.MailboxPreview
     end
+  end
+
+  def swagger_info do
+    %{
+      basePath: "/api",
+      info: %{
+        version: "1.0",
+        title: "E-Campus"
+      },
+      tags: [
+        %{name: "Accounts", description: "Operations with Accounts"},
+        %{name: "Groups", description: "Operations with Groups"},
+        %{name: "Speciality", description: "Operations with Specialities"}
+      ]
+    }
   end
 end
