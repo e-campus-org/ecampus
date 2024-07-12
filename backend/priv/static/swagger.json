@@ -5,14 +5,6 @@
   },
   "host": "localhost:4000",
   "definitions": {
-    "Accounts": {
-      "description": "A collection of Account",
-      "items": {
-        "$ref": "#/definitions/Account"
-      },
-      "title": "List of accounts",
-      "type": "array"
-    },
     "Account": {
       "description": "An user account of the application",
       "example": {
@@ -60,6 +52,14 @@
       ],
       "title": "Account",
       "type": "object"
+    },
+    "Accounts": {
+      "description": "A collection of Account",
+      "items": {
+        "$ref": "#/definitions/Account"
+      },
+      "title": "List of accounts",
+      "type": "array"
     },
     "NewAccount": {
       "description": "Data object to create new account",
@@ -132,7 +132,6 @@
       "description": "Operations with Specialities"
     }
   ],
-  "basePath": "/api",
   "paths": {
     "/accounts": {
       "get": {
@@ -297,5 +296,6 @@
       }
     }
   },
+  "basePath": "/api",
   "swagger": "2.0"
 }
