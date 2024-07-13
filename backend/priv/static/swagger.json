@@ -132,6 +132,7 @@
       "description": "Operations with Specialities"
     }
   ],
+  "basePath": "/api",
   "paths": {
     "/accounts": {
       "get": {
@@ -296,6 +297,5 @@
       }
     }
   },
-  "basePath": "/api",
   "swagger": "2.0"
 }
