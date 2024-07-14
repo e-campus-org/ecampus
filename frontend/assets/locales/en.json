@@ -1,1 +1,19 @@
-{}
+{
+    "layouts": {
+        "dashboard": {
+            "header": {
+                "settings": "Settings",
+                "profile": "Profile",
+                "logout": "Logout"
+            },
+            "sideMenu": {
+                "header": "Menu",
+                "find": "Find",
+                "my": "My subjects",
+                "darkTheme": "Toggle dark theme",
+                "lightTheme": "Toggle light theme",
+                "showContents": "Show contents"
+            }
+        }
+    }
+}

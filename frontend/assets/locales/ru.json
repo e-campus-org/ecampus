@@ -1,1 +1,18 @@
-{}
+{
+    "layouts": {
+        "dashboard": {
+            "header": {
+                "settings": "Настройки",
+                "profile": "Профиль",
+                "logout": "Выход"
+            },
+            "sideMenu": {
+                "header": "Меню",
+                "find": "Поиск",
+                "my": "Мои предметы",
+                "darkTheme": "Включить темную тему",
+                "lightTheme": "Включить светлую тему"
+            }
+        }
+    }
+}
