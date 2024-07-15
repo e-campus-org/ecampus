@@ -35,7 +35,7 @@ export const useSettingsStore = defineStore(
     },
     {
         persist: {
-            key: "codeed.settings",
+            key: "e-campus.settings",
             storage: persistedState.localStorage,
             paths: ["locale"]
         }

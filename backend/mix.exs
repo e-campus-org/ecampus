@@ -52,7 +52,9 @@ defmodule Backend.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.5"}
+      {:ex_json_schema, "~> 0.5"},
+      {:guardian, "~> 2.3.2"},
+      {:bcrypt_elixir, "~> 3.0"}
     ]
   end
 

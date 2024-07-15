@@ -1,7 +1,5 @@
 import Config
 
-System.get_env("POSTGRES_HOSTNAME") |> IO.puts()
-
 # Configure your database
 config :backend, Backend.Repo,
   username: System.get_env("POSTGRES_USER"),

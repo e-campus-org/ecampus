@@ -6,7 +6,7 @@ defmodule BackendWeb.AccountController do
   alias Backend.Accounts
   alias Backend.Accounts.Account
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   def swagger_definitions do
     %{
