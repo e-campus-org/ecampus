@@ -5,6 +5,7 @@ defmodule BackendWeb.AccountController do
 
   alias Backend.Accounts
   alias Backend.Accounts.Account
+  alias Backend.Guardian
 
   action_fallback(BackendWeb.FallbackController)
 
@@ -185,6 +186,18 @@ defmodule BackendWeb.AccountController do
 
     with {:ok, %Account{}} <- Accounts.delete_account(account) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def sign_in(conn, %{"email" => email, "password" => password}) do
+    case Guardian.authenticate(email, password) do
+      {:ok, _account, token} ->
+        conn
+        |> put_status(:ok)
+        |> render(:token, token: token)
+
+      {:error, :unauthorized} ->
+        {:error, :unauthorized}
     end
   end
 end
