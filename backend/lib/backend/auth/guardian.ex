@@ -1,4 +1,4 @@
-defmodule Backend.Guardian do
+defmodule Backend.Auth.Guardian do
   use Guardian, otp_app: :backend
 
   alias Backend.Accounts
