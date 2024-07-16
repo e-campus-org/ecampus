@@ -38,6 +38,24 @@ defmodule Backend.Accounts do
   def get_account!(id), do: Repo.get!(Account, id)
 
   @doc """
+  Gets a single account by email.
+
+  ## Examples
+
+      iex> get_by_email('existing_email@example.com')
+      %Account{}
+
+      iex> get_by_email('not_existing_email@example.com')
+      {:error, :not_found}
+  """
+  def get_account_by_email(email) do
+    case Repo.get_by(Account, email: email) do
+      nil -> {:error, :not_found}
+      user -> {:ok, user}
+    end
+  end
+
+  @doc """
   Creates a account.
 
   ## Examples

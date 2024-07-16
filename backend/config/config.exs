@@ -56,7 +56,7 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-config :guardian, Guardian,
+config :backend, Backend.Guardian,
   issuer: "E-Campus",
   secret_key: System.get_env("JWT_TOKEN_SECRET")
 
