@@ -14,13 +14,25 @@ defmodule BackendWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :auth do
+    plug(Backend.Auth.Pipeline)
+  end
+
   scope "/api", BackendWeb do
     pipe_through(:api)
 
-    resources("/accounts", AccountController, except: [:new, :edit])
     resources("/groups", GroupController, except: [:new, :edit])
     resources("/specialities", SpecialityController, except: [:new, :edit])
-    post("/accounts/sign_in", AccountController, :sign_in)
+    post("/auth/signin", AuthController, :sign_in)
+  end
+
+  scope "/api", BackendWeb do
+    pipe_through([:api, :auth])
+    get("/accounts", AccountController, :index)
+    get("/accounts/:id", AccountController, :show)
+    post("/accounts", AccountController, :create)
+    put("/accounts/:id", AccountController, :update)
+    delete("/accounts/:id", AccountController, :delete)
   end
 
   scope "/api/swagger" do
@@ -57,6 +69,7 @@ defmodule BackendWeb.Router do
         title: "E-Campus"
       },
       tags: [
+        %{name: "Auth", description: "Operations with authentication"},
         %{name: "Accounts", description: "Operations with Accounts"},
         %{name: "Groups", description: "Operations with Groups"},
         %{name: "Speciality", description: "Operations with Specialities"}

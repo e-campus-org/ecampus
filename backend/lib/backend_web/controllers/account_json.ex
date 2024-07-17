@@ -26,8 +26,4 @@ defmodule BackendWeb.AccountJSON do
       updated_at: account.updated_at
     }
   end
-
-  def token(%{token: token}) do
-    %{access_token: token}
-  end
 end

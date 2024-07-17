@@ -91,6 +91,34 @@ defmodule BackendWeb.AccountController do
     response(200, "Success", Schema.ref(:Accounts))
   end
 
+  def index(conn, _params) do
+    accounts = Accounts.list_accounts()
+    render(conn, :index, accounts: accounts)
+  end
+
+  swagger_path :create do
+    post("/accounts")
+    summary("Create new account")
+    description("Create new account.")
+    produces("application/json")
+    tag("Accounts")
+
+    parameters do
+      account(:body, Schema.ref(:NewAccount), "Data to create account", required: true)
+    end
+
+    response(200, "Success", Schema.ref(:Accounts))
+  end
+
+  def create(conn, %{"account" => account_params}) do
+    with {:ok, %Account{} = account} <- Accounts.create_account(account_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", ~p"/api/accounts/#{account}")
+      |> render(:show, account: account)
+    end
+  end
+
   swagger_path :show do
     get("/accounts/{id}")
     summary("Query single account by id")
@@ -107,18 +135,9 @@ defmodule BackendWeb.AccountController do
     response(400, "Bad request (Unknown error)")
   end
 
-  swagger_path :create do
-    post("/accounts")
-    summary("Create new account")
-    description("Create new account.")
-    produces("application/json")
-    tag("Accounts")
-
-    parameters do
-      account(:body, Schema.ref(:NewAccount), "Data to create account", required: true)
-    end
-
-    response(200, "Success", Schema.ref(:Accounts))
+  def show(conn, %{"id" => id}) do
+    account = Accounts.get_account!(id)
+    render(conn, :show, account: account)
   end
 
   swagger_path :update do
@@ -139,6 +158,14 @@ defmodule BackendWeb.AccountController do
     response(400, "Bad request (Unknown error)")
   end
 
+  def update(conn, %{"id" => id, "account" => account_params}) do
+    account = Accounts.get_account!(id)
+
+    with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do
+      render(conn, :show, account: account)
+    end
+  end
+
   swagger_path :delete do
     PhoenixSwagger.Path.delete("/accounts/{id}")
     summary("Delete account by id")
@@ -154,50 +181,11 @@ defmodule BackendWeb.AccountController do
     response(400, "Bad request (Unknown error)")
   end
 
-  def index(conn, _params) do
-    accounts = Accounts.list_accounts()
-    render(conn, :index, accounts: accounts)
-  end
-
-  def create(conn, %{"account" => account_params}) do
-    with {:ok, %Account{} = account} <- Accounts.create_account(account_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/accounts/#{account}")
-      |> render(:show, account: account)
-    end
-  end
-
-  def show(conn, %{"id" => id}) do
-    account = Accounts.get_account!(id)
-    render(conn, :show, account: account)
-  end
-
-  def update(conn, %{"id" => id, "account" => account_params}) do
-    account = Accounts.get_account!(id)
-
-    with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do
-      render(conn, :show, account: account)
-    end
-  end
-
   def delete(conn, %{"id" => id}) do
     account = Accounts.get_account!(id)
 
     with {:ok, %Account{}} <- Accounts.delete_account(account) do
       send_resp(conn, :no_content, "")
-    end
-  end
-
-  def sign_in(conn, %{"email" => email, "password" => password}) do
-    case Guardian.authenticate(email, password) do
-      {:ok, _account, token} ->
-        conn
-        |> put_status(:ok)
-        |> render(:token, token: token)
-
-      {:error, :unauthorized} ->
-        {:error, :unauthorized}
     end
   end
 end
