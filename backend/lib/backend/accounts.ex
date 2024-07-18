@@ -38,6 +38,19 @@ defmodule Backend.Accounts do
   def get_account!(id), do: Repo.get!(Account, id)
 
   @doc """
+  Check if default admin exists
+
+  ## Examples
+
+      iex> is_default_admin_exists?()
+      true
+  """
+  def is_default_admin_exists?() do
+    query = from(a in Account, where: :admin in a.roles)
+    Repo.exists?(query)
+  end
+
+  @doc """
   Gets a single account by email.
 
   ## Examples

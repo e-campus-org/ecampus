@@ -20,7 +20,7 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through(:api)
-
+    post("/accounts/init", AccountController, :init)
     resources("/groups", GroupController, except: [:new, :edit])
     resources("/specialities", SpecialityController, except: [:new, :edit])
     post("/auth/signin", AuthController, :sign_in)
@@ -73,7 +73,15 @@ defmodule BackendWeb.Router do
         %{name: "Accounts", description: "Operations with Accounts"},
         %{name: "Groups", description: "Operations with Groups"},
         %{name: "Speciality", description: "Operations with Specialities"}
-      ]
+      ],
+      securityDefinitions: %{
+        bearer: %{
+          type: "apiKey",
+          name: "Authorization",
+          in: "header",
+          description: "Enter the token with the 'Bearer: ' prefix, e.g. 'Bearer abcde12345'"
+        }
+      }
     }
   end
 end

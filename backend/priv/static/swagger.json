@@ -14,6 +14,9 @@
         "id": 1,
         "inserted_at": "2024-07-11T05:47:50Z",
         "last_name": "Doe",
+        "roles": [
+          "student"
+        ],
         "updated_at": "2024-07-11T05:47:50Z"
       },
       "properties": {
@@ -41,15 +44,23 @@
           "description": "User last name",
           "type": "string"
         },
+        "roles": {
+          "default": [
+            "student"
+          ],
+          "description": "User roles",
+          "enum": [
+            "admin",
+            "teacher",
+            "student"
+          ],
+          "type": "array"
+        },
         "updated_at": {
           "description": "Date and time of account last update",
           "type": "datetime"
         }
       },
-      "required": [
-        "email",
-        "id"
-      ],
       "title": "Account",
       "type": "object"
     },
@@ -67,7 +78,12 @@
         "email": "test@example.com",
         "first_name": "John",
         "group_id": 1,
-        "last_name": "Doe"
+        "last_name": "Doe",
+        "password": "Qwerty123!",
+        "password_confirmation": "Qwerty123!",
+        "roles": [
+          "student"
+        ]
       },
       "properties": {
         "email": {
@@ -79,18 +95,80 @@
           "type": "string"
         },
         "group_id": {
-          "description": "Id od the user group, if exists",
+          "description": "Id of the user group, if exists",
           "type": "number"
         },
         "last_name": {
           "description": "User last name",
           "type": "string"
+        },
+        "password": {
+          "description": "User password",
+          "type": "string"
+        },
+        "password_confirmation": {
+          "description": "User password confirmation",
+          "type": "string"
+        },
+        "roles": {
+          "default": [
+            "student"
+          ],
+          "description": "User roles",
+          "enum": [
+            "admin",
+            "teacher",
+            "student"
+          ],
+          "type": "array"
         }
       },
       "required": [
+        "roles",
+        "password_confirmation",
+        "password",
         "email"
       ],
       "title": "New account",
+      "type": "object"
+    },
+    "NewDefaultAccount": {
+      "description": "Data object to create new default admin account",
+      "example": {
+        "email": "test@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "password": "Qwerty123!",
+        "password_confirmation": "Qwerty123!"
+      },
+      "properties": {
+        "email": {
+          "description": "Admin email",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "Admin first name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Admin last name",
+          "type": "string"
+        },
+        "password": {
+          "description": "Admin password",
+          "type": "string"
+        },
+        "password_confirmation": {
+          "description": "Admin password confirmation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "password_confirmation",
+        "password",
+        "email"
+      ],
+      "title": "New default admin account",
       "type": "object"
     },
     "UpdateAccount": {
@@ -98,7 +176,10 @@
       "example": {
         "first_name": "John",
         "group_id": 1,
-        "last_name": "Doe"
+        "last_name": "Doe",
+        "roles": [
+          "student"
+        ]
       },
       "properties": {
         "first_name": {
@@ -112,6 +193,18 @@
         "last_name": {
           "description": "User last name",
           "type": "string"
+        },
+        "roles": {
+          "default": [
+            "student"
+          ],
+          "description": "User roles",
+          "enum": [
+            "admin",
+            "teacher",
+            "student"
+          ],
+          "type": "array"
         }
       },
       "title": "Update existing account",
@@ -155,6 +248,25 @@
       "type": "object"
     }
   },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Operations with authentication"
+    },
+    {
+      "name": "Accounts",
+      "description": "Operations with Accounts"
+    },
+    {
+      "name": "Groups",
+      "description": "Operations with Groups"
+    },
+    {
+      "name": "Speciality",
+      "description": "Operations with Specialities"
+    }
+  ],
+  "basePath": "/api",
   "paths": {
     "/accounts": {
       "get": {
@@ -172,6 +284,11 @@
             }
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Query for accounts",
         "tags": [
           "Accounts"
@@ -195,14 +312,60 @@
           "application/json"
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Success",
             "schema": {
               "$ref": "#/definitions/Accounts"
             }
+          },
+          "400": {
+            "description": "Bad request (Unknown error)"
+          },
+          "422": {
+            "description": "Unprocessable entity (something wrong with body)"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Create new account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/accounts/init": {
+      "post": {
+        "description": "Create new default admin account. Allowed only when no accounts presents in the database on application first startup",
+        "operationId": "BackendWeb.AccountController.init",
+        "parameters": [
+          {
+            "description": "Data to create new default admin account",
+            "in": "body",
+            "name": "account",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewDefaultAccount"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request (Unknown error)"
+          },
+          "422": {
+            "description": "Unprocessable entity (something wrong with body)"
+          }
+        },
+        "summary": "Create new default admin account",
         "tags": [
           "Accounts"
         ]
@@ -232,6 +395,11 @@
             "description": "Not found (account doesn't exists)"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Delete account by id",
         "tags": [
           "Accounts"
@@ -266,6 +434,11 @@
             "description": "Not found (account doesn't exists)"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Query single account by id",
         "tags": [
           "Accounts"
@@ -312,6 +485,11 @@
             "description": "Unprocessable entity (something wrong with body)"
           }
         },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
         "summary": "Update existing account",
         "tags": [
           "Accounts"
@@ -358,23 +536,12 @@
     }
   },
   "swagger": "2.0",
-  "basePath": "/api",
-  "tags": [
-    {
-      "name": "Auth",
-      "description": "Operations with authentication"
-    },
-    {
-      "name": "Accounts",
-      "description": "Operations with Accounts"
-    },
-    {
-      "name": "Groups",
-      "description": "Operations with Groups"
-    },
-    {
-      "name": "Speciality",
-      "description": "Operations with Specialities"
+  "securityDefinitions": {
+    "bearer": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey",
+      "description": "Enter the token with the 'Bearer: ' prefix, e.g. 'Bearer abcde12345'"
     }
-  ]
+  }
 }
