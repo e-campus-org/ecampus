@@ -8,16 +8,11 @@ defmodule Backend.Auth.Guardian do
     {:ok, sub}
   end
 
-  def subject_for_token(_, _), do: {:error, :no_id_provided}
+  def subject_for_token(_, _), do: {:error, :not_provided}
 
-  def resource_from_claims(%{"sub" => id}) do
-    case Accounts.get_account!(id) do
-      nil -> {:error, :not_found}
-      resource -> {:ok, resource}
-    end
-  end
+  def resource_from_claims(claims), do: {:ok, claims}
 
-  def resource_from_claims(_), do: {:error, :no_id_provided}
+  def resource_from_claims(_), do: {:error, :not_provided}
 
   def authenticate(email, password) do
     case Accounts.get_account_by_email(email) do
@@ -37,7 +32,11 @@ defmodule Backend.Auth.Guardian do
   end
 
   defp create_token(account) do
-    {:ok, token, _claims} = encode_and_sign(account)
+    user_claims = %{"id" => account.id, "email" => account.email, "roles" => account.roles}
+
+    {:ok, token, _claims} =
+      encode_and_sign(account, %{"account" => user_claims}, token_type: :access)
+
     {:ok, account, token}
   end
 end

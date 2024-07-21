@@ -6,7 +6,11 @@ defmodule BackendWeb.AccountController do
   alias Backend.Accounts
   alias Backend.Accounts.Account
 
+  import Backend.Auth.Plugs
+
   action_fallback(BackendWeb.FallbackController)
+
+  plug(:is_admin when action in [:create, :delete])
 
   def swagger_definitions do
     %{

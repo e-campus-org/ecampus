@@ -5,6 +5,103 @@
   },
   "host": "localhost:4000",
   "definitions": {
+    "EmailAndPassport": {
+      "description": "An user account of the application",
+      "example": {
+        "email": "test@example.com",
+        "password": "qwerty123!"
+      },
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "password": {
+          "description": "User password",
+          "type": "string"
+        }
+      },
+      "required": [
+        "password",
+        "email"
+      ],
+      "title": "Email and Password",
+      "type": "object"
+    },
+    "TokenResult": {
+      "description": "Object containing jwt token data",
+      "example": {
+        "access_token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJFLUNhbXB1cyIsImV4cCI6MTcyMzYzNDA1OSwiaWF0IjoxNzIxMjE0ODU5LCJpc3MiOiJFLUNhbXB1cyIsImp0aSI6ImJlZTM0ODFiLTFmMTUtNDdiYi05YmIwLTQzYTk0MDhiYjgzYyIsIm5iZiI6MTcyMTIxNDg1OCwic3ViIjoiMTIiLCJ0eXAiOiJhY2Nlc3MifQ.o5kKkF_CJXsl0zrVoew38KCqqUMpPrn5qzJHcIuQQFYNZfCu0K2SerpHQTPlUqQOaHFzaWrzFFM497BtMSmb3Q"
+      },
+      "properties": {
+        "access_token": {
+          "description": "User access token",
+          "type": "string"
+        }
+      },
+      "title": "Token result",
+      "type": "object"
+    },
+    "NewAccount": {
+      "description": "Data object to create new account",
+      "example": {
+        "email": "test@example.com",
+        "first_name": "John",
+        "group_id": 1,
+        "last_name": "Doe",
+        "password": "Qwerty123!",
+        "password_confirmation": "Qwerty123!",
+        "roles": [
+          "student"
+        ]
+      },
+      "properties": {
+        "email": {
+          "description": "User email",
+          "type": "string"
+        },
+        "first_name": {
+          "description": "User first name",
+          "type": "string"
+        },
+        "group_id": {
+          "description": "Id of the user group, if exists",
+          "type": "number"
+        },
+        "last_name": {
+          "description": "User last name",
+          "type": "string"
+        },
+        "password": {
+          "description": "User password",
+          "type": "string"
+        },
+        "password_confirmation": {
+          "description": "User password confirmation",
+          "type": "string"
+        },
+        "roles": {
+          "default": [
+            "student"
+          ],
+          "description": "User roles",
+          "enum": [
+            "admin",
+            "teacher",
+            "student"
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "roles",
+        "password_confirmation",
+        "password",
+        "email"
+      ],
+      "title": "New account",
+      "type": "object"
+    },
     "Accounts": {
       "description": "A collection of Account",
       "items": {
@@ -70,66 +167,6 @@
         }
       },
       "title": "Account",
-      "type": "object"
-    },
-    "NewAccount": {
-      "description": "Data object to create new account",
-      "example": {
-        "email": "test@example.com",
-        "first_name": "John",
-        "group_id": 1,
-        "last_name": "Doe",
-        "password": "Qwerty123!",
-        "password_confirmation": "Qwerty123!",
-        "roles": [
-          "student"
-        ]
-      },
-      "properties": {
-        "email": {
-          "description": "User email",
-          "type": "string"
-        },
-        "first_name": {
-          "description": "User first name",
-          "type": "string"
-        },
-        "group_id": {
-          "description": "Id of the user group, if exists",
-          "type": "number"
-        },
-        "last_name": {
-          "description": "User last name",
-          "type": "string"
-        },
-        "password": {
-          "description": "User password",
-          "type": "string"
-        },
-        "password_confirmation": {
-          "description": "User password confirmation",
-          "type": "string"
-        },
-        "roles": {
-          "default": [
-            "student"
-          ],
-          "description": "User roles",
-          "enum": [
-            "admin",
-            "teacher",
-            "student"
-          ],
-          "type": "array"
-        }
-      },
-      "required": [
-        "roles",
-        "password_confirmation",
-        "password",
-        "email"
-      ],
-      "title": "New account",
       "type": "object"
     },
     "NewDefaultAccount": {
@@ -208,43 +245,6 @@
         }
       },
       "title": "Update existing account",
-      "type": "object"
-    },
-    "EmailAndPassport": {
-      "description": "An user account of the application",
-      "example": {
-        "email": "test@example.com",
-        "password": "qwerty123!"
-      },
-      "properties": {
-        "email": {
-          "description": "User email",
-          "type": "string"
-        },
-        "password": {
-          "description": "User password",
-          "type": "string"
-        }
-      },
-      "required": [
-        "password",
-        "email"
-      ],
-      "title": "Email and Password",
-      "type": "object"
-    },
-    "TokenResult": {
-      "description": "Object containing jwt token data",
-      "example": {
-        "access_token": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJFLUNhbXB1cyIsImV4cCI6MTcyMzYzNDA1OSwiaWF0IjoxNzIxMjE0ODU5LCJpc3MiOiJFLUNhbXB1cyIsImp0aSI6ImJlZTM0ODFiLTFmMTUtNDdiYi05YmIwLTQzYTk0MDhiYjgzYyIsIm5iZiI6MTcyMTIxNDg1OCwic3ViIjoiMTIiLCJ0eXAiOiJhY2Nlc3MifQ.o5kKkF_CJXsl0zrVoew38KCqqUMpPrn5qzJHcIuQQFYNZfCu0K2SerpHQTPlUqQOaHFzaWrzFFM497BtMSmb3Q"
-      },
-      "properties": {
-        "access_token": {
-          "description": "User access token",
-          "type": "string"
-        }
-      },
-      "title": "Token result",
       "type": "object"
     }
   },
