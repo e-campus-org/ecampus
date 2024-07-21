@@ -5,7 +5,6 @@ defmodule BackendWeb.AccountController do
 
   alias Backend.Accounts
   alias Backend.Accounts.Account
-  alias Backend.Auth.Guardian
 
   action_fallback(BackendWeb.FallbackController)
 

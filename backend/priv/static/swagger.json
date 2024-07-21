@@ -5,6 +5,14 @@
   },
   "host": "localhost:4000",
   "definitions": {
+    "Accounts": {
+      "description": "A collection of Account",
+      "items": {
+        "$ref": "#/definitions/Account"
+      },
+      "title": "List of accounts",
+      "type": "array"
+    },
     "Account": {
       "description": "An user account of the application",
       "example": {
@@ -63,14 +71,6 @@
       },
       "title": "Account",
       "type": "object"
-    },
-    "Accounts": {
-      "description": "A collection of Account",
-      "items": {
-        "$ref": "#/definitions/Account"
-      },
-      "title": "List of accounts",
-      "type": "array"
     },
     "NewAccount": {
       "description": "Data object to create new account",
@@ -267,6 +267,14 @@
     }
   ],
   "basePath": "/api",
+  "securityDefinitions": {
+    "bearer": {
+      "in": "header",
+      "name": "Authorization",
+      "type": "apiKey",
+      "description": "Enter the token with the 'Bearer: ' prefix, e.g. 'Bearer abcde12345'"
+    }
+  },
   "paths": {
     "/accounts": {
       "get": {
@@ -535,13 +543,5 @@
       }
     }
   },
-  "swagger": "2.0",
-  "securityDefinitions": {
-    "bearer": {
-      "in": "header",
-      "name": "Authorization",
-      "type": "apiKey",
-      "description": "Enter the token with the 'Bearer: ' prefix, e.g. 'Bearer abcde12345'"
-    }
-  }
+  "swagger": "2.0"
 }
