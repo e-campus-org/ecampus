@@ -13,7 +13,11 @@ defmodule Backend.AccountsFixtures do
       |> Enum.into(%{
         email: "some email",
         first_name: "some first_name",
-        last_name: "some last_name"
+        last_name: "some last_name",
+        email: "some@email.com",
+        password: "some password",
+        password_confirmation: "some password",
+        roles: ["admin"]
       })
       |> Backend.Accounts.create_account()
 
