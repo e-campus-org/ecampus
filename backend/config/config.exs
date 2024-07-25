@@ -60,6 +60,8 @@ config :backend, Backend.Auth.Guardian,
   issuer: "E-Campus",
   secret_key: System.get_env("JWT_TOKEN_SECRET")
 
+config :flop, repo: Backend.Repo
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

@@ -142,9 +142,14 @@ defmodule BackendWeb.AccountController do
     response(200, "Success", Schema.ref(:Accounts))
   end
 
+  def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
+    data = Accounts.list_accounts(params)
+    render(conn, :index, data: data)
+  end
+
   def index(conn, _params) do
     accounts = Accounts.list_accounts()
-    render(conn, :index, accounts: accounts)
+    render(conn, :index, accounts: [])
   end
 
   swagger_path :create do

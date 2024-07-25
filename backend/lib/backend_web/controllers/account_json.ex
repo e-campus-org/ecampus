@@ -4,8 +4,12 @@ defmodule BackendWeb.AccountJSON do
   @doc """
   Renders a list of accounts.
   """
-  def index(%{accounts: accounts}) do
-    %{data: for(account <- accounts, do: data(account))}
+  def index(%{data: {:ok, %{list: list, pagination: pagination}}}) do
+    %{list: for(account <- list, do: data(account)), pagination: pagination}
+  end
+
+  def index(%{data: {:error, _paylaod}}) do
+    %{error: "Wrong params"}
   end
 
   @doc """

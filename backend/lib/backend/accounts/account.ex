@@ -2,6 +2,12 @@ defmodule Backend.Accounts.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {
+    Flop.Schema,
+    filterable: [:email, :last_name, :first_name, :group_id],
+    sortable: [:email, :last_name, :first_name]
+  }
+
   @roles [:student, :teacher, :admin]
 
   schema "accounts" do
