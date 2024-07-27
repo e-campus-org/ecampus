@@ -4,6 +4,7 @@ defmodule Backend.Accounts do
   """
 
   import Ecto.Query, warn: false
+  import Backend.Pagination
   alias Backend.Repo
 
   alias Backend.Accounts.Account
@@ -20,36 +21,7 @@ defmodule Backend.Accounts do
   def list_accounts(params \\ %{}),
     do:
       Flop.validate_and_run(Account, params, for: Account)
-      |> do_list_accounts()
-
-  defp do_list_accounts(
-         {:ok,
-          {accounts,
-           %{total_pages: pages, total_count: count, flop: %{page: page, page_size: page_size}} =
-             _meta}}
-       ),
-       do: {
-         :ok,
-         %{
-           pagination: %{
-             count: count,
-             pages: pages,
-             page_size: page_size,
-             page: page
-           },
-           list: accounts
-         }
-       }
-
-  defp do_list_accounts({:error, %{errors: errors}}),
-    do: {
-      :error,
-      %{
-        pagination: nil,
-        list: nil,
-        errors: errors
-      }
-    }
+      |> with_pagination()
 
   @doc """
   Gets a single account.
