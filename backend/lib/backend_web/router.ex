@@ -22,7 +22,7 @@ defmodule BackendWeb.Router do
     pipe_through(:api)
     post("/accounts/init", AccountController, :init)
     resources("/groups", GroupController, except: [:new, :edit])
-    resources("/specialities", SpecialityController, except: [:new, :edit])
+    # resources("/specialities", SpecialityController, except: [:new, :edit])
     post("/auth/signin", AuthController, :sign_in)
   end
 
@@ -33,6 +33,11 @@ defmodule BackendWeb.Router do
     post("/accounts", AccountController, :create)
     put("/accounts/:id", AccountController, :update)
     delete("/accounts/:id", AccountController, :delete)
+    get("/specialities", SpecialityController, :index)
+    get("/specialities/:id", SpecialityController, :show)
+    post("/specialities", SpecialityController, :create)
+    put("/specialities/:id", SpecialityController, :update)
+    delete("/specialities/:id", SpecialityController, :delete)
   end
 
   scope "/api/swagger" do

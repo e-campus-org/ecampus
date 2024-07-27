@@ -2,6 +2,11 @@ defmodule Backend.Groups.Group do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {
+    Flop.Schema,
+    filterable: [:description, :title, :speciality_id], sortable: [:description, :title]
+  }
+
   schema "groups" do
     field :description, :string
     field :title, :string

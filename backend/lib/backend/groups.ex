@@ -4,6 +4,7 @@ defmodule Backend.Groups do
   """
 
   import Ecto.Query, warn: false
+  import Backend.Pagination
   alias Backend.Repo
 
   alias Backend.Groups.Group
@@ -17,9 +18,11 @@ defmodule Backend.Groups do
       [%Group{}, ...]
 
   """
-  def list_groups do
-    Repo.all(Group)
-  end
+
+  def list_groups(params \\ %{}),
+    do:
+      Flop.validate_and_run(Group, params, for: Group)
+      |> with_pagination()
 
   @doc """
   Gets a single group.

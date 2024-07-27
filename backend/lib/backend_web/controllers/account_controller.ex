@@ -136,7 +136,7 @@ defmodule BackendWeb.AccountController do
       UpdateAccount:
         swagger_schema do
           title("Update existing account")
-          description("Data object to update new account")
+          description("Data object to update account")
 
           properties do
             first_name(:string, "User first name")
@@ -162,7 +162,7 @@ defmodule BackendWeb.AccountController do
   swagger_path :index do
     get("/accounts")
     summary("Query for accounts")
-    description("Query for all accounts. This operation doesn't support pagination yet.")
+    description("Query for all accounts. This operation supports pagination.")
     produces("application/json")
     tag("Accounts")
 
@@ -194,7 +194,7 @@ defmodule BackendWeb.AccountController do
       account(:body, Schema.ref(:NewAccount), "Data to create account", required: true)
     end
 
-    response(201, "Success", Schema.ref(:Accounts))
+    response(201, "Success", Schema.ref(:Account))
     response(422, "Unprocessable entity (something wrong with body)")
     response(400, "Bad request (Unknown error)")
   end
@@ -282,10 +282,10 @@ defmodule BackendWeb.AccountController do
 
     parameters do
       id(:path, :number, "Account id", required: true)
-      account(:body, Schema.ref(:NewAccount), "Data to create account", required: true)
+      account(:body, Schema.ref(:UpdateAccount), "Data to update account", required: true)
     end
 
-    response(200, "Success", Schema.ref(:Accounts))
+    response(200, "Success", Schema.ref(:Account))
     response(404, "Not found (account doesn't exists)")
     response(422, "Unprocessable entity (something wrong with body)")
     response(400, "Bad request (Unknown error)")
