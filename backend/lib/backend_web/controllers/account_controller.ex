@@ -3,7 +3,6 @@ defmodule BackendWeb.AccountController do
 
   use PhoenixSwagger
 
-  alias Backend.Pagination
   alias Backend.Accounts
   alias Backend.Accounts.Account
 
