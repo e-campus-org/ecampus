@@ -3,6 +3,7 @@ defmodule BackendWeb.AccountController do
 
   use PhoenixSwagger
 
+  alias Backend.Pagination
   alias Backend.Accounts
   alias Backend.Accounts.Account
 
@@ -52,6 +53,35 @@ defmodule BackendWeb.AccountController do
           description("A collection of Account")
           type(:array)
           items(Schema.ref(:Account))
+        end,
+      Pagination:
+        swagger_schema do
+          title("Pagination data")
+          description("Pagination data to get accounts by pages")
+
+          properties do
+            count(:number, "Total accounts in the database")
+            page(:number, "Current page")
+            pages(:number, "Total pages")
+            page_size(:number, "Page size, i.e. account count per page")
+          end
+
+          example(%{
+            count: 10,
+            page: 1,
+            pages: 2,
+            page_size: 5
+          })
+        end,
+      AccountsWithPagination:
+        swagger_schema do
+          title("List of accounts with pagination data")
+          description("A collection of Account with pagination data")
+
+          properties do
+            list(Schema.ref(:Accounts), "Accounts list", required: true)
+            pagination(Schema.ref(:Pagination), "Pagination data", required: true)
+          end
         end,
       NewAccount:
         swagger_schema do
@@ -139,7 +169,7 @@ defmodule BackendWeb.AccountController do
 
     security([%{bearer: []}])
 
-    response(200, "Success", Schema.ref(:Accounts))
+    response(200, "Success", Schema.ref(:AccountsWithPagination))
   end
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
