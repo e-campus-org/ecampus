@@ -26,7 +26,7 @@ defmodule Backend.Accounts do
          {:ok,
           {accounts,
            %{total_pages: pages, total_count: count, flop: %{page: page, page_size: page_size}} =
-             meta}}
+             _meta}}
        ),
        do: {
          :ok,

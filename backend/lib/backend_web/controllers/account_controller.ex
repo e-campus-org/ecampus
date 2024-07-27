@@ -148,8 +148,8 @@ defmodule BackendWeb.AccountController do
   end
 
   def index(conn, _params) do
-    accounts = Accounts.list_accounts()
-    render(conn, :index, accounts: [])
+    data = Accounts.list_accounts(%{"page" => 1, "page_size" => 10})
+    render(conn, :index, data: data)
   end
 
   swagger_path :create do
