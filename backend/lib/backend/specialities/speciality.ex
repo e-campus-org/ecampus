@@ -2,6 +2,11 @@ defmodule Backend.Specialities.Speciality do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {
+    Flop.Schema,
+    filterable: [:description, :title, :code], sortable: [:description, :title, :code]
+  }
+
   schema "specialities" do
     field :code, :string
     field :description, :string

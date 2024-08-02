@@ -4,8 +4,13 @@ defmodule BackendWeb.SpecialityJSON do
   @doc """
   Renders a list of specialities.
   """
-  def index(%{specialities: specialities}) do
-    %{data: for(speciality <- specialities, do: data(speciality))}
+
+  def index(%{data: {:ok, %{list: list, pagination: pagination}}}) do
+    %{list: for(speciality <- list, do: data(speciality)), pagination: pagination}
+  end
+
+  def index(%{data: {:error, _paylaod}}) do
+    %{error: "Wrong params"}
   end
 
   @doc """

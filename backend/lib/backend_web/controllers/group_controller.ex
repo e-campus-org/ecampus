@@ -21,9 +21,9 @@ defmodule BackendWeb.GroupController do
 
           properties do
             id(:number, "Unique identifier")
-            title(:string, "User email")
-            description(:string, "User first name")
-            speciality_id(:number, "Id od the group speciality")
+            title(:string, "Group title")
+            description(:string, "Group description")
+            speciality_id(:number, "Id of the group speciality")
             inserted_at(:datetime, "Date and time of group creation")
             updated_at(:datetime, "Date and time of group last update")
           end
@@ -79,9 +79,9 @@ defmodule BackendWeb.GroupController do
           description("Data object to create new group")
 
           properties do
-            title(:string, "User email", required: true)
-            description(:string, "User first name", required: true)
-            speciality_id(:number, "Id od the group speciality", required: true)
+            title(:string, "Group title", required: true)
+            description(:string, "Group description", required: true)
+            speciality_id(:number, "Id of the group speciality", required: true)
           end
 
           example(%{
@@ -96,9 +96,9 @@ defmodule BackendWeb.GroupController do
           description("Data object to update group")
 
           properties do
-            title(:string, "User email", required: true)
-            description(:string, "User first name", required: true)
-            speciality_id(:number, "Id od the group speciality", required: true)
+            title(:string, "Group title")
+            description(:string, "Group description")
+            speciality_id(:number, "Id of the group speciality")
           end
 
           example(%{

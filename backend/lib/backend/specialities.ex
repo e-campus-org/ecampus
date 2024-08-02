@@ -4,6 +4,7 @@ defmodule Backend.Specialities do
   """
 
   import Ecto.Query, warn: false
+  import Backend.Pagination
   alias Backend.Repo
 
   alias Backend.Specialities.Speciality
@@ -17,9 +18,10 @@ defmodule Backend.Specialities do
       [%Speciality{}, ...]
 
   """
-  def list_specialities do
-    Repo.all(Speciality)
-  end
+  def list_specialities(params \\ %{}),
+    do:
+      Flop.validate_and_run(Speciality, params, for: Speciality)
+      |> with_pagination()
 
   @doc """
   Gets a single speciality.
