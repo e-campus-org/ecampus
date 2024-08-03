@@ -8,7 +8,7 @@ defmodule BackendWeb.SubjectController do
 
   import Backend.Auth.Plugs
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   plug(:is_teacher when action in [:create, :update, :delete])
 
@@ -59,7 +59,7 @@ defmodule BackendWeb.SubjectController do
             count(:number, "Total subjects in the database")
             page(:number, "Current page")
             pages(:number, "Total pages")
-            page_size(:number, "Page size, i.e. group count per page")
+            page_size(:number, "Page size, i.e. subject count per page")
           end
 
           example(%{

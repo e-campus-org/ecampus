@@ -21,28 +21,41 @@ defmodule BackendWeb.Router do
   scope "/api", BackendWeb do
     pipe_through(:api)
     post("/accounts/init", AccountController, :init)
-    resources("/groups", GroupController, except: [:new, :edit])
-    # resources("/specialities", SpecialityController, except: [:new, :edit])
     post("/auth/signin", AuthController, :sign_in)
   end
 
   scope "/api", BackendWeb do
     pipe_through([:api, :auth])
+
     get("/accounts", AccountController, :index)
     get("/accounts/:id", AccountController, :show)
     post("/accounts", AccountController, :create)
     put("/accounts/:id", AccountController, :update)
     delete("/accounts/:id", AccountController, :delete)
+
     get("/specialities", SpecialityController, :index)
     get("/specialities/:id", SpecialityController, :show)
     post("/specialities", SpecialityController, :create)
     put("/specialities/:id", SpecialityController, :update)
     delete("/specialities/:id", SpecialityController, :delete)
+
+    get("/groups", GroupController, :index)
+    get("/groups/:id", GroupController, :show)
+    post("/groups", GroupController, :create)
+    put("/groups/:id", GroupController, :update)
+    delete("/groups/:id", GroupController, :delete)
+
     get("/subjects", SubjectController, :index)
     get("/subjects/:id", SubjectController, :show)
     post("/subjects", SubjectController, :create)
     put("/subjects/:id", SubjectController, :update)
     delete("/subjects/:id", SubjectController, :delete)
+
+    get("/lessons", LessonController, :index)
+    get("/lessons/:id", LessonController, :show)
+    post("/lessons", LessonController, :create)
+    put("/lessons/:id", LessonController, :update)
+    delete("/lessons/:id", LessonController, :delete)
   end
 
   scope "/api/swagger" do
@@ -83,7 +96,8 @@ defmodule BackendWeb.Router do
         %{name: "Accounts", description: "Operations with Accounts"},
         %{name: "Groups", description: "Operations with Groups"},
         %{name: "Specialities", description: "Operations with Specialities"},
-        %{name: "Subjects", description: "Operations with Subjects"}
+        %{name: "Subjects", description: "Operations with Subjects"},
+        %{name: "Lessons", description: "Operations with Lessons"}
       ],
       securityDefinitions: %{
         bearer: %{

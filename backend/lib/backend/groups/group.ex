@@ -8,10 +8,10 @@ defmodule Backend.Groups.Group do
   }
 
   schema "groups" do
-    field :description, :string
-    field :title, :string
-    belongs_to :speciality, Backend.Specialities.Speciality
-    has_many :accounts, Backend.Accounts.Account
+    field(:description, :string)
+    field(:title, :string)
+    belongs_to(:speciality, Backend.Specialities.Speciality)
+    has_many(:accounts, Backend.Accounts.Account)
     timestamps(type: :utc_datetime)
   end
 

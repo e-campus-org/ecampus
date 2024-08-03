@@ -9,13 +9,13 @@ defmodule Backend.Subjects.Subject do
   }
 
   schema "subjects" do
-    field :description, :string
-    field :title, :string
-    field :short_title, :string
-    field :prerequisites, :string
-    field :objectives, :string
-    field :required_texts, :string
-
+    field(:description, :string)
+    field(:title, :string)
+    field(:short_title, :string)
+    field(:prerequisites, :string)
+    field(:objectives, :string)
+    field(:required_texts, :string)
+    has_many(:lessons, Backend.Lessons.Lesson)
     timestamps(type: :utc_datetime)
   end
 

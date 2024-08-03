@@ -12,8 +12,6 @@ defmodule Backend.Auth.Guardian do
 
   def resource_from_claims(claims), do: {:ok, claims}
 
-  def resource_from_claims(_), do: {:error, :not_provided}
-
   def authenticate(email, password) do
     case Accounts.get_account_by_email(email) do
       {:error, _} ->
