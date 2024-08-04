@@ -13,6 +13,7 @@ defmodule Backend.Lessons.Lesson do
     field(:topic, :string)
     field(:is_draft, :boolean, default: true)
     belongs_to(:subject, Backend.Subjects.Subject)
+    has_many(:topics, Backend.LessonTopics.LessonTopic)
     timestamps(type: :utc_datetime)
   end
 

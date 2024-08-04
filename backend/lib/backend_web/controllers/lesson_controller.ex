@@ -17,7 +17,7 @@ defmodule BackendWeb.LessonController do
       Lesson:
         swagger_schema do
           title("Lesson")
-          description("A single lesson of lesson to study")
+          description("A single lesson of subject to study")
 
           properties do
             id(:number, "Unique identifier")
