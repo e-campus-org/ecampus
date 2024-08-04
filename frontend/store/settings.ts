@@ -2,42 +2,35 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useSettingsStore = defineStore(
-    "e-campus-settings",
-    () => {
-        const i18n = useI18n();
-        const locale = ref<Locale>("en");
-        const isDarkThemeApplied = computed(
-            () => colorMode.preference === "dark" || (colorMode.preference === "system" && colorMode.value === "dark")
-        );
-        const colorMode = useColorMode();
+export const useSettingsStore = defineStore("e-campus-settings", () => {
+    const i18n = useI18n();
+    const locale = ref<Locale>("en");
+    const selectedTheme = useCookie<"dark" | "light">("selected-theme", { default: () => "dark" });
 
-        function setLocale(value: Locale) {
-            locale.value = value;
-        }
+    const theme = useTheme();
 
-        function switchTheme() {
-            if (isDarkThemeApplied.value) {
-                colorMode.preference = "light";
-            } else {
-                colorMode.preference = "dark";
-            }
-        }
+    const isDarkThemeApplied = computed(() => theme.global.name.value === "dark");
 
-        watch(locale, newValue => (i18n.locale.value = newValue as Locale));
+    function setLocale(value: Locale) {
+        locale.value = value;
+    }
 
-        return {
-            setLocale,
-            locale,
-            switchTheme,
-            isDarkThemeApplied
-        };
-    },
-    {
-        persist: {
-            key: "e-campus.settings",
-            storage: persistedState.localStorage,
-            paths: ["locale"]
+    function switchTheme() {
+        if (isDarkThemeApplied.value) {
+            selectedTheme.value = "light";
+        } else {
+            selectedTheme.value = "dark";
         }
     }
-);
+
+    watch(locale, newValue => (i18n.locale.value = newValue as Locale));
+    watch(selectedTheme, newValue => (theme.global.name.value = newValue), { immediate: true });
+
+    return {
+        setLocale,
+        locale,
+        selectedTheme,
+        switchTheme,
+        isDarkThemeApplied
+    };
+});

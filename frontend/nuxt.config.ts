@@ -3,7 +3,6 @@ export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: false },
     modules: [
-        "@nuxt/ui",
         "@nuxt/eslint",
         "@nuxtjs/i18n",
         "nuxt-lodash",
@@ -12,12 +11,8 @@ export default defineNuxtConfig({
         "nuxt-viewport",
         "nuxt-monaco-editor",
         "@pinia/nuxt",
-        "@pinia-plugin-persistedstate/nuxt"
+        "vuetify-nuxt-module"
     ],
-    ui: {
-        global: true,
-        icons: ["heroicons"]
-    },
     i18n: {
         vueI18n: "./i18n.ts"
     },
@@ -38,7 +33,6 @@ export default defineNuxtConfig({
         fallbackBreakpoint: "lg"
     },
     monacoEditor: {
-        // These are default values:
         locale: "en",
         componentName: {
             codeEditor: "MonacoEditor",
@@ -68,8 +62,5 @@ export default defineNuxtConfig({
                 }
             ]
         }
-    },
-    build: {
-        transpile: ["pinia-plugin-persistedstate"]
     }
 });
