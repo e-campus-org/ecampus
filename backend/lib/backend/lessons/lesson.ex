@@ -4,7 +4,7 @@ defmodule Backend.Lessons.Lesson do
 
   @derive {
     Flop.Schema,
-    filterable: [:title, :topic, :is_draft], sortable: [:title, :topic, :is_draft]
+    filterable: [:title, :topic, :is_draft, :subject_id], sortable: [:title, :topic, :is_draft]
   }
 
   schema "lessons" do
@@ -22,5 +22,6 @@ defmodule Backend.Lessons.Lesson do
     lesson
     |> cast(attrs, [:title, :description, :topic, :is_draft, :subject_id])
     |> validate_required([:title, :topic, :subject_id])
+    |> foreign_key_constraint(:subject_id)
   end
 end
