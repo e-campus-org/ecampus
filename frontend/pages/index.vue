@@ -1,8 +1,3 @@
 <template>
-    <div>index page</div>
+    <nuxt-page />
 </template>
-<script setup lang="ts">
-definePageMeta({
-    layout: "dashboard"
-});
-</script>

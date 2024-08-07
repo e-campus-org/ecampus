@@ -2,6 +2,10 @@
 export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: false },
+    routeRules: {
+        "/": { prerender: true },
+        "/dashboard": { redirect: "/dashboard/my" }
+    },
     modules: [
         "@nuxt/eslint",
         "@nuxtjs/i18n",

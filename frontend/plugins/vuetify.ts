@@ -6,6 +6,7 @@ import { md3 } from "vuetify/blueprints";
 
 export default defineNuxtPlugin(app => {
     const vuetify = createVuetify({
+        ssr: true,
         blueprint: md3,
         theme: {
             defaultTheme: "dark"
