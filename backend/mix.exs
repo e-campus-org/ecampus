@@ -55,7 +55,8 @@ defmodule Backend.MixProject do
       {:ex_json_schema, "~> 0.5"},
       {:guardian, "~> 2.3.2"},
       {:bcrypt_elixir, "~> 3.0"},
-      {:flop, "~> 0.25.0"}
+      {:flop, "~> 0.25.0"},
+      {:corsica, "~> 2.1.3"}
     ]
   end
 

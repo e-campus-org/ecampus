@@ -31,5 +31,15 @@
                 "showContents": "Show contents"
             }
         }
+    },
+    "pages": {
+        "auth": {
+            "email": "Email",
+            "emailIsRequired": "Email is required",
+            "invalidEmail": "Invalid email",
+            "password": "Password",
+            "passwordIsRequired": "Password is required",
+            "signIn": "Sign in"
+        }
     }
 }

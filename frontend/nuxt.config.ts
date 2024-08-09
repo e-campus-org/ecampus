@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { md3 } from "vuetify/blueprints";
+
 export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: false },
@@ -16,26 +18,19 @@ export default defineNuxtConfig({
         "nuxt-viewport",
         "nuxt-monaco-editor",
         "@pinia/nuxt",
-        "vuetify-nuxt-module"
+        "vuetify-nuxt-module",
+        "@vueuse/nuxt"
     ],
     i18n: {
         vueI18n: "./i18n.ts"
     },
-    viewport: {
-        breakpoints: {
-            xs: 576,
-            sm: 640,
-            md: 768,
-            lg: 1024,
-            xl: 1280,
-            "2xl": 1536
-        },
-        defaultBreakpoints: {
-            desktop: "lg",
-            mobile: "xs",
-            tablet: "md"
-        },
-        fallbackBreakpoint: "lg"
+    vuetify: {
+        vuetifyOptions: {
+            blueprint: md3,
+            theme: {
+                defaultTheme: "dark"
+            }
+        }
     },
     monacoEditor: {
         locale: "en",
@@ -46,7 +41,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            baseUrl: process.env.API_URL
+            apiUrl: ""
         }
     },
     app: {
