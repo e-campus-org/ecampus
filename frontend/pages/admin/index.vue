@@ -5,8 +5,8 @@
 import { useAccountStore } from "@/store";
 
 definePageMeta({
-    middleware: ["auth"],
-    layout: "dashboard"
+    // middleware: ["auth"],
+    layout: "admin"
 });
 
 const accountStore = useAccountStore();
@@ -16,7 +16,7 @@ const isLoggedIn = computed(() => accountStore.isLoggedIn);
 
 watchEffect(() => {
     if (isLoggedIn.value && route.name === "dashboard") {
-        router.replace({ name: "dashboard-my" });
+        router.replace({ name: "dashboard" });
     }
 });
 </script>

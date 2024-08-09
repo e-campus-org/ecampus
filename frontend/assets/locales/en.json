@@ -1,16 +1,32 @@
 {
     "layouts": {
-        "dashboard": {
+        "internal": {
             "header": {
                 "settings": "Settings",
                 "profile": "Profile",
                 "logout": "Logout"
             },
             "sideMenu": {
-                "header": "Menu",
                 "find": "Find",
                 "my": "My subjects",
                 "darkTheme": "Toggle dark theme",
+                "lightTheme": "Toggle light theme",
+                "showContents": "Show contents"
+            }
+        },
+        "dashboard": {
+            "sideMenu": {
+                "find": "Find",
+                "my": "My subjects"
+            }
+        },
+        "admin": {
+            "sideMenu": {
+                "specialities": "Specialities",
+                "groups": "Groups",
+                "accounts": "Accounts",
+                "subjects": "Subjects",
+                "lessons": "Lessons",
                 "lightTheme": "Toggle light theme",
                 "showContents": "Show contents"
             }

@@ -4,7 +4,8 @@ export default defineNuxtConfig({
     devtools: { enabled: false },
     routeRules: {
         "/": { prerender: true },
-        "/dashboard": { redirect: "/dashboard/my" }
+        "/dashboard": { redirect: "/dashboard/my" },
+        "/admin": { redirect: "/admin/accounts" }
     },
     modules: [
         "@nuxt/eslint",

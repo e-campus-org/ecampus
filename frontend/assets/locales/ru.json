@@ -7,9 +7,24 @@
                 "logout": "Выход"
             },
             "sideMenu": {
-                "header": "Меню",
                 "find": "Поиск",
                 "my": "Мои предметы",
+                "darkTheme": "Включить темную тему",
+                "lightTheme": "Включить светлую тему"
+            }
+        },
+        "admin": {
+            "header": {
+                "settings": "Настройки",
+                "profile": "Профиль",
+                "logout": "Выход"
+            },
+            "sideMenu": {
+                "specialities": "Специальности",
+                "groups": "Группы",
+                "accounts": "Учетные записи",
+                "subjects": "Учебные дисциплины",
+                "lessons": "Учебные занятия",
                 "darkTheme": "Включить темную тему",
                 "lightTheme": "Включить светлую тему"
             }
