@@ -41,5 +41,9 @@
             "passwordIsRequired": "Password is required",
             "signIn": "Sign in"
         }
+    },
+    "errors": {
+        "unauthorized": "Wrong email or password",
+        "unknown": "Unknown error"
     }
 }

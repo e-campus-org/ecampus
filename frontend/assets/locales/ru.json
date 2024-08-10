@@ -29,5 +29,19 @@
                 "lightTheme": "Включить светлую тему"
             }
         }
+    },
+    "pages": {
+        "auth": {
+            "email": "Email",
+            "emailIsRequired": "Требуется ввести email",
+            "invalidEmail": "Некорректный email",
+            "password": "Пароль",
+            "passwordIsRequired": "Требуется ввести пароль",
+            "signIn": "Войти"
+        }
+    },
+    "errors": {
+        "unauthorized": "Неправильный email или пароль",
+        "unknown": "Произошла неизвестная ошибка"
     }
 }

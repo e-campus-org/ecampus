@@ -11,3 +11,11 @@ declare namespace JWT {
         lastName: string;
     }
 }
+
+declare namespace Common {
+    interface Notification {
+        text: string;
+        timeout: number;
+        color: string;
+    }
+}

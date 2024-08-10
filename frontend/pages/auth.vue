@@ -32,6 +32,9 @@
 </template>
 <script setup lang="ts">
 import { useField, useForm } from "vee-validate";
+import { FetchError } from "ofetch";
+
+const { isFresh } = useJwt();
 
 definePageMeta({
     layout: false
@@ -63,19 +66,38 @@ const email = useField("email");
 const password = useField("password");
 const loading = ref(false);
 
+const accessToken = useCookie("access_token", {
+    watch: true,
+    secure: true,
+    sameSite: true
+});
+
 const submit = handleSubmit(async values => {
     try {
-        // error.value = null;
         loading.value = true;
-        const result = await useAnonymousFetch("/auth/signin", {
+        const result = await useAnonymousFetch<{ access_token: string }>("/auth/signin", {
             body: values,
             method: "POST"
         });
-        console.log(result);
-    } catch (e: any) {
-        // error.value = e.message;
+        accessToken.value = result.access_token;
+    } catch (e: unknown) {
+        if (e instanceof FetchError && e.status === 401) {
+            useEvent("notify:error", t("errors.unauthorized"));
+        } else {
+            useEvent("notify:error", t("errors.unknown"));
+        }
     } finally {
         loading.value = false;
     }
 });
+
+watch(
+    isFresh,
+    newValue => {
+        if (newValue) {
+            navigateTo({ name: "dashboard" });
+        }
+    },
+    { immediate: true }
+);
 </script>
