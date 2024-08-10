@@ -64,7 +64,16 @@ const { handleSubmit } = useForm({
 
 const email = useField("email");
 const password = useField("password");
-const loading = ref(false);
+const localLoading = ref(false);
+const nuxtLoading = ref(true);
+
+const nuxtApp = useNuxtApp();
+
+nuxtApp.hook("page:finish", () => {
+    nuxtLoading.value = false;
+});
+
+const loading = computed(() => localLoading.value || nuxtLoading.value);
 
 const accessToken = useCookie("access_token", {
     watch: true,
@@ -74,7 +83,7 @@ const accessToken = useCookie("access_token", {
 
 const submit = handleSubmit(async values => {
     try {
-        loading.value = true;
+        localLoading.value = true;
         const result = await useAnonymousFetch<{ access_token: string }>("/auth/signin", {
             body: values,
             method: "POST"
@@ -87,7 +96,7 @@ const submit = handleSubmit(async values => {
             useEvent("notify:error", t("errors.unknown"));
         }
     } finally {
-        loading.value = false;
+        localLoading.value = false;
     }
 });
 
