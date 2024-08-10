@@ -100,11 +100,9 @@ const { t } = useI18n();
 
 const drawer = ref(false);
 
+const logout = useLogout();
+
 function toggleTheme() {
     settingsStore.switchTheme();
-}
-
-function logout() {
-    console.log("logout");
 }
 </script>
