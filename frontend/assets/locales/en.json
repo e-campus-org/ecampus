@@ -38,6 +38,26 @@
             "password": "Password",
             "passwordIsRequired": "Password is required",
             "signIn": "Sign in"
+        },
+        "specialities": {
+            "headers": {
+                "id": "ID",
+                "code": "Speciality code",
+                "description": "Description",
+                "title": "title",
+                "insertedAt": "Creation date",
+                "updatedAt": "Update date"
+            }
+        },
+        "groups": {
+            "headers": {
+                "id": "ID",
+                "title": "title",
+                "description": "Description",
+                "specialityId": "Speciality",
+                "insertedAt": "Creation date",
+                "updatedAt": "Update date"
+            }
         }
     },
     "components": {

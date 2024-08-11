@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { VSnackbarQueue } from "vuetify/labs/VSnackbarQueue";
 
-const queue = ref<Common.Notification[]>([]);
+const queue = ref<Shared.Notification[]>([]);
 
 function pushNotify(text: string, color: string = "primary") {
     queue.value.push({ text, color, timeout: 1500 });

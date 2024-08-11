@@ -79,7 +79,7 @@ const accessToken = useCookie("access_token", {
 const submit = handleSubmit(async values => {
     try {
         localLoading.value = true;
-        const result = await useAnonymousFetch<{ access_token: string }>("/auth/signin", {
+        const result = await useFetch<{ access_token: string }>("/auth/signin", {
             body: values,
             method: "POST"
         });
