@@ -25,7 +25,9 @@ defmodule BackendWeb.SpecialityJSON do
       id: speciality.id,
       code: speciality.code,
       title: speciality.title,
-      description: speciality.description
+      description: speciality.description,
+      inserted_at: speciality.inserted_at,
+      updated_at: speciality.updated_at
     }
   end
 end
