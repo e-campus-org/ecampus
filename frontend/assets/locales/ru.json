@@ -7,8 +7,7 @@
                 "logout": "Выход"
             },
             "sideMenu": {
-                "find": "Поиск",
-                "my": "Мои предметы",
+                "admin": "Панель администратора",
                 "darkTheme": "Включить темную тему",
                 "lightTheme": "Включить светлую тему"
             }
@@ -38,6 +37,13 @@
             "password": "Пароль",
             "passwordIsRequired": "Требуется ввести пароль",
             "signIn": "Войти"
+        }
+    },
+    "components": {
+        "shared": {
+            "nuxtLoading": {
+                "loading": "Загрузка"
+            }
         }
     },
     "errors": {

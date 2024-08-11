@@ -4,6 +4,7 @@ import { md3 } from "vuetify/blueprints";
 export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
     devtools: { enabled: false },
+    spaLoadingTemplate: "./components/shared/nuxt-loading.vue",
     routeRules: {
         "/": { prerender: true },
         "/dashboard": { redirect: "/dashboard/my" },
@@ -29,6 +30,12 @@ export default defineNuxtConfig({
             blueprint: md3,
             theme: {
                 defaultTheme: "dark"
+            }
+        },
+        moduleOptions: {
+            ssrClientHints: {
+                viewportSize: true,
+                prefersColorScheme: true
             }
         }
     },

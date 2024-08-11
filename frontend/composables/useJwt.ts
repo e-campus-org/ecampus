@@ -29,8 +29,17 @@ export function useJwt() {
         }
     });
 
+    const accountInfo = computed(() => {
+        if (payload.value) {
+            return payload.value.account;
+        } else {
+            return null;
+        }
+    });
+
     return {
         payload,
-        isFresh
+        isFresh,
+        accountInfo
     };
 }

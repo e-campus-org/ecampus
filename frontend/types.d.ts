@@ -1,14 +1,21 @@
 type Locale = "en" | "ru";
 
 declare namespace JWT {
-    interface Payload {
-        sub: string;
-        exp: number;
-        roles: Client.Role[];
+    interface AccountInfo {
         id: number;
-        username: string;
-        firstName: string;
-        lastName: string;
+        email: string;
+        roles: Account.Role[];
+    }
+    interface Payload {
+        account: AccountInfo;
+        aud: string;
+        exp: number;
+        iat: number;
+        iss: string;
+        jti: string;
+        nbf: number;
+        sub: string;
+        type: string;
     }
 }
 
@@ -18,4 +25,8 @@ declare namespace Common {
         timeout: number;
         color: string;
     }
+}
+
+declare namespace Account {
+    type Role = "admin" | "teacher" | "student";
 }

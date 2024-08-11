@@ -7,11 +7,9 @@
                 "logout": "Logout"
             },
             "sideMenu": {
-                "find": "Find",
-                "my": "My subjects",
+                "admin": "Admin panel",
                 "darkTheme": "Toggle dark theme",
-                "lightTheme": "Toggle light theme",
-                "showContents": "Show contents"
+                "lightTheme": "Toggle light theme"
             }
         },
         "dashboard": {
@@ -40,6 +38,13 @@
             "password": "Password",
             "passwordIsRequired": "Password is required",
             "signIn": "Sign in"
+        }
+    },
+    "components": {
+        "shared": {
+            "nuxtLoading": {
+                "loading": "Loading"
+            }
         }
     },
     "errors": {

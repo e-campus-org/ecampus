@@ -65,13 +65,8 @@ const { handleSubmit } = useForm({
 const email = useField("email");
 const password = useField("password");
 const localLoading = ref(false);
-const nuxtLoading = ref(true);
-
-const nuxtApp = useNuxtApp();
-
-nuxtApp.hook("page:finish", () => {
-    nuxtLoading.value = false;
-});
+// useLoadingIndicator doesn't works correctly
+const nuxtLoading = useNuxtLoading();
 
 const loading = computed(() => localLoading.value || nuxtLoading.value);
 
