@@ -91,6 +91,18 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 }
+            },
+            "lessons": {
+                "headers": {
+                    "id": "ID",
+                    "title": "Title",
+                    "description": "Description",
+                    "topic": "Topic",
+                    "isDraft": "Is draft",
+                    "subjectId": "Subject",
+                    "insertedAt": "Creation date",
+                    "updatedAt": "Update date"
+                }
             }
         }
     },

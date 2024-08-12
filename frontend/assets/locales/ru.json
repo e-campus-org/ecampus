@@ -90,6 +90,18 @@
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
                 }
+            },
+            "lessons": {
+                "headers": {
+                    "id": "ID",
+                    "title": "Название",
+                    "description": "Описание",
+                    "topic": "Тема",
+                    "isDraft": "Черновик",
+                    "subjectId": "Дисциплина",
+                    "insertedAt": "Дата создания",
+                    "updatedAt": "Дата обновления"
+                }
             }
         }
     },

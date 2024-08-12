@@ -91,3 +91,16 @@ declare namespace Subjects {
         updated_at: string;
     }
 }
+
+declare namespace Lessons {
+    interface ReadLessonDTO {
+        id: number;
+        title: string;
+        description: string;
+        topic: string;
+        is_draft: boolean;
+        subject_id: number;
+        inserted_at: string;
+        updated_at: string;
+    }
+}
