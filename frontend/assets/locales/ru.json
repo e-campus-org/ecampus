@@ -65,6 +65,18 @@
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
                 }
+            },
+            "accounts": {
+                "headers": {
+                    "id": "ID",
+                    "email": "Email",
+                    "firstName": "Имя",
+                    "lastName": "Фамилия",
+                    "group": "Группа",
+                    "roles": "Роли",
+                    "insertedAt": "Дата создания",
+                    "updatedAt": "Дата обновления"
+                }
             }
         }
     },

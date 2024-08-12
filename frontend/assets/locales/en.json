@@ -66,6 +66,18 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 }
+            },
+            "accounts": {
+                "headers": {
+                    "id": "ID",
+                    "email": "Email",
+                    "firstName": "First name",
+                    "lastName": "Last name",
+                    "group": "Group",
+                    "roles": "Roles",
+                    "insertedAt": "Creation date",
+                    "updatedAt": "Update date"
+                }
             }
         }
     },

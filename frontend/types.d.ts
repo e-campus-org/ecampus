@@ -59,7 +59,20 @@ declare namespace Groups {
         id: 1;
         title: string;
         description: string;
-        speciality_id: number;
+        speciality_id: number | null;
+        inserted_at: string;
+        updated_at: string;
+    }
+}
+
+declare namespace Accounts {
+    interface ReadAccountDTO {
+        id: 1;
+        email: string;
+        first_name: string;
+        last_name: string;
+        group_id: number | null;
+        roles: string[];
         inserted_at: string;
         updated_at: string;
     }

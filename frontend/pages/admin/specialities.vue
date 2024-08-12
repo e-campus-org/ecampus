@@ -1,11 +1,13 @@
 <template>
-    <list-widget
-        :data="specialitiesListData"
-        :loading="loading"
-        :page="page"
-        :page-size="pageSize"
-        @page-changed="page = $event"
-    />
+    <v-container>
+        <list-widget
+            :data="specialitiesListData"
+            :loading="loading"
+            :page="page"
+            :page-size="pageSize"
+            @page-changed="page = $event"
+        />
+    </v-container>
 </template>
 <script setup lang="ts">
 import { ListWidget } from "@/components/widgets/specialities";

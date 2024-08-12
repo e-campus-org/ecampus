@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-    data: Shared.ListData<Groups.ReadGroupDTO> | null;
+    data: Shared.ListData<Accounts.ReadAccountDTO> | null;
     loading: boolean;
     page: number;
     pageSize: number;
@@ -36,36 +36,55 @@ const currentPage = computed({
 
 const headers = computed(() => [
     {
-        title: t("components.widgets.groups.headers.id"),
+        title: t("components.widgets.accounts.headers.id"),
         align: "start",
         sortable: false,
         key: "id"
     },
     {
-        title: t("components.widgets.groups.headers.title"),
+        title: t("components.widgets.accounts.headers.email"),
         align: "start",
         sortable: false,
-        key: "title"
+        key: "email"
     },
     {
-        title: t("components.widgets.groups.headers.specialityId"),
+        title: t("components.widgets.accounts.headers.firstName"),
         align: "start",
         sortable: false,
-        key: "speciality_id"
+        key: "first_name"
     },
     {
-        title: t("components.widgets.groups.headers.insertedAt"),
+        title: t("components.widgets.accounts.headers.lastName"),
+        align: "start",
+        sortable: false,
+        key: "last_name"
+    },
+    {
+        title: t("components.widgets.accounts.headers.group"),
+        align: "start",
+        sortable: false,
+        key: "group_id"
+    },
+    {
+        title: t("components.widgets.accounts.headers.roles"),
+        align: "start",
+        sortable: false,
+        key: "roles",
+        value: (item: Accounts.ReadAccountDTO) => item.roles?.join(", ")
+    },
+    {
+        title: t("components.widgets.accounts.headers.insertedAt"),
         align: "start",
         sortable: false,
         key: "inserted_at",
-        value: (item: Groups.ReadGroupDTO) => dayjs(item.inserted_at).format("DD.MM.YYYY HH:mm:ss")
+        value: (item: Accounts.ReadAccountDTO) => dayjs(item.inserted_at).format("DD.MM.YYYY HH:mm:ss")
     },
     {
-        title: t("components.widgets.groups.headers.updatedAt"),
+        title: t("components.widgets.accounts.headers.updatedAt"),
         align: "start",
         sortable: false,
         key: "updated_at",
-        value: (item: Groups.ReadGroupDTO) => dayjs(item.updated_at).format("DD.MM.YYYY HH:mm:ss")
+        value: (item: Accounts.ReadAccountDTO) => dayjs(item.updated_at).format("DD.MM.YYYY HH:mm:ss")
     }
 ]);
 </script>
