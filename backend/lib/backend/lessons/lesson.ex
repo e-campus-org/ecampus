@@ -12,6 +12,7 @@ defmodule Backend.Lessons.Lesson do
     field(:title, :string)
     field(:topic, :string)
     field(:is_draft, :boolean, default: true)
+    field(:hours_count, :integer, default: 2)
     belongs_to(:subject, Backend.Subjects.Subject)
     has_many(:topics, Backend.LessonTopics.LessonTopic)
     timestamps(type: :utc_datetime)
@@ -20,7 +21,7 @@ defmodule Backend.Lessons.Lesson do
   @doc false
   def changeset(lesson, attrs) do
     lesson
-    |> cast(attrs, [:title, :description, :topic, :is_draft, :subject_id])
+    |> cast(attrs, [:title, :description, :topic, :is_draft, :subject_id, :hours_count])
     |> validate_required([:title, :topic, :subject_id])
     |> foreign_key_constraint(:subject_id)
   end

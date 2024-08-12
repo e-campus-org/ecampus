@@ -99,6 +99,7 @@
                     "description": "Description",
                     "topic": "Topic",
                     "isDraft": "Is draft",
+                    "hoursCount": "Duration in academic hours",
                     "subjectId": "Subject",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"

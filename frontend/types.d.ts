@@ -99,6 +99,7 @@ declare namespace Lessons {
         description: string;
         topic: string;
         is_draft: boolean;
+        hours_count: number;
         subject_id: number;
         inserted_at: string;
         updated_at: string;

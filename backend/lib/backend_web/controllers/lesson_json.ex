@@ -26,6 +26,8 @@ defmodule BackendWeb.LessonJSON do
       description: lesson.description,
       topic: lesson.topic,
       is_draft: lesson.is_draft,
+      hours_count: lesson.hours_count,
+      subject_id: lesson.subject_id,
       inserted_at: lesson.inserted_at,
       updated_at: lesson.updated_at
     }

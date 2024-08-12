@@ -98,6 +98,7 @@
                     "description": "Описание",
                     "topic": "Тема",
                     "isDraft": "Черновик",
+                    "hoursCount": "Количество часов",
                     "subjectId": "Дисциплина",
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"

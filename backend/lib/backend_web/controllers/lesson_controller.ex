@@ -25,6 +25,7 @@ defmodule BackendWeb.LessonController do
             description(:string, "Lesson description")
             topic(:string, "Lesson topic")
             is_draft(:boolean, "Is lesson draft (not shown to students)")
+            hours_count(:number, "Academic hours for this lesson")
             subject_id(:number, "Id of the subject this lesson belongs to")
             inserted_at(:datetime, "Date and time of lesson creation")
             updated_at(:datetime, "Date and time of lesson last update")
@@ -36,6 +37,7 @@ defmodule BackendWeb.LessonController do
             description: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
             is_draft: false,
+            hours_count: 2,
             subject_id: 1,
             inserted_at: "2024-07-11T05:47:50Z",
             updated_at: "2024-07-11T05:47:50Z"

@@ -60,6 +60,12 @@ const headers = computed(() => [
         key: "is_draft"
     },
     {
+        title: t("components.widgets.lessons.headers.hoursCount"),
+        align: "start",
+        sortable: false,
+        key: "hours_count"
+    },
+    {
         title: t("components.widgets.lessons.headers.insertedAt"),
         align: "start",
         sortable: false,
