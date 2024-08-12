@@ -22,7 +22,7 @@ const pageSize = ref(10);
 const loading = computed(() => status.value === "pending");
 
 const { data: specialitiesListData, status } = await useAsyncData(
-    "client-full-info",
+    "specialities-list-data",
     () =>
         useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
             `/specialities?page=${page.value}&page_size=${pageSize.value}`,

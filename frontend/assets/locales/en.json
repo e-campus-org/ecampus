@@ -78,6 +78,19 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 }
+            },
+            "subjects": {
+                "headers": {
+                    "id": "ID",
+                    "title": "Title",
+                    "shortTitle": "Short title",
+                    "description": "Description",
+                    "objectives": "Objectives",
+                    "prerequisites": "Prerequisites",
+                    "requiredTexts": "Required texts",
+                    "insertedAt": "Creation date",
+                    "updatedAt": "Update date"
+                }
             }
         }
     },

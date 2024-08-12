@@ -22,7 +22,7 @@ const pageSize = ref(10);
 const loading = computed(() => status.value === "pending");
 
 const { data: accountsListData, status } = await useAsyncData(
-    "client-full-info",
+    "accounts-list-data",
     () =>
         useFetch<Shared.ListData<Accounts.ReadAccountDTO>>(
             `/accounts?page=${page.value}&page_size=${pageSize.value}`,

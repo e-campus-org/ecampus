@@ -22,7 +22,7 @@ const pageSize = ref(10);
 const loading = computed(() => status.value === "pending");
 
 const { data: groupsListData, status } = await useAsyncData(
-    "client-full-info",
+    "groups-list-data",
     () => useFetch<Shared.ListData<Groups.ReadGroupDTO>>(`/groups?page=${page.value}&page_size=${pageSize.value}`, {}),
     {
         server: false,

@@ -77,6 +77,19 @@
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
                 }
+            },
+            "subjects": {
+                "headers": {
+                    "id": "ID",
+                    "title": "Название",
+                    "shortTitle": "Краткое название",
+                    "description": "Описание",
+                    "objectives": "Цели занятия",
+                    "prerequisites": "Предварительные требования",
+                    "requiredTexts": "Список источников",
+                    "insertedAt": "Дата создания",
+                    "updatedAt": "Дата обновления"
+                }
             }
         }
     },

@@ -77,3 +77,17 @@ declare namespace Accounts {
         updated_at: string;
     }
 }
+
+declare namespace Subjects {
+    interface ReadSubjectDTO {
+        id: number;
+        title: string;
+        short_title: string;
+        description: string;
+        objectives: string;
+        prerequisites: string;
+        required_texts: string;
+        inserted_at: string;
+        updated_at: string;
+    }
+}
