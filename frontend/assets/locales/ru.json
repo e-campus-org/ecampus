@@ -37,32 +37,34 @@
             "password": "Пароль",
             "passwordIsRequired": "Требуется ввести пароль",
             "signIn": "Войти"
-        },
-        "specialities": {
-            "headers": {
-                "id": "ID",
-                "code": "Код специальности",
-                "description": "Описание",
-                "title": "Название",
-                "insertedAt": "Дата создания",
-                "updatedAt": "Дата обновления"
-            }
-        },
-        "groups": {
-            "headers": {
-                "id": "ID",
-                "title": "Название",
-                "description": "Описание",
-                "specialityId": "Специальность",
-                "insertedAt": "Дата создания",
-                "updatedAt": "Дата обновления"
-            }
         }
     },
     "components": {
         "shared": {
             "nuxtLoading": {
                 "loading": "Загрузка"
+            }
+        },
+        "widgets": {
+            "specialities": {
+                "headers": {
+                    "id": "ID",
+                    "code": "Код специальности",
+                    "description": "Описание",
+                    "title": "Название",
+                    "insertedAt": "Дата создания",
+                    "updatedAt": "Дата обновления"
+                }
+            },
+            "groups": {
+                "headers": {
+                    "id": "ID",
+                    "title": "Название",
+                    "description": "Описание",
+                    "specialityId": "Специальность",
+                    "insertedAt": "Дата создания",
+                    "updatedAt": "Дата обновления"
+                }
             }
         }
     },
