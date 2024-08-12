@@ -8,7 +8,7 @@
         >
             <template #bottom>
                 <div class="text-center pt-2">
-                    <v-pagination v-model="currentPage" :length="props.data?.pagination?.components.widgets || 0" />
+                    <v-pagination v-model="currentPage" :length="props.data?.pagination?.pages || 0" />
                 </div>
             </template>
         </v-data-table>
@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-    data: Shared.ListData<Groups.ReadGroupDTO>;
+    data: Shared.ListData<Groups.ReadGroupDTO> | null;
     loading: boolean;
     page: number;
     pageSize: number;

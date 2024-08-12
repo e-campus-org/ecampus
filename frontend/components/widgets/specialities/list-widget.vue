@@ -16,7 +16,7 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-    data: Shared.ListData<Specialities.ReadSpecialityDTO>;
+    data: Shared.ListData<Specialities.ReadSpecialityDTO> | null;
     loading: boolean;
     page: number;
     pageSize: number;

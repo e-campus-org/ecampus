@@ -8,7 +8,7 @@
     />
 </template>
 <script setup lang="ts">
-import { ListWidget } from "@/components/widgets/specialities";
+import { ListWidget } from "@/components/widgets/groups";
 
 definePageMeta({
     layout: "admin"
