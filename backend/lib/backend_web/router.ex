@@ -62,6 +62,12 @@ defmodule BackendWeb.Router do
     post("/lesson_topics", LessonTopicController, :create)
     put("/lesson_topics/:id", LessonTopicController, :update)
     delete("/lesson_topics/:id", LessonTopicController, :delete)
+
+    get("/classes", ClassController, :index)
+    get("/classes/:id", ClassController, :show)
+    post("/classes", ClassController, :create)
+    put("/classes/:id", ClassController, :update)
+    delete("/classes/:id", ClassController, :delete)
   end
 
   scope "/api/swagger" do
@@ -104,7 +110,8 @@ defmodule BackendWeb.Router do
         %{name: "Specialities", description: "Operations with Specialities"},
         %{name: "Subjects", description: "Operations with Subjects"},
         %{name: "Lessons", description: "Operations with Lessons"},
-        %{name: "LessonTopics", description: "Operations with LessonTopics"}
+        %{name: "LessonTopics", description: "Operations with LessonTopics"},
+        %{name: "Classes", description: "Operations with Classes"}
       ],
       securityDefinitions: %{
         bearer: %{

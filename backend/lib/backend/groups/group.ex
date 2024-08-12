@@ -12,6 +12,7 @@ defmodule Backend.Groups.Group do
     field(:title, :string)
     belongs_to(:speciality, Backend.Specialities.Speciality)
     has_many(:accounts, Backend.Accounts.Account)
+    has_many(:classes, Backend.Classes.Class)
     timestamps(type: :utc_datetime)
   end
 

@@ -15,6 +15,7 @@ defmodule Backend.Lessons.Lesson do
     field(:hours_count, :integer, default: 2)
     belongs_to(:subject, Backend.Subjects.Subject)
     has_many(:topics, Backend.LessonTopics.LessonTopic)
+    has_many(:classes, Backend.Classes.Class)
     timestamps(type: :utc_datetime)
   end
 
