@@ -8,7 +8,7 @@ defmodule BackendWeb.GroupController do
 
   import Backend.Auth.Plugs
 
-  action_fallback BackendWeb.FallbackController
+  action_fallback(BackendWeb.FallbackController)
 
   plug(:is_admin when action in [:create, :update, :delete])
 
@@ -116,6 +116,11 @@ defmodule BackendWeb.GroupController do
     description("Query for all groups. This operation supports pagination.")
     produces("application/json")
     tag("Groups")
+
+    parameters do
+      page(:query, :number, "Page")
+      page_size(:query, :number, "Page size")
+    end
 
     security([%{bearer: []}])
 

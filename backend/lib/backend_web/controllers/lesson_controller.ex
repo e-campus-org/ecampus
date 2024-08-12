@@ -131,6 +131,11 @@ defmodule BackendWeb.LessonController do
     produces("application/json")
     tag("Lessons")
 
+    parameters do
+      page(:query, :number, "Page")
+      page_size(:query, :number, "Page size")
+    end
+
     security([%{bearer: []}])
 
     response(200, "Success", Schema.ref(:LessonsWithPagination))
