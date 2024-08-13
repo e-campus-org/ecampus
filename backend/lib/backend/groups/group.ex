@@ -13,6 +13,8 @@ defmodule Backend.Groups.Group do
     belongs_to(:speciality, Backend.Specialities.Speciality)
     has_many(:accounts, Backend.Accounts.Account)
     has_many(:classes, Backend.Classes.Class)
+    many_to_many(:subjects, Backend.Subjects.Subject, join_through: "taught_subjects")
+    many_to_many(:teachers, Backend.Accounts.Account, join_through: "taught_subjects")
     timestamps(type: :utc_datetime)
   end
 

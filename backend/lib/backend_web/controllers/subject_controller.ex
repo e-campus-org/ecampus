@@ -3,6 +3,7 @@ defmodule BackendWeb.SubjectController do
 
   use PhoenixSwagger
 
+  alias Backend.TaughtSubjects.TaughtSubject
   alias Backend.Subjects
   alias Backend.Subjects.Subject
 
@@ -11,9 +12,28 @@ defmodule BackendWeb.SubjectController do
   action_fallback(BackendWeb.FallbackController)
 
   plug(:is_teacher when action in [:create, :update, :delete])
+  plug(:is_admin when action in [:link_subject_with_teacher_and_group])
 
   def swagger_definitions do
     %{
+      TeacherInfo:
+        swagger_schema do
+          title("Teacher info")
+          description("Teacher account info")
+
+          properties do
+            id(:number, "Unique identifier")
+            first_name(:string, "Teacher first name")
+            last_name(:string, "Teacher last name")
+          end
+        end,
+      TeacherInfoList:
+        swagger_schema do
+          title("List of teacher info objects")
+          description("A collection of TeacherInfo objects")
+          type(:array)
+          items(Schema.ref(:TeacherInfo))
+        end,
       Subject:
         swagger_schema do
           title("Subject")
@@ -27,6 +47,7 @@ defmodule BackendWeb.SubjectController do
             prerequisites(:string, "Subject prerequisites")
             objectives(:string, "Subject objectives")
             required_texts(:string, "Subject required texts")
+            teachers(Schema.ref(:TeacherInfoList), "List of subject teachers")
             inserted_at(:datetime, "Date and time of subject creation")
             updated_at(:datetime, "Date and time of subject last update")
           end
@@ -39,16 +60,44 @@ defmodule BackendWeb.SubjectController do
             prerequisites: "Subj1, Subj2",
             objectives: "Lorem ipsum dolor sit amet",
             required_texts: "Lorem ipsum dolor sit amet",
+            teachers: [
+              %{
+                id: 1,
+                first_name: "John",
+                last_name: "Doe"
+              }
+            ],
             inserted_at: "2024-07-11T05:47:50Z",
             updated_at: "2024-07-11T05:47:50Z"
           })
         end,
-      Subjects:
+      ShortSubject:
+        swagger_schema do
+          title("Subject")
+          description("A subject to study")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Subject title")
+            short_title(:string, "Subject short title")
+            inserted_at(:datetime, "Date and time of subject creation")
+            updated_at(:datetime, "Date and time of subject last update")
+          end
+
+          example(%{
+            id: 1,
+            title: "Subject Title",
+            short_title: "ST",
+            inserted_at: "2024-07-11T05:47:50Z",
+            updated_at: "2024-07-11T05:47:50Z"
+          })
+        end,
+      ShortSubjects:
         swagger_schema do
           title("List of subjects")
           description("A collection of Subject")
           type(:array)
-          items(Schema.ref(:Subject))
+          items(Schema.ref(:ShortSubject))
         end,
       Pagination:
         swagger_schema do
@@ -69,13 +118,13 @@ defmodule BackendWeb.SubjectController do
             page_size: 5
           })
         end,
-      SubjectsWithPagination:
+      ShortSubjectsWithPagination:
         swagger_schema do
           title("List of subjects with pagination data")
           description("A collection of Subject with pagination data")
 
           properties do
-            list(Schema.ref(:Subjects), "Subjects list", required: true)
+            list(Schema.ref(:ShortSubjects), "Subjects list", required: true)
             pagination(Schema.ref(:Pagination), "Pagination data", required: true)
           end
         end,
@@ -142,7 +191,7 @@ defmodule BackendWeb.SubjectController do
 
     security([%{bearer: []}])
 
-    response(200, "Success", Schema.ref(:SubjectsWithPagination))
+    response(200, "Success", Schema.ref(:ShortSubjectsWithPagination))
   end
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
@@ -255,6 +304,41 @@ defmodule BackendWeb.SubjectController do
 
     with {:ok, %Subject{}} <- Subjects.delete_subject(subject) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  swagger_path :link_subject_with_teacher_and_group do
+    put("/subjects/{id}/link")
+    summary("Links subject with teacher and group")
+    description("Links subject with teacher and group.")
+    produces("application/json")
+    tag("Subjects")
+
+    security([%{bearer: []}])
+
+    parameters do
+      subject_id(:path, :number, "Subject id", required: true)
+      taught_by_id(:body, :number, "Teacher account id", required: true)
+      group_id(:body, :number, "Group id", required: true)
+    end
+
+    response(200, "Success", Schema.ref(:Subject))
+    response(404, "Not found (subject or group or account doesn't exists)")
+    response(422, "Unprocessable entity (something wrong with body)")
+    response(400, "Bad request (Unknown error)")
+  end
+
+  def link_subject_with_teacher_and_group(
+        conn,
+        %{
+          "subject_id" => _subject_id,
+          "taught_by_id" => _account_id,
+          "group_id" => _group_id
+        } = params
+      ) do
+    with {:ok, %TaughtSubject{} = taught_subject} <-
+           Subjects.link_subject_with_teacher_and_group(params) do
+      render(conn, :show, subject: taught_subject.subject)
     end
   end
 end

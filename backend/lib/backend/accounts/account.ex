@@ -17,6 +17,13 @@ defmodule Backend.Accounts.Account do
     field(:password_hash, :string)
     field(:roles, {:array, Ecto.Enum}, values: @roles)
     belongs_to(:group, Backend.Groups.Group)
+
+    many_to_many(:subjects, Backend.Subjects.Subject,
+      join_through: "taught_subjects",
+      join_keys: [taught_by_id: :id, subject_id: :id]
+    )
+
+    many_to_many(:taught_groups, Backend.Groups.Group, join_through: "taught_subjects")
     timestamps(type: :utc_datetime)
 
     field(:password, :string, virtual: true)

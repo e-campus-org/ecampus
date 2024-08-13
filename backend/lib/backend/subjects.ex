@@ -8,6 +8,7 @@ defmodule Backend.Subjects do
   alias Backend.Repo
 
   alias Backend.Subjects.Subject
+  alias Backend.TaughtSubjects.TaughtSubject
 
   @doc """
   Returns the list of subjects.
@@ -37,7 +38,9 @@ defmodule Backend.Subjects do
       ** (Ecto.NoResultsError)
 
   """
-  def get_subject!(id), do: Repo.get!(Subject, id)
+  def get_subject!(id) do
+    Repo.get!(Subject, id) |> Repo.preload([:teachers])
+  end
 
   @doc """
   Creates a subject.
@@ -52,9 +55,13 @@ defmodule Backend.Subjects do
 
   """
   def create_subject(attrs \\ %{}) do
-    %Subject{}
-    |> Subject.changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %Subject{}
+      |> Subject.changeset(attrs)
+
+    with {:ok, subject} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(subject, [:teachers])}
+    end
   end
 
   @doc """
@@ -70,9 +77,13 @@ defmodule Backend.Subjects do
 
   """
   def update_subject(%Subject{} = subject, attrs) do
-    subject
-    |> Subject.changeset(attrs)
-    |> Repo.update()
+    changeset =
+      subject
+      |> Subject.changeset(attrs)
+
+    with {:ok, subject} <- Repo.update(changeset) do
+      {:ok, Repo.preload(subject, [:teachers])}
+    end
   end
 
   @doc """
@@ -88,7 +99,9 @@ defmodule Backend.Subjects do
 
   """
   def delete_subject(%Subject{} = subject) do
-    Repo.delete(subject)
+    Subject.changeset(subject, %{})
+    |> Ecto.Changeset.no_assoc_constraint(:lessons)
+    |> Repo.delete()
   end
 
   @doc """
@@ -102,5 +115,27 @@ defmodule Backend.Subjects do
   """
   def change_subject(%Subject{} = subject, attrs \\ %{}) do
     Subject.changeset(subject, attrs)
+  end
+
+  @doc """
+  Links subject with teacher and group.
+
+  ## Examples
+
+      iex> link_subject_with_teacher_and_group(%{field: value})
+      {:ok, %TaughtSubject{}}
+
+      iex> link_subject_with_teacher_and_group(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def link_subject_with_teacher_and_group(attrs) do
+    changeset =
+      %TaughtSubject{}
+      |> TaughtSubject.changeset(attrs)
+
+    with {:ok, taught_subject} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(taught_subject, [:subject])}
+    end
   end
 end

@@ -49,6 +49,7 @@ defmodule BackendWeb.Router do
     get("/subjects/:id", SubjectController, :show)
     post("/subjects", SubjectController, :create)
     put("/subjects/:id", SubjectController, :update)
+    put("/subjects/:subject_id/link", SubjectController, :link_subject_with_teacher_and_group)
     delete("/subjects/:id", SubjectController, :delete)
 
     get("/lessons", LessonController, :index)

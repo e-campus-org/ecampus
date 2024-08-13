@@ -16,6 +16,13 @@ defmodule Backend.Subjects.Subject do
     field(:objectives, :string)
     field(:required_texts, :string)
     has_many(:lessons, Backend.Lessons.Lesson)
+    many_to_many(:groups, Backend.Groups.Group, join_through: "taught_subjects")
+
+    many_to_many(:teachers, Backend.Accounts.Account,
+      join_through: "taught_subjects",
+      join_keys: [subject_id: :id, taught_by_id: :id]
+    )
+
     timestamps(type: :utc_datetime)
   end
 

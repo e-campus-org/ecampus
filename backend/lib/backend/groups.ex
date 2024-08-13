@@ -89,7 +89,9 @@ defmodule Backend.Groups do
 
   """
   def delete_group(%Group{} = group) do
-    Repo.delete(group)
+    Group.changeset(group, %{})
+    |> Ecto.Changeset.no_assoc_constraint(:classes)
+    |> Repo.delete()
   end
 
   @doc """

@@ -88,7 +88,9 @@ defmodule Backend.Lessons do
 
   """
   def delete_lesson(%Lesson{} = lesson) do
-    Repo.delete(lesson)
+    Lesson.changeset(lesson, %{})
+    |> Ecto.Changeset.no_assoc_constraint(:topics)
+    |> Repo.delete()
   end
 
   @doc """
