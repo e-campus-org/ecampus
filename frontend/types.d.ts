@@ -96,7 +96,7 @@ declare namespace Lessons {
     interface ReadLessonDTO {
         id: number;
         title: string;
-        description: string;
+        objectives: string;
         topic: string;
         is_draft: boolean;
         hours_count: number;

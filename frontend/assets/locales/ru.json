@@ -95,7 +95,7 @@
                 "headers": {
                     "id": "ID",
                     "title": "Название",
-                    "description": "Описание",
+                    "objectives": "Цели занятия",
                     "topic": "Тема",
                     "isDraft": "Черновик",
                     "hoursCount": "Количество часов",

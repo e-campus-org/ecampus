@@ -96,7 +96,7 @@
                 "headers": {
                     "id": "ID",
                     "title": "Title",
-                    "description": "Description",
+                    "objectives": "Objectives",
                     "topic": "Topic",
                     "isDraft": "Is draft",
                     "hoursCount": "Duration in academic hours",
