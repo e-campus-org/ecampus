@@ -23,7 +23,7 @@ defmodule BackendWeb.LessonJSON do
     %{
       id: lesson.id,
       title: lesson.title,
-      description: lesson.description,
+      objectives: lesson.objectives,
       topic: lesson.topic,
       is_draft: lesson.is_draft,
       hours_count: lesson.hours_count,

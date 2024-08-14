@@ -8,7 +8,7 @@ defmodule Backend.Lessons.Lesson do
   }
 
   schema "lessons" do
-    field(:description, :string)
+    field(:objectives, :string)
     field(:title, :string)
     field(:topic, :string)
     field(:is_draft, :boolean, default: true)
@@ -22,7 +22,7 @@ defmodule Backend.Lessons.Lesson do
   @doc false
   def changeset(lesson, attrs) do
     lesson
-    |> cast(attrs, [:title, :description, :topic, :is_draft, :subject_id, :hours_count])
+    |> cast(attrs, [:title, :objectives, :topic, :is_draft, :subject_id, :hours_count])
     |> validate_required([:title, :topic, :subject_id])
     |> foreign_key_constraint(:subject_id)
   end

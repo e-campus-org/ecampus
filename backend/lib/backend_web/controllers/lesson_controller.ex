@@ -22,7 +22,7 @@ defmodule BackendWeb.LessonController do
           properties do
             id(:number, "Unique identifier")
             title(:string, "Lesson title")
-            description(:string, "Lesson description")
+            objectives(:string, "Lesson objectives")
             topic(:string, "Lesson topic")
             is_draft(:boolean, "Is lesson draft (not shown to students)")
             hours_count(:number, "Academic hours for this lesson")
@@ -34,7 +34,7 @@ defmodule BackendWeb.LessonController do
           example(%{
             id: 1,
             title: "Lesson Title",
-            description: "Lorem ipsum dolor sit amet",
+            objectives: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
             is_draft: false,
             hours_count: 2,
@@ -86,7 +86,7 @@ defmodule BackendWeb.LessonController do
 
           properties do
             title(:string, "Lesson title", required: true)
-            description(:string, "Lesson description")
+            objectives(:string, "Lesson objectives")
             topic(:string, "Lesson topic", required: true)
             is_draft(:boolean, "Is lesson draft (not shown to students)")
             subject_id(:number, "Id of the subject this lesson belongs to", required: true)
@@ -94,7 +94,7 @@ defmodule BackendWeb.LessonController do
 
           example(%{
             title: "Lesson Title",
-            description: "Lorem ipsum dolor sit amet",
+            objectives: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
             is_draft: false,
             subject_id: 1
@@ -107,7 +107,7 @@ defmodule BackendWeb.LessonController do
 
           properties do
             title(:string, "Lesson title")
-            description(:string, "Lesson description")
+            objectives(:string, "Lesson objectives")
             topic(:string, "Lesson topic")
             is_draft(:boolean, "Is lesson draft (not shown to students)")
             subject_id(:number, "Id of the subject this lesson belongs to")
@@ -115,7 +115,7 @@ defmodule BackendWeb.LessonController do
 
           example(%{
             title: "Lesson Title",
-            description: "Lorem ipsum dolor sit amet",
+            objectives: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
             is_draft: false,
             subject_id: 1
