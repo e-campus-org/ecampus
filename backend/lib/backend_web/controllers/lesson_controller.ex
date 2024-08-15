@@ -14,6 +14,31 @@ defmodule BackendWeb.LessonController do
 
   def swagger_definitions do
     %{
+      ShortLesson:
+        swagger_schema do
+          title("Lesson")
+          description("A single lesson of subject to study")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Lesson title")
+            is_draft(:boolean, "Is lesson draft (not shown to students)")
+            hours_count(:number, "Academic hours for this lesson")
+            subject_id(:number, "Id of the subject this lesson belongs to")
+            inserted_at(:datetime, "Date and time of lesson creation")
+            updated_at(:datetime, "Date and time of lesson last update")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lesson Title",
+            is_draft: false,
+            hours_count: 2,
+            subject_id: 1,
+            inserted_at: "2024-07-11T05:47:50Z",
+            updated_at: "2024-07-11T05:47:50Z"
+          })
+        end,
       Lesson:
         swagger_schema do
           title("Lesson")
@@ -43,12 +68,12 @@ defmodule BackendWeb.LessonController do
             updated_at: "2024-07-11T05:47:50Z"
           })
         end,
-      Lessons:
+      ShortLessons:
         swagger_schema do
           title("List of lessons")
-          description("A collection of Lesson")
+          description("A collection of ShortLesson")
           type(:array)
-          items(Schema.ref(:Lesson))
+          items(Schema.ref(:ShortLesson))
         end,
       Pagination:
         swagger_schema do
@@ -69,13 +94,13 @@ defmodule BackendWeb.LessonController do
             page_size: 5
           })
         end,
-      LessonsWithPagination:
+      ShortLessonsWithPagination:
         swagger_schema do
           title("List of lessons with pagination data")
           description("A collection of Lesson with pagination data")
 
           properties do
-            list(Schema.ref(:Lessons), "Lessons list", required: true)
+            list(Schema.ref(:ShortLessons), "Lessons list", required: true)
             pagination(Schema.ref(:Pagination), "Pagination data", required: true)
           end
         end,
@@ -138,7 +163,7 @@ defmodule BackendWeb.LessonController do
 
     security([%{bearer: []}])
 
-    response(200, "Success", Schema.ref(:LessonsWithPagination))
+    response(200, "Success", Schema.ref(:ShortLessonsWithPagination))
   end
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do

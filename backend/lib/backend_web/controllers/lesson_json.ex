@@ -5,7 +5,7 @@ defmodule BackendWeb.LessonJSON do
   Renders a list of lessons.
   """
   def index(%{data: {:ok, %{list: list, pagination: pagination}}}) do
-    %{list: for(lesson <- list, do: data(lesson)), pagination: pagination}
+    %{list: for(lesson <- list, do: short_data(lesson)), pagination: pagination}
   end
 
   def index(%{data: {:error, _paylaod}}) do
@@ -17,6 +17,18 @@ defmodule BackendWeb.LessonJSON do
   """
   def show(%{lesson: lesson}) do
     %{data: data(lesson)}
+  end
+
+  defp short_data(%Lesson{} = lesson) do
+    %{
+      id: lesson.id,
+      title: lesson.title,
+      is_draft: lesson.is_draft,
+      hours_count: lesson.hours_count,
+      subject_id: lesson.subject_id,
+      inserted_at: lesson.inserted_at,
+      updated_at: lesson.updated_at
+    }
   end
 
   defp data(%Lesson{} = lesson) do
