@@ -5,7 +5,9 @@ defmodule Backend.Classes.Class do
   @derive {
     Flop.Schema,
     filterable: [:begin_date, :classroom, :lesson_id, :group_id],
-    sortable: [:begin_date, :classroom, :lesson_id, :group_id]
+    sortable: [:begin_date, :classroom, :lesson_id, :group_id],
+    max_limit: 100,
+    default_limit: 10
   }
 
   schema "classes" do

@@ -14,6 +14,38 @@ defmodule BackendWeb.ClassController do
 
   def swagger_definitions do
     %{
+      ClassLesson:
+        swagger_schema do
+          title("ClassLesson")
+          description("A lesson object inside class object")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Lesson title")
+            topic(:string, "Lesson topic")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lorem ipsum dolor sit amet",
+            topic: "Lorem ipsum dolor sit amet"
+          })
+        end,
+      ClassGroup:
+        swagger_schema do
+          title("ClassGroup")
+          description("A group object inside class object")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Group title")
+          end
+
+          example(%{
+            id: 1,
+            title: "123a"
+          })
+        end,
       Class:
         swagger_schema do
           title("Class")
@@ -23,8 +55,8 @@ defmodule BackendWeb.ClassController do
             id(:number, "Unique identifier")
             begin_date(:datetime, "Class begin date and time")
             classroom(:string, "Classroom number")
-            lesson_id(:string, "Id of the lesson this class is for")
-            group_id(:number, "Id of the group this class is for")
+            lesson(Schema.ref(:ClassLesson), "Class lesson info")
+            group(Schema.ref(:ClassGroup), "Class group info")
             inserted_at(:datetime, "Date and time of class creation")
             updated_at(:datetime, "Date and time of class last update")
           end
@@ -33,8 +65,16 @@ defmodule BackendWeb.ClassController do
             id: 1,
             begin_date: "2024-07-11T10:00:00Z",
             classroom: "103a",
-            lesson_id: 1,
-            group_id: 1,
+            lesson: %{
+              id: 1,
+              title: "Lorem ipsum dolor sit amet",
+              topic: "Lorem ipsum dolor sit amet"
+            },
+            group: %{
+              id: 1,
+              title: "Lorem ipsum dolor sit amet",
+              topic: "Lorem ipsum dolor sit amet"
+            },
             inserted_at: "2024-07-11T05:47:50Z",
             updated_at: "2024-07-11T05:47:50Z"
           })
@@ -126,6 +166,10 @@ defmodule BackendWeb.ClassController do
     parameters do
       page(:query, :number, "Page")
       page_size(:query, :number, "Page size")
+      group_id(:query, :number, "Group id")
+      lesson_id(:query, :string, "Lesson id")
+      classroom(:query, :string, "Classroom number")
+      begin_date(:query, :string, "Class begin date")
     end
 
     security([%{bearer: []}])
@@ -133,13 +177,9 @@ defmodule BackendWeb.ClassController do
     response(200, "Success", Schema.ref(:ClassesWithPagination))
   end
 
-  def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
+  def index(conn, params) do
     data = Classes.list_classes(params)
-    render(conn, :index, data: data)
-  end
-
-  def index(conn, _params) do
-    data = Classes.list_classes(%{"page" => 1, "page_size" => 10})
+    data |> IO.inspect()
     render(conn, :index, data: data)
   end
 

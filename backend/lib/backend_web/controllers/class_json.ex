@@ -24,8 +24,15 @@ defmodule BackendWeb.ClassJSON do
       id: class.id,
       begin_date: class.begin_date,
       classroom: class.classroom,
-      lesson_id: class.lesson_id,
-      group_id: class.group_id,
+      lesson: %{
+        id: class.lesson_id,
+        title: class.lesson.title,
+        topic: class.lesson.topic
+      },
+      group: %{
+        id: class.group_id,
+        title: class.group.title
+      },
       inserted_at: class.inserted_at,
       updated_at: class.updated_at
     }

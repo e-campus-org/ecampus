@@ -18,10 +18,37 @@ defmodule Backend.Classes do
       [%Class{}, ...]
 
   """
-  def list_classes(params \\ %{}),
-    do:
-      Flop.validate_and_run(Class, params, for: Class)
-      |> with_pagination()
+  def list_classes(params \\ %{}) do
+    filters = []
+
+    filters =
+      params
+      |> Enum.reduce(filters, fn
+        {"group_id", group_id}, acc ->
+          [%{field: :group_id, value: group_id} | acc]
+
+        {"lesson_id", lesson_id}, acc ->
+          [%{field: :lesson_id, value: lesson_id} | acc]
+
+        {"classroom", classroom}, acc ->
+          [%{field: :classroom, op: :ilike, value: classroom} | acc]
+
+        _, acc ->
+          acc
+      end)
+
+    Class
+    |> preload([:group, :lesson])
+    |> Flop.validate_and_run(
+      %{
+        page: Map.get(params, "page", 1),
+        page_size: Map.get(params, "page_size", 10),
+        filters: filters
+      },
+      for: Class
+    )
+    |> with_pagination()
+  end
 
   @doc """
   Gets a single class.
