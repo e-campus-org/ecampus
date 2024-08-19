@@ -2,7 +2,6 @@ import { StorageSerializers } from "@vueuse/core";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function useFetch<T>(where: string, params: any, cache?: boolean) {
-    console.log(cache);
     const config = useRuntimeConfig();
     const accessToken = useCookie("access_token");
     const url = `${config.public.apiUrl}${where}`;

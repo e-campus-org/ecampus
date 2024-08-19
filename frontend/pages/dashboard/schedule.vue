@@ -10,14 +10,21 @@ definePageMeta({
     layout: "dashboard"
 });
 
-const loading = computed(() => status.value === "pending");
+const loading = computed(() => status.value === "pending" || accountLoading.value);
+const { account, loading: accountLoading } = useAccount();
 
 const { data: classesListData, status } = await useAsyncData(
     "classes-list-data",
-    () => useFetch<Shared.ListData<Classes.ReadClassDTO>>(`/classes`, {}, false),
+    () => {
+        if (account.value?.group_id && account.value.group_id > 0) {
+            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(`/classes?=${account.value?.group_id}`, {}, false);
+        } else {
+            return Promise.resolve(null);
+        }
+    },
     {
-        server: false
-        // watch: [page, pageSize]
+        server: false,
+        watch: [account]
     }
 );
 </script>
