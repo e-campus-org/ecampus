@@ -5,6 +5,7 @@
             :items="props.data?.list || []"
             :loading="loading"
             :items-per-page="props.pageSize"
+            :mobile-breakpoint="0"
         >
             <template #bottom>
                 <div class="text-center pt-2">
