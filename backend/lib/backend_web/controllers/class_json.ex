@@ -27,7 +27,8 @@ defmodule BackendWeb.ClassJSON do
       lesson: %{
         id: class.lesson_id,
         title: class.lesson.title,
-        topic: class.lesson.topic
+        topic: class.lesson.topic,
+        hours_count: class.lesson.hours_count
       },
       group: %{
         id: class.group_id,

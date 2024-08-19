@@ -19,6 +19,15 @@
                     $t("layouts.dashboard.sideMenu.find")
                 }}</v-tooltip>
             </v-list-item>
+            <v-list-item
+                prepend-icon="mdi-timetable"
+                :title="$t('layouts.dashboard.sideMenu.schedule')"
+                :to="{ name: 'dashboard-schedule' }"
+            >
+                <v-tooltip v-if="$vuetify.display.mdAndUp" activator="parent" location="end">{{
+                    $t("layouts.dashboard.sideMenu.schedule")
+                }}</v-tooltip>
+            </v-list-item>
         </template>
     </internal-layout>
 </template>

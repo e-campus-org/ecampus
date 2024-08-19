@@ -1,6 +1,6 @@
 {
     "layouts": {
-        "dashboard": {
+        "internal": {
             "header": {
                 "settings": "Настройки",
                 "profile": "Профиль",
@@ -12,20 +12,20 @@
                 "lightTheme": "Включить светлую тему"
             }
         },
+        "dashboard": {
+            "sideMenu": {
+                "find": "Поиск",
+                "my": "Мои предметы",
+                "schedule": "Расписание"
+            }
+        },
         "admin": {
-            "header": {
-                "settings": "Настройки",
-                "profile": "Профиль",
-                "logout": "Выход"
-            },
             "sideMenu": {
                 "specialities": "Специальности",
                 "groups": "Группы",
                 "accounts": "Учетные записи",
-                "subjects": "Учебные дисциплины",
-                "lessons": "Учебные занятия",
-                "darkTheme": "Включить темную тему",
-                "lightTheme": "Включить светлую тему"
+                "subjects": "Предметы",
+                "lessons": "Занятия"
             }
         }
     },
@@ -46,6 +46,9 @@
             }
         },
         "widgets": {
+            "schedule": {
+                "today": "Сегодня"
+            },
             "specialities": {
                 "headers": {
                     "id": "ID",

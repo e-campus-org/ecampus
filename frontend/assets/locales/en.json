@@ -15,7 +15,8 @@
         "dashboard": {
             "sideMenu": {
                 "find": "Find",
-                "my": "My subjects"
+                "my": "My subjects",
+                "schedule": "Schedule"
             }
         },
         "admin": {
@@ -24,9 +25,7 @@
                 "groups": "Groups",
                 "accounts": "Accounts",
                 "subjects": "Subjects",
-                "lessons": "Lessons",
-                "lightTheme": "Toggle light theme",
-                "showContents": "Show contents"
+                "lessons": "Lessons"
             }
         }
     },
@@ -47,6 +46,9 @@
             }
         },
         "widgets": {
+            "schedule": {
+                "today": "Today"
+            },
             "specialities": {
                 "headers": {
                     "id": "ID",

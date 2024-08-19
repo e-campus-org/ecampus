@@ -105,3 +105,26 @@ declare namespace Lessons {
         updated_at: string;
     }
 }
+
+declare namespace Classes {
+    interface ReadClassGroupInfoDTO {
+        id: number;
+        title: string;
+    }
+
+    interface ReadClassLessonInfoDTO {
+        id: number;
+        title: string;
+        topic: string;
+        hours_count: number;
+    }
+    interface ReadClassDTO {
+        id: number;
+        begin_date: string;
+        classroom: string;
+        group: ReadClassGroupInfoDTO;
+        lesson: ReadClassLessonInfoDTO;
+        inserted_at: string;
+        updated_at: string;
+    }
+}

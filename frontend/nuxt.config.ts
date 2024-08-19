@@ -1,5 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { md3 } from "vuetify/blueprints";
 
 export default defineNuxtConfig({
     compatibilityDate: "2024-04-03",
@@ -27,7 +26,6 @@ export default defineNuxtConfig({
     },
     vuetify: {
         vuetifyOptions: {
-            blueprint: md3,
             theme: {
                 defaultTheme: "dark"
             }
