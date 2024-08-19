@@ -10,19 +10,21 @@
                 :text="$t('components.widgets.schedule.today')"
             >
                 <template #event="{ event }">
-                    <v-chip color="primary" class="mb-1 cursor-pointer">
-                        <span class="text-truncate">{{ event.title }}</span>
-                        <v-tooltip activator="parent" location="top">
-                            <div class="d-flex flex-column align-start justify-start">
-                                <strong>{{ event.title }}</strong>
-                                <span>{{ event.classroom }}</span>
-                                <span
-                                    >{{ $dayjs(event.start).format("DD.MM.YYYY, HH:mm") }} -
-                                    {{ $dayjs(event.end).format("HH:mm") }}</span
-                                >
-                            </div>
-                        </v-tooltip>
-                    </v-chip>
+                    <div style="max-width: 118px" class="d-flex align-center justify-center px-2">
+                        <v-chip color="primary" class="mb-1 cursor-pointer">
+                            <span class="text-truncate">{{ event.title }}</span>
+                            <v-tooltip activator="parent" location="top">
+                                <div class="d-flex flex-column align-start justify-start">
+                                    <strong>{{ event.title }}</strong>
+                                    <span>{{ event.classroom }}</span>
+                                    <span
+                                        >{{ $dayjs(event.start).format("DD.MM.YYYY, HH:mm") }} -
+                                        {{ $dayjs(event.end).format("HH:mm") }}</span
+                                    >
+                                </div>
+                            </v-tooltip>
+                        </v-chip>
+                    </div>
                 </template>
             </v-calendar>
         </div>
