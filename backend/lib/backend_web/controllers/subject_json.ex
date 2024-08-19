@@ -15,9 +15,7 @@ defmodule BackendWeb.SubjectJSON do
   @doc """
   Renders a single subject.
   """
-  def show(%{subject: subject}) do
-    %{data: data(subject)}
-  end
+  def show(%{subject: subject}), do: data(subject)
 
   defp data_short(%Subject{} = subject) do
     %{

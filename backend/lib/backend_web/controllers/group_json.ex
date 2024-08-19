@@ -15,9 +15,7 @@ defmodule BackendWeb.GroupJSON do
   @doc """
   Renders a single group.
   """
-  def show(%{group: group}) do
-    %{data: data(group)}
-  end
+  def show(%{group: group}), do: data(group)
 
   defp data(%Group{} = group) do
     %{

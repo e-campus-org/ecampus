@@ -11,13 +11,17 @@ definePageMeta({
 });
 
 const loading = computed(() => status.value === "pending" || accountLoading.value);
-const { account, loading: accountLoading } = useAccount();
+const { account, loading: accountLoading } = await useAccount();
 
 const { data: classesListData, status } = await useAsyncData(
     "classes-list-data",
     () => {
         if (account.value?.group_id && account.value.group_id > 0) {
-            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(`/classes?=${account.value?.group_id}`, {}, false);
+            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(
+                `/classes?group_id=${account.value?.group_id}`,
+                {},
+                false
+            );
         } else {
             return Promise.resolve(null);
         }

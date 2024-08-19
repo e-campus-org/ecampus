@@ -42,7 +42,6 @@ const value = ref(new Date());
 
 const events = computed(() => {
     if (props.data) {
-        console.log(props.data);
         return props.data.list.map((c: Classes.ReadClassDTO) => {
             return {
                 title: c.lesson.title,

@@ -16,9 +16,7 @@ defmodule BackendWeb.SpecialityJSON do
   @doc """
   Renders a single speciality.
   """
-  def show(%{speciality: speciality}) do
-    %{data: data(speciality)}
-  end
+  def show(%{speciality: speciality}), do: data(speciality)
 
   defp data(%Speciality{} = speciality) do
     %{

@@ -16,9 +16,7 @@ defmodule BackendWeb.LessonTopicJSON do
   @doc """
   Renders a single lesson_topic.
   """
-  def show(%{lesson_topic: lesson_topic}) do
-    %{data: data(lesson_topic)}
-  end
+  def show(%{lesson_topic: lesson_topic}), do: data(lesson_topic)
 
   defp data(%LessonTopic{} = lesson_topic) do
     %{

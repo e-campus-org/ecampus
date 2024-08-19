@@ -15,9 +15,7 @@ defmodule BackendWeb.ClassJSON do
   @doc """
   Renders a single class.
   """
-  def show(%{class: class}) do
-    %{data: data(class)}
-  end
+  def show(%{class: class}), do: data(class)
 
   defp data(%Class{} = class) do
     %{

@@ -15,9 +15,7 @@ defmodule BackendWeb.AccountJSON do
   @doc """
   Renders a single account.
   """
-  def show(%{account: account}) do
-    %{data: data(account)}
-  end
+  def show(%{account: account}), do: data(account)
 
   defp data(%Account{} = account) do
     %{

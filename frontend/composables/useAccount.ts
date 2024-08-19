@@ -1,23 +1,22 @@
-export function useAccount(forceRefresh?: boolean) {
+export async function useAccount(forceRefresh?: boolean) {
     const { accountInfo } = useJwt();
 
-    const loading = ref(false);
-    const account = ref<Accounts.ReadAccountDTO | null>(null);
+    const loading = computed(() => status.value === "pending");
 
-    (async () => {
-        const { data, status } = await useAsyncData(
-            "current-account",
-            () => useFetch<Accounts.ReadAccountDTO>(`/accounts/${accountInfo.value?.id}`, {}, !forceRefresh),
-            {
-                server: false,
-                watch: [accountInfo]
+    const { data: account, status } = await useAsyncData(
+        "current-account",
+        () => {
+            if (accountInfo.value) {
+                return useFetch<Accounts.ReadAccountDTO>(`/accounts/${accountInfo.value?.id}`, {}, !forceRefresh);
+            } else {
+                return Promise.resolve(null);
             }
-        );
-
-        watch(status, newVal => (loading.value = newVal === "pending"));
-
-        watch(data, newVal => (account.value = newVal));
-    })();
+        },
+        {
+            server: false,
+            watch: [accountInfo]
+        }
+    );
 
     return { loading, account };
 }

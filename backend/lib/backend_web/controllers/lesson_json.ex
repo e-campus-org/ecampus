@@ -15,9 +15,7 @@ defmodule BackendWeb.LessonJSON do
   @doc """
   Renders a single lesson.
   """
-  def show(%{lesson: lesson}) do
-    %{data: data(lesson)}
-  end
+  def show(%{lesson: lesson}), do: data(lesson)
 
   defp short_data(%Lesson{} = lesson) do
     %{

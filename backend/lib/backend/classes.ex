@@ -64,7 +64,7 @@ defmodule Backend.Classes do
       ** (Ecto.NoResultsError)
 
   """
-  def get_class!(id), do: Repo.get!(Class, id)
+  def get_class!(id), do: Repo.get!(Class, id) |> Repo.preload([:group, :lesson])
 
   @doc """
   Creates a class.
