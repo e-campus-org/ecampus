@@ -17,10 +17,10 @@
                                 <div class="d-flex flex-column align-start justify-start">
                                     <strong>{{ event.title }}</strong>
                                     <span>{{ event.classroom }}</span>
-                                    <span
-                                        >{{ $dayjs(event.start).format("DD.MM.YYYY, HH:mm") }} -
-                                        {{ $dayjs(event.end).format("HH:mm") }}</span
-                                    >
+                                    <span>
+                                        {{ $dayjs(event.start as Date).format("DD.MM.YYYY, HH:mm") }} -
+                                        {{ $dayjs(event.end as Date).format("HH:mm") }}
+                                    </span>
                                 </div>
                             </v-tooltip>
                         </v-chip>
@@ -38,7 +38,7 @@ const props = defineProps<{
     data: Shared.ListData<Classes.ReadClassDTO> | null;
 }>();
 
-const value = ref(new Date());
+const value = ref([new Date()]);
 
 const events = computed(() => {
     if (props.data) {
