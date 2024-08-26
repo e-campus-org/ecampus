@@ -1,5 +1,6 @@
 defmodule BackendWeb.GroupJSON do
   alias Backend.Groups.Group
+  alias Backend.Subjects.Subject
 
   @doc """
   Renders a list of groups.
@@ -10,6 +11,10 @@ defmodule BackendWeb.GroupJSON do
 
   def index(%{data: {:error, _paylaod}}) do
     %{error: "Wrong params"}
+  end
+
+  def index_subjects(%{subjects: subjects}) do
+    for(subject <- subjects, do: data_subject(subject))
   end
 
   @doc """
@@ -25,6 +30,16 @@ defmodule BackendWeb.GroupJSON do
       speciality_id: group.speciality_id,
       created_at: group.inserted_at,
       updated_at: group.updated_at
+    }
+  end
+
+  # def show_subject()
+  defp data_subject(%Subject{} = subject) do
+    %{
+      id: subject.id,
+      title: subject.title,
+      short_title: subject.short_title,
+      description: subject.description
     }
   end
 end

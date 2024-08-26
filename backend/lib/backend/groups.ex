@@ -8,6 +8,9 @@ defmodule Backend.Groups do
   alias Backend.Repo
 
   alias Backend.Groups.Group
+  alias Backend.Subjects.Subject
+  alias Backend.Lessons.Lesson
+  alias Backend.Classes.Class
 
   @doc """
   Returns the list of groups.
@@ -39,6 +42,25 @@ defmodule Backend.Groups do
 
   """
   def get_group!(id), do: Repo.get!(Group, id)
+
+  @doc """
+  Gets an all subject of the group
+
+  """
+  def get_group_subjects(group_id) do
+    from(s in Subject,
+      join: l in Lesson,
+      on: l.subject_id == s.id,
+      join: c in Class,
+      on: c.lesson_id == l.id,
+      join: g in Group,
+      on: g.id == c.group_id,
+      where: c.group_id == ^group_id,
+      distinct: s.id,
+      select: s
+    )
+    |> Repo.all()
+  end
 
   @doc """
   Creates a group.

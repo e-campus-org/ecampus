@@ -41,6 +41,7 @@ defmodule BackendWeb.Router do
 
     get("/groups", GroupController, :index)
     get("/groups/:id", GroupController, :show)
+    get("/groups/:id/subjects", GroupController, :show_subjects)
     post("/groups", GroupController, :create)
     put("/groups/:id", GroupController, :update)
     delete("/groups/:id", GroupController, :delete)

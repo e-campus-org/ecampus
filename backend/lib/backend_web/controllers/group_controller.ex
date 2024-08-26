@@ -187,6 +187,11 @@ defmodule BackendWeb.GroupController do
     render(conn, :show, group: group)
   end
 
+  def show_subjects(conn, %{"id" => group_id}) do
+    subjects = Groups.get_group_subjects(group_id)
+    render(conn, :index_subjects, subjects: subjects)
+  end
+
   swagger_path :update do
     put("/groups/{id}")
     summary("Update existing group")
