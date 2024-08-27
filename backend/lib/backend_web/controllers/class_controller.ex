@@ -24,13 +24,15 @@ defmodule BackendWeb.ClassController do
             title(:string, "Lesson title")
             topic(:string, "Lesson topic")
             hours_count(:number, "Academic hours for this lesson")
+            subject_id(:number, "Subject id")
           end
 
           example(%{
             id: 1,
             title: "Lorem ipsum dolor sit amet",
             topic: "Lorem ipsum dolor sit amet",
-            hours_count: 2
+            hours_count: 2,
+            subject_id: 1
           })
         end,
       ClassGroup:
@@ -71,7 +73,8 @@ defmodule BackendWeb.ClassController do
               id: 1,
               title: "Lorem ipsum dolor sit amet",
               topic: "Lorem ipsum dolor sit amet",
-              hours_count: 2
+              hours_count: 2,
+              subject_id: 1
             },
             group: %{
               id: 1,

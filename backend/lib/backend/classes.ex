@@ -19,31 +19,35 @@ defmodule Backend.Classes do
 
   """
   def list_classes(params \\ %{}) do
-    filters = []
+    filters =
+      Class
+      |> join(:inner, [c], l in assoc(c, :lesson))
 
     filters =
       params
       |> Enum.reduce(filters, fn
-        {"group_id", group_id}, acc ->
-          [%{field: :group_id, value: group_id} | acc]
+        {"group_id", group_id}, query ->
+          query |> where([c], c.group_id == ^group_id)
 
-        {"lesson_id", lesson_id}, acc ->
-          [%{field: :lesson_id, value: lesson_id} | acc]
+        {"lesson_id", lesson_id}, query ->
+          query |> where([c], c.lesson_id == ^lesson_id)
 
-        {"classroom", classroom}, acc ->
-          [%{field: :classroom, op: :ilike, value: classroom} | acc]
+        {"classroom", classroom}, query ->
+          query |> where([c], ilike(c.classroom, ^"%#{classroom}%"))
 
-        _, acc ->
-          acc
+        {"subject_id", subject_id}, query ->
+          query |> where([c, l], l.subject_id == ^subject_id)
+
+        _, query ->
+          query
       end)
 
-    Class
-    |> preload([:group, :lesson])
+    filters
+    |> preload([c, l], [:group, lesson: l])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
-        page_size: Map.get(params, "page_size", 10),
-        filters: filters
+        page_size: Map.get(params, "page_size", 10)
       },
       for: Class
     )

@@ -10,7 +10,7 @@ defmodule BackendWeb.LessonController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action in [:create, :update, :delete])
+  plug(:is_teacher)
 
   def swagger_definitions do
     %{
