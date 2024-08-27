@@ -114,6 +114,7 @@
     },
     "errors": {
         "unauthorized": "Wrong email or password",
-        "unknown": "Unknown error"
+        "unknown": "Unknown error",
+        "comingSoon": "Coming soon"
     }
 }

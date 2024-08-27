@@ -1,5 +1,5 @@
 <template>
-    <div>settings</div>
+    <div>{{ $t("errors.comingSoon") }}</div>
 </template>
 <script setup lang="ts">
 definePageMeta({
