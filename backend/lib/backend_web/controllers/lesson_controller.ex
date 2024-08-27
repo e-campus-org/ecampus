@@ -159,6 +159,7 @@ defmodule BackendWeb.LessonController do
     parameters do
       page(:query, :number, "Page")
       page_size(:query, :number, "Page size")
+      subject_id(:query, :string, "Subject id")
     end
 
     security([%{bearer: []}])

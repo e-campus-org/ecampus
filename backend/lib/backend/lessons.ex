@@ -18,10 +18,30 @@ defmodule Backend.Lessons do
       [%Lesson{}, ...]
 
   """
-  def list_lessons(params \\ %{}),
-    do:
-      Flop.validate_and_run(Lesson, params, for: Lesson)
-      |> with_pagination()
+  def list_lessons(params \\ %{}) do
+    filters = []
+
+    filters =
+      params
+      |> Enum.reduce(filters, fn
+        {"subject_id", subject_id}, acc ->
+          [%{field: :subject_id, value: subject_id} | acc]
+
+        _, acc ->
+          acc
+      end)
+
+    Lesson
+    |> Flop.validate_and_run(
+      %{
+        page: Map.get(params, "page", 1),
+        page_size: Map.get(params, "page_size", 10),
+        filters: filters
+      },
+      for: Lesson
+    )
+    |> with_pagination()
+  end
 
   @doc """
   Gets a single lesson.

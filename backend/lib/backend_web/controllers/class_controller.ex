@@ -181,7 +181,6 @@ defmodule BackendWeb.ClassController do
 
   def index(conn, params) do
     data = Classes.list_classes(params)
-    data |> IO.inspect()
     render(conn, :index, data: data)
   end
 
