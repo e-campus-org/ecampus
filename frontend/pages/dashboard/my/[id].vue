@@ -1,10 +1,10 @@
 <template>
     <v-container>
-        <lesson-list-widget :loading="loading" :lessons-data="lessonsData" @page-changed="page = $event" />
+        <class-list-widget :loading="loading" :classes-data="classesData" @page-changed="page = $event" />
     </v-container>
 </template>
 <script setup lang="ts">
-import { LessonListWidget } from "@/components/widgets/my";
+import { ClassListWidget } from "@/components/widgets/my";
 
 definePageMeta({
     layout: "dashboard",
@@ -16,17 +16,19 @@ definePageMeta({
 const route = useRoute();
 const subjectId = computed(() => Number(route.params.id));
 
-const loading = computed(() => status.value === "pending");
+const { account, loading: accountLoading } = await useAccount();
 
-const page = useState("dashboard-lessons-page", () => 1);
-const pageSize = useState("dashboard-lessons-page-size", () => 10);
+const loading = computed(() => status.value === "pending" || accountLoading.value);
 
-const { data: lessonsData, status } = await useAsyncData(
-    "subject-lessons-list-data",
+const page = useState("dashboard-classes-page", () => 1);
+const pageSize = useState("dashboard-classes-page-size", () => 10);
+
+const { data: classesData, status } = await useAsyncData(
+    "dashboard-classes-list-data",
     () => {
         if (subjectId.value && subjectId.value > 0) {
-            return useFetch<Shared.ListData<Lessons.ReadLessonDTO>>(
-                `/lessons?subject_id=${subjectId.value}&page=${page.value}&page_size=${pageSize.value}`,
+            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(
+                `/classes?subject_id=${subjectId.value}&group_id=${account.value?.group_id}&page=${page.value}&page_size=${pageSize.value}`,
                 {},
                 false
             );
@@ -38,7 +40,7 @@ const { data: lessonsData, status } = await useAsyncData(
         getCachedData: _ => undefined,
         lazy: true,
         default: () => null,
-        watch: [subjectId, page, pageSize]
+        watch: [subjectId, page, pageSize, account]
     }
 );
 </script>

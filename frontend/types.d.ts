@@ -117,6 +117,7 @@ declare namespace Classes {
         title: string;
         topic: string;
         hours_count: number;
+        subject_id: number;
     }
     interface ReadClassDTO {
         id: number;
