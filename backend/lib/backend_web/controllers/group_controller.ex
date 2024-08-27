@@ -44,6 +44,32 @@ defmodule BackendWeb.GroupController do
           type(:array)
           items(Schema.ref(:Group))
         end,
+      GroupSubject:
+        swagger_schema do
+          title("Subject")
+          description("A subject to study")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Subject title")
+            short_title(:string, "Subject short title")
+            description(:string, "Subject description")
+          end
+
+          example(%{
+            id: 1,
+            title: "Subject Title",
+            short_title: "ST",
+            description: "Lorem ipsum dolor sit amet"
+          })
+        end,
+      GroupSubjects:
+        swagger_schema do
+          title("List of group subjects")
+          description("A collection of GroupSubject")
+          type(:array)
+          items(Schema.ref(:GroupSubject))
+        end,
       Pagination:
         swagger_schema do
           title("Pagination data")
@@ -185,6 +211,24 @@ defmodule BackendWeb.GroupController do
   def show(conn, %{"id" => id}) do
     group = Groups.get_group!(id)
     render(conn, :show, group: group)
+  end
+
+  swagger_path :show_subjects do
+    get("/groups/{id}/subjects")
+    summary("Query subjects for group")
+    description("Query subjects for group.")
+    produces("application/json")
+    tag("Groups")
+
+    security([%{bearer: []}])
+
+    parameters do
+      id(:path, :number, "Group id", required: true)
+    end
+
+    response(200, "Success", Schema.ref(:GroupSubjects))
+    response(404, "Not found (group doesn't exists)")
+    response(400, "Bad request (Unknown error)")
   end
 
   def show_subjects(conn, %{"id" => group_id}) do
