@@ -51,7 +51,7 @@
             },
             "my": {
                 "showSubject": "Показать",
-                "goToLesson": "Перейти к уроку"
+                "goToClass": "Перейти к уроку"
             },
             "specialities": {
                 "headers": {

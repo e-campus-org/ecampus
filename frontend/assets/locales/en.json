@@ -51,7 +51,7 @@
             },
             "my": {
                 "showSubject": "Show",
-                "goToLesson": "Go to lesson"
+                "goToClass": "Go to class"
             },
             "specialities": {
                 "headers": {
