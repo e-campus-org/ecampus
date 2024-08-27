@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <subject-list-widget :loading="loading" :subjects="mySubjects" />
+        <subject-list-widget :loading="loading" :subjects="mySubjects" @subject-selected="onSubjectSelected" />
     </v-container>
 </template>
 
@@ -30,4 +30,11 @@ const { data: mySubjects, status } = await useAsyncData(
         watch: [account]
     }
 );
+
+function onSubjectSelected(subjectId: number) {
+    navigateTo({
+        name: "dashboard-my-id",
+        params: { id: subjectId }
+    });
+}
 </script>

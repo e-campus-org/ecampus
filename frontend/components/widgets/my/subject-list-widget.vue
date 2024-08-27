@@ -8,7 +8,9 @@
                 :text="subject.description"
             >
                 <v-card-actions>
-                    <v-btn>{{ $t("components.widgets.my.showSubject") }}</v-btn>
+                    <v-btn @click="emit('subject-selected', subject.id)">{{
+                        $t("components.widgets.my.showSubject")
+                    }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-col>
@@ -18,5 +20,9 @@
 const props = defineProps<{
     loading: boolean;
     subjects: Subjects.ReadSubjectDTO[];
+}>();
+
+const emit = defineEmits<{
+    (e: "subject-selected", subjectId: number): void;
 }>();
 </script>
