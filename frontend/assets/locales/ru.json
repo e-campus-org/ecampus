@@ -50,7 +50,8 @@
                 "today": "Сегодня"
             },
             "my": {
-                "showSubject": "Показать"
+                "showSubject": "Показать",
+                "goToLesson": "Перейти к уроку"
             },
             "specialities": {
                 "headers": {

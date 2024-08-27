@@ -4,7 +4,7 @@
             <v-card :loading="props.loading" :title="cls.lesson.title" :subtitle="cls.lesson.topic">
                 <v-card-actions>
                     <v-btn @click="emit('class-selected', cls.id)">
-                        {{ $t("components.widgets.my.showSubject") }}
+                        {{ $t("components.widgets.my.goToLesson") }}
                     </v-btn>
                 </v-card-actions>
             </v-card>
