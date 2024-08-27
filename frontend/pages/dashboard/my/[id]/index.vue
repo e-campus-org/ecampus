@@ -1,6 +1,11 @@
 <template>
     <v-container>
-        <class-list-widget :loading="loading" :classes-data="classesData" @page-changed="page = $event" />
+        <class-list-widget
+            :loading="loading"
+            :classes-data="classesData"
+            @page-changed="page = $event"
+            @class-selected="onClassSelected"
+        />
     </v-container>
 </template>
 <script setup lang="ts">
@@ -43,4 +48,11 @@ const { data: classesData, status } = await useAsyncData(
         watch: [subjectId, page, pageSize, account]
     }
 );
+
+function onClassSelected(classId: number) {
+    navigateTo({
+        name: "dashboard-my-id-classes-classId",
+        params: { id: subjectId.value, classId }
+    });
+}
 </script>
