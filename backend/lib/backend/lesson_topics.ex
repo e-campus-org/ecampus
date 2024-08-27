@@ -19,10 +19,30 @@ defmodule Backend.LessonTopics do
 
   """
 
-  def list_lesson_topics(params \\ %{}),
-    do:
-      Flop.validate_and_run(LessonTopic, params, for: LessonTopic)
-      |> with_pagination()
+  def list_lesson_topics(params \\ %{}) do
+    filters = []
+
+    filters =
+      params
+      |> Enum.reduce(filters, fn
+        {"lesson_id", lesson_id}, acc ->
+          [%{field: :lesson_id, value: lesson_id} | acc]
+
+        _, acc ->
+          acc
+      end)
+
+    LessonTopic
+    |> Flop.validate_and_run(
+      %{
+        page: Map.get(params, "page", 1),
+        page_size: Map.get(params, "page_size", 10),
+        filters: filters
+      },
+      for: LessonTopic
+    )
+    |> with_pagination()
+  end
 
   @doc """
   Gets a single lesson_topic.

@@ -26,7 +26,8 @@ defmodule BackendWeb.LessonTopicJSON do
       description: lesson_topic.description,
       objectives: lesson_topic.objectives,
       inserted_at: lesson_topic.inserted_at,
-      updated_at: lesson_topic.updated_at
+      updated_at: lesson_topic.updated_at,
+      lesson_id: lesson_topic.lesson_id
     }
   end
 end
