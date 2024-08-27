@@ -49,6 +49,9 @@
             "schedule": {
                 "today": "Сегодня"
             },
+            "my": {
+                "showSubject": "Показать"
+            },
             "specialities": {
                 "headers": {
                     "id": "ID",

@@ -27,7 +27,9 @@ const { data: classesListData, status } = await useAsyncData(
         }
     },
     {
-        server: false,
+        getCachedData: _ => undefined,
+        lazy: true,
+        default: () => null,
         watch: [account]
     }
 );
