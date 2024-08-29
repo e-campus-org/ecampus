@@ -23,6 +23,7 @@
         "monaco-editor": "^0.50.0",
         "nuxt": "^3.12.3",
         "nuxt-monaco-editor": "^1.2.9",
+        "nuxt-tiptap-editor": "^1.2.1",
         "nuxt-viewport": "^2.1.5",
         "pinia": "^2.1.7",
         "sass": "^1.77.8",

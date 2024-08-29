@@ -19,8 +19,15 @@ export default defineNuxtConfig({
         "nuxt-monaco-editor",
         "@pinia/nuxt",
         "vuetify-nuxt-module",
-        "@vueuse/nuxt"
+        "@vueuse/nuxt",
+        "nuxt-tiptap-editor"
     ],
+    tiptap: {
+        prefix: "Tiptap",
+        lowlight: {
+            theme: "github-dark"
+        }
+    },
     i18n: {
         vueI18n: "./i18n.ts"
     },

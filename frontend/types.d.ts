@@ -104,6 +104,20 @@ declare namespace Lessons {
         inserted_at: string;
         updated_at: string;
     }
+
+    interface CreateLessonTopicDTO {
+        title: string;
+        description: string;
+        objectives: string;
+        content: string;
+        lesson_id: number;
+    }
+
+    interface ReadLessonTopicDTO extends CreateLessonTopicDTO {
+        id: number;
+        inserted_at: string;
+        updated_at: string;
+    }
 }
 
 declare namespace Classes {
