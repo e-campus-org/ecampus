@@ -26,15 +26,6 @@
             </v-col>
             <v-col cols="12">
                 <tiptap-editor v-model="content.value.value" />
-                <!-- <v-textarea
-                    v-model="content.value.value"
-                    class="w-100"
-                    clearable
-                    :error-messages="content.errorMessage.value"
-                    :label="$t('components.widgets.lessons.topics.headers.content')"
-                    :loading="loading"
-                    :disabled="loading"
-                /> -->
             </v-col>
         </v-row>
         <v-btn class="mt-4" type="submit" :loading="loading">
@@ -80,11 +71,10 @@ const title = useField<string>("title");
 const content = useField<string>("content");
 
 const submit = handleSubmit(values => {
-    // emit("lesson-topic-changed", {
-    //     title: values.title,
-    //     content: values.content
-    // });
-    console.log(values);
+    emit("lesson-topic-changed", {
+        title: values.title,
+        content: values.content
+    });
 });
 
 watch(

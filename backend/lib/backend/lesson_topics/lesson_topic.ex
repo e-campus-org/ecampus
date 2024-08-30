@@ -4,14 +4,12 @@ defmodule Backend.LessonTopics.LessonTopic do
 
   @derive {
     Flop.Schema,
-    filterable: [:title, :lesson_id], sortable: [:description, :title]
+    filterable: [:title, :lesson_id], sortable: [:title]
   }
 
   schema "lesson_topics" do
     field(:title, :string)
-    field(:description, :string)
-    field(:objectives, :string)
-    field(:content, :string)
+    field(:content, :map)
     belongs_to(:lesson, Backend.Lessons.Lesson)
     timestamps(type: :utc_datetime)
   end
@@ -19,7 +17,7 @@ defmodule Backend.LessonTopics.LessonTopic do
   @doc false
   def changeset(lesson_topic, attrs) do
     lesson_topic
-    |> cast(attrs, [:title, :content, :description, :objectives, :lesson_id])
+    |> cast(attrs, [:title, :content, :lesson_id])
     |> validate_required([:title, :lesson_id])
     |> foreign_key_constraint(:lesson_id)
   end

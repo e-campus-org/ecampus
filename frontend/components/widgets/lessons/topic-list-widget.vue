@@ -59,12 +59,6 @@ const headers = computed(() => [
         key: "title"
     },
     {
-        title: t("components.widgets.lessons.topics.headers.lessonId"),
-        align: "start",
-        sortable: false,
-        key: "lesson_id"
-    },
-    {
         title: t("components.widgets.lessons.topics.headers.insertedAt"),
         align: "start",
         sortable: false,
