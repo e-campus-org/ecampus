@@ -109,6 +109,17 @@
                     "subjectId": "Subject",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "edit": {
+                    "editTitle": "Edit lesson",
+                    "createTitle": "Create lesson",
+                    "save": "Save changes",
+                    "cancel": "Cancel",
+                    "subjectIsRequired": "Subject is required",
+                    "wrongSubject": "Wrong subject",
+                    "titleIsRequired": "Title is required",
+                    "topicIsRequired": "Topic is required",
+                    "wrongHours": "Wrong hours count"
                 }
             }
         }

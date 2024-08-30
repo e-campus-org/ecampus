@@ -93,14 +93,26 @@ declare namespace Subjects {
 }
 
 declare namespace Lessons {
-    interface ReadLessonDTO {
-        id: number;
-        title: string;
-        objectives: string;
-        topic: string;
+    interface CreateLessonDTO {
         is_draft: boolean;
-        hours_count: number;
+        objectives: string;
         subject_id: number;
+        title: string;
+        topic: string;
+        hours_count: number;
+    }
+
+    interface UpdateLessonDTO {
+        is_draft?: boolean;
+        objectives?: string;
+        subject_id?: number;
+        title?: string;
+        topic?: string;
+        hours_count?: number;
+    }
+
+    interface ReadLessonDTO extends CreateLessonDTO {
+        id: number;
         inserted_at: string;
         updated_at: string;
     }
@@ -111,6 +123,14 @@ declare namespace Lessons {
         objectives: string;
         content: string;
         lesson_id: number;
+    }
+
+    interface UpdateLessonTopicDTO {
+        title?: string;
+        description?: string;
+        objectives?: string;
+        content?: string;
+        lesson_id?: number;
     }
 
     interface ReadLessonTopicDTO extends CreateLessonTopicDTO {

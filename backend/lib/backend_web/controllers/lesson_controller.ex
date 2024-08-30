@@ -113,6 +113,7 @@ defmodule BackendWeb.LessonController do
             title(:string, "Lesson title", required: true)
             objectives(:string, "Lesson objectives")
             topic(:string, "Lesson topic", required: true)
+            hours_count(:number, "Academic hours for this lesson")
             is_draft(:boolean, "Is lesson draft (not shown to students)")
             subject_id(:number, "Id of the subject this lesson belongs to", required: true)
           end
@@ -121,6 +122,7 @@ defmodule BackendWeb.LessonController do
             title: "Lesson Title",
             objectives: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
+            hours_count: 2,
             is_draft: false,
             subject_id: 1
           })
@@ -134,6 +136,7 @@ defmodule BackendWeb.LessonController do
             title(:string, "Lesson title")
             objectives(:string, "Lesson objectives")
             topic(:string, "Lesson topic")
+            hours_count(:number, "Academic hours for this lesson")
             is_draft(:boolean, "Is lesson draft (not shown to students)")
             subject_id(:number, "Id of the subject this lesson belongs to")
           end
@@ -142,6 +145,7 @@ defmodule BackendWeb.LessonController do
             title: "Lesson Title",
             objectives: "Lorem ipsum dolor sit amet",
             topic: "Lesson Topic",
+            hours_count: 2,
             is_draft: false,
             subject_id: 1
           })
