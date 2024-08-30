@@ -110,9 +110,22 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 },
+                "topics": {
+                    "headers": {
+                        "id": "ID",
+                        "title": "Lesson",
+                        "description": "Description",
+                        "content": "Content",
+                        "lessonId": "Lesson",
+                        "objectives": "Objectives",
+                        "insertedAt": "Creation date",
+                        "updatedAt": "Update date"
+                    }
+                },
                 "edit": {
                     "editTitle": "Edit lesson",
                     "createTitle": "Create lesson",
+                    "topicsTitle": "Lesson topics",
                     "save": "Save changes",
                     "cancel": "Cancel",
                     "subjectIsRequired": "Subject is required",

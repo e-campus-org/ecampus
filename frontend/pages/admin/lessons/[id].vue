@@ -1,10 +1,17 @@
 <template>
     <v-container>
         <edit-lesson-widget :loading="loading" :lesson="currentLesson" @lesson-changed="updateLesson" />
+        <topic-list-widget
+            :loading="loading"
+            :data="lessonTopicsListData"
+            :page="page"
+            :page-size="pageSize"
+            @topic-selected="onTopicSelected"
+        />
     </v-container>
 </template>
 <script setup lang="ts">
-import { EditLessonWidget } from "@/components/widgets/lessons";
+import { EditLessonWidget, TopicListWidget } from "@/components/widgets/lessons";
 import { FetchError } from "ofetch";
 
 definePageMeta({
@@ -76,5 +83,9 @@ async function updateLesson(lesson: Lessons.UpdateLessonDTO) {
     } finally {
         localLoading.value = false;
     }
+}
+
+function onTopicSelected(topic: Lessons.ReadLessonTopicDTO) {
+    console.log(topic);
 }
 </script>

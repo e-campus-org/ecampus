@@ -110,9 +110,22 @@
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
                 },
+                "topics": {
+                    "headers": {
+                        "id": "ID",
+                        "title": "Название учебного вопроса",
+                        "description": "Описание",
+                        "content": "Содержание вопроса",
+                        "lessonId": "Занятие",
+                        "objectives": "Цели",
+                        "insertedAt": "Дата создания",
+                        "updatedAt": "Дата обновления"
+                    }
+                },
                 "edit": {
                     "editTitle": "Редактировать занятие",
                     "createTitle": "Создать занятие",
+                    "topicsTitle": "Учебные вопросы занятия",
                     "save": "Сохранить изменения",
                     "cancel": "Отмена",
                     "subjectIsRequired": "Требуется выбрать дисциплину",
