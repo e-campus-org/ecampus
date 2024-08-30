@@ -215,7 +215,7 @@ defmodule BackendWeb.LessonTopicController do
     parameters do
       id(:path, :number, "Lesson topic id", required: true)
 
-      lesson_topic(:body, Schema.ref(:UpdateLesson), "Data to update lesson topic",
+      lesson_topic(:body, Schema.ref(:UpdateLessonTopic), "Data to update lesson topic",
         required: true
       )
     end

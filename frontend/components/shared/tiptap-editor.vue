@@ -128,14 +128,21 @@
     </client-only>
 </template>
 
-<script setup>
-// import "tiptap/styles/reset.css";
-// import "tiptap/styles/typography.css";
-// import "tiptap/styles/editor.css";
+<script setup lang="ts">
+import type { Content } from "@tiptap/core";
+
+const props = defineProps<{
+    modelValue: string;
+}>();
+
+const emit = defineEmits<{
+    (e: "update:modelValue", content: Content): void;
+}>();
+
 const lowlight = TiptapcreateLowlight(Tiptapall);
 
 const editor = useEditor({
-    content: "<p>I'm running Tiptap with Vue.js. 🎉</p>",
+    content: props.modelValue,
     extensions: [
         TiptapStarterKit.configure({
             codeBlock: false
@@ -143,14 +150,19 @@ const editor = useEditor({
         TiptapCodeBlockLowlight.configure({ lowlight })
     ],
     onFocus: () => (isFocused.value = true),
-    onBlur: () => (isFocused.value = false)
+    onBlur: () => (isFocused.value = false),
+    onUpdate: ({ editor }) => {
+        emit("update:modelValue", editor.getJSON());
+    }
+});
+
+watch([() => props.modelValue, editor], ([newVal, _]) => {
+    if (editor) {
+        editor.value?.commands.setContent(newVal);
+    }
 });
 
 const isFocused = ref(false);
-
-watchEffect(() => {
-    console.log(editor.value);
-});
 
 onBeforeUnmount(() => {
     unref(editor).destroy();

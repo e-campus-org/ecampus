@@ -113,13 +113,18 @@
                 "topics": {
                     "headers": {
                         "id": "ID",
-                        "title": "Lesson",
-                        "description": "Description",
+                        "title": "Title",
                         "content": "Content",
-                        "lessonId": "Lesson",
                         "objectives": "Objectives",
                         "insertedAt": "Creation date",
                         "updatedAt": "Update date"
+                    },
+                    "edit": {
+                        "editTitle": "Edit lesson topic",
+                        "createTitle": "Create lesson topic",
+                        "save": "Save changes",
+                        "cancel": "Cancel",
+                        "titleIsRequired": "Title is required"
                     }
                 },
                 "edit": {

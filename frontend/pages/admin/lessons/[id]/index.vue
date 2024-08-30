@@ -34,7 +34,7 @@ const loading = computed(
 );
 
 const { data: currentLesson, status: lessonStatus } = await useAsyncData(
-    "dashboard-current-class-data",
+    "admin-current-lesson-data",
     () => {
         if (lessonId.value && lessonId.value > 0) {
             return useFetch<Lessons.ReadLessonDTO>(`/lessons/${lessonId.value}`, {}, false);
@@ -86,6 +86,9 @@ async function updateLesson(lesson: Lessons.UpdateLessonDTO) {
 }
 
 function onTopicSelected(topic: Lessons.ReadLessonTopicDTO) {
-    console.log(topic);
+    navigateTo({
+        name: "admin-lessons-id-topics-topicId",
+        params: { id: lessonId.value, topicId: topic.id }
+    });
 }
 </script>
