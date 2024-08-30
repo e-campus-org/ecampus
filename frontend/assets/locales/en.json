@@ -51,7 +51,17 @@
             },
             "my": {
                 "showSubject": "Show",
-                "goToClass": "Go to class"
+                "goToClass": "Go to class",
+                "class": {
+                    "info": "Class information",
+                    "group": "Group: %{group}",
+                    "date": "Date: %{date}",
+                    "begin": "Begin: %{begin}",
+                    "end": "End: %{end}",
+                    "professors": "Professors",
+                    "topics": "Class topics",
+                    "openTopic": "Open topic"
+                }
             },
             "specialities": {
                 "headers": {

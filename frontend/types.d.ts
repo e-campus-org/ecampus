@@ -146,10 +146,21 @@ declare namespace Classes {
         title: string;
     }
 
+    interface ReadClassLessonTopicInfoDTO {
+        id: number;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        content: any;
+        title: string;
+        lesson_id: number;
+        inserted_at: string;
+        updated_at: string;
+    }
+
     interface ReadClassLessonInfoDTO {
         id: number;
         title: string;
         topic: string;
+        topics: ReadClassLessonTopicInfoDTO[];
         hours_count: number;
         subject_id: number;
     }

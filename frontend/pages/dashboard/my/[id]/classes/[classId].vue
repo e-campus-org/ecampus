@@ -1,7 +1,11 @@
 <template>
-    <div>{{ classId }}</div>
+    <v-container>
+        <class-widget :loading="loading" :current-class="currentClass" />
+    </v-container>
 </template>
 <script setup lang="ts">
+import { ClassWidget } from "@/components/widgets/my";
+
 definePageMeta({
     layout: "dashboard",
     validate: route => {

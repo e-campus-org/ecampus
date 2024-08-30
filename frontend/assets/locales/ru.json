@@ -51,7 +51,17 @@
             },
             "my": {
                 "showSubject": "Показать",
-                "goToClass": "Перейти к уроку"
+                "goToClass": "Перейти к занятию",
+                "class": {
+                    "info": "Информация о занятии",
+                    "group": "Группа: %{group}",
+                    "date": "Дата: %{date}",
+                    "begin": "Начало: %{begin}",
+                    "end": "Окончание: %{end}",
+                    "professors": "Преподаватели",
+                    "topics": "Учебные вопросы занятия",
+                    "openTopic": "Перейти к изучению"
+                }
             },
             "specialities": {
                 "headers": {
