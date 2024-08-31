@@ -11,7 +11,7 @@
             >
                 <template #event="{ event }">
                     <div style="max-width: 118px" class="d-flex align-center justify-center px-2">
-                        <v-chip color="primary" class="mb-1 cursor-pointer">
+                        <v-chip color="primary" class="mb-1 cursor-pointer" @click="onClassClicked(event.id as number)">
                             <span class="text-truncate">{{ event.title }}</span>
                             <v-tooltip activator="parent" location="top">
                                 <div class="d-flex flex-column align-start justify-start">
@@ -38,6 +38,10 @@ const props = defineProps<{
     data: Shared.ListData<Classes.ReadClassDTO> | null;
 }>();
 
+const emit = defineEmits<{
+    (e: "class-selected", cls: Classes.ReadClassDTO): void;
+}>();
+
 const value = ref([new Date()]);
 
 const events = computed(() => {
@@ -47,13 +51,21 @@ const events = computed(() => {
                 title: c.lesson.title,
                 classroom: c.classroom,
                 start: new Date(Date.parse(c.begin_date)),
-                end: new Date(Date.parse(c.begin_date) + 45 * c.lesson.hours_count * 60 * 1000)
+                end: new Date(Date.parse(c.begin_date) + 45 * c.lesson.hours_count * 60 * 1000),
+                id: c.id
             };
         });
     } else {
         return [];
     }
 });
+
+function onClassClicked(id: number) {
+    const cls = props?.data?.list?.find?.(c => c.id == id);
+    if (cls) {
+        emit("class-selected", cls);
+    }
+}
 </script>
 <style scoped>
 ::v-deep .v-chip__content {

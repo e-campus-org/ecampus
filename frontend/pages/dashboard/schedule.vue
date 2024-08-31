@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <schedule-table-widget :loading="loading" :data="classesListData" />
+        <schedule-table-widget :loading="loading" :data="classesListData" @class-selected="onClassSelected" />
     </v-container>
 </template>
 <script setup lang="ts">
@@ -33,4 +33,11 @@ const { data: classesListData, status } = await useAsyncData(
         watch: [account]
     }
 );
+
+function onClassSelected(c: Classes.ReadClassDTO) {
+    navigateTo({
+        name: "dashboard-my-id-classes-classId",
+        params: { id: c.lesson.subject_id, classId: c.id }
+    });
+}
 </script>
