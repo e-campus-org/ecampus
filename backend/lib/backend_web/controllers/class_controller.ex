@@ -251,7 +251,7 @@ defmodule BackendWeb.ClassController do
       class(:body, Schema.ref(:UpdateClass), "Data to update class", required: true)
     end
 
-    response(200, "Success", Schema.ref(:UpdateClass))
+    response(200, "Success", Schema.ref(:Class))
     response(404, "Not found (class doesn't exists)")
     response(422, "Unprocessable entity (something wrong with body)")
     response(400, "Bad request (Unknown error)")
