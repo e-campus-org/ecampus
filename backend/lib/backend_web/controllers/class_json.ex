@@ -1,6 +1,9 @@
 defmodule BackendWeb.ClassJSON do
   alias Backend.Classes.Class
   alias Backend.LessonTopics.LessonTopic
+  alias Backend.Quizzes.Quiz
+  alias Backend.Questions.Question
+  alias Backend.Questions.Question.Answer
 
   @doc """
   Renders a list of classes.
@@ -40,6 +43,8 @@ defmodule BackendWeb.ClassJSON do
   end
 
   defp data(%Class{} = class) do
+    class |> IO.inspect()
+
     %{
       id: class.id,
       begin_date: class.begin_date,
@@ -50,7 +55,8 @@ defmodule BackendWeb.ClassJSON do
         topic: class.lesson.topic,
         hours_count: class.lesson.hours_count,
         subject_id: class.lesson.subject_id,
-        topics: for(topic <- class.lesson.topics, do: data_topic(topic))
+        topics: for(topic <- class.lesson.topics, do: data_topic(topic)),
+        quizzes: for(quiz <- class.lesson.quizzes, do: data_quiz(quiz))
       },
       group: %{
         id: class.group_id,
@@ -69,6 +75,37 @@ defmodule BackendWeb.ClassJSON do
       inserted_at: lesson_topic.inserted_at,
       updated_at: lesson_topic.updated_at,
       lesson_id: lesson_topic.lesson_id
+    }
+  end
+
+  defp data_quiz(%Quiz{} = quiz) do
+    %{
+      id: quiz.id,
+      title: quiz.title,
+      description: quiz.description,
+      estimation: quiz.estimation,
+      lesson_id: quiz.lesson_id,
+      questions: for(question <- quiz.questions, do: data_question(question))
+    }
+  end
+
+  defp data_question(%Question{} = question) do
+    %{
+      id: question.id,
+      type: question.type,
+      title: question.title,
+      subtitle: question.subtitle,
+      grade: question.grade,
+      quiz_id: question.quiz_id,
+      answers: for(answer <- question.answers, do: date_answer(answer))
+    }
+  end
+
+  defp date_answer(%Answer{} = answer) do
+    %{
+      id: answer.id,
+      title: answer.title,
+      subtitle: answer.subtitle
     }
   end
 end

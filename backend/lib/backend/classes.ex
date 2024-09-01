@@ -69,7 +69,9 @@ defmodule Backend.Classes do
 
   """
   def get_class!(id),
-    do: Repo.get!(Class, id) |> Repo.preload([:group, :lesson, lesson: [:topics]])
+    do:
+      Repo.get!(Class, id)
+      |> Repo.preload([:group, :lesson, lesson: [:topics, :quizzes, quizzes: [:questions]]])
 
   @doc """
   Creates a class.
