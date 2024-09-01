@@ -26,7 +26,7 @@ defmodule Backend.Questions.Question do
   @doc false
   def changeset(question, attrs) do
     question
-    |> cast(attrs, [:title, :subtitle, :type, :grade, :answers])
-    |> validate_required([:title, :type])
+    |> cast(attrs, [:title, :subtitle, :type, :grade, :answers, :quiz_id])
+    |> validate_required([:title, :type, :quiz_id])
   end
 end

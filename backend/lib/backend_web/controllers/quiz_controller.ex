@@ -91,6 +91,77 @@ defmodule BackendWeb.QuizController do
             updated_at: "2024-07-11T05:47:50Z"
           })
         end,
+      NewQuestion:
+        swagger_schema do
+          title("New question")
+          description("Data object to create new question")
+
+          properties do
+            title(:string, "Question title", required: true)
+            subtitle(:string, "Question subtitle")
+            grade(:number, "Question grade", required: true)
+
+            type(:enum, "Question type",
+              enum: [:single, :multiple, :open, :sequence, :fill],
+              default: [:single]
+            )
+
+            answers(Schema.ref(:Answers), "List of quiz question answers")
+          end
+
+          example(%{
+            title: "Lorem ipsum dolor sit amet",
+            subtitle: "Lorem ipsum dolor sit amet",
+            grade: 5,
+            type: "single",
+            quiz_id: 1,
+            answers: [
+              %{
+                id: 1,
+                title: "Lorem ipsum dolor sit amet",
+                subtitle: "Lorem ipsum dolor sit amet",
+                is_correct: true,
+                correct_value: "Lorem ipsum dolor sit amet",
+                sequence_order_number: 1
+              }
+            ]
+          })
+        end,
+      UpdateQuestion:
+        swagger_schema do
+          title("Update existing question")
+          description("Data object to update question")
+
+          properties do
+            title(:string, "Question title")
+            subtitle(:string, "Question subtitle")
+            grade(:number, "Question grade")
+
+            type(:enum, "Question type",
+              enum: [:single, :multiple, :open, :sequence, :fill],
+              default: [:single]
+            )
+
+            answers(Schema.ref(:Answers), "List of quiz question answers")
+          end
+
+          example(%{
+            title: "Lorem ipsum dolor sit amet",
+            subtitle: "Lorem ipsum dolor sit amet",
+            grade: 5,
+            type: "single",
+            answers: [
+              %{
+                id: 1,
+                title: "Lorem ipsum dolor sit amet",
+                subtitle: "Lorem ipsum dolor sit amet",
+                is_correct: true,
+                correct_value: "Lorem ipsum dolor sit amet",
+                sequence_order_number: 1
+              }
+            ]
+          })
+        end,
       Questions:
         swagger_schema do
           title("List of questions")
@@ -358,6 +429,35 @@ defmodule BackendWeb.QuizController do
 
     with {:ok, %Quiz{}} <- Quizzes.delete_quiz(quiz) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  swagger_path :create_question do
+    post("/quizzes/{id}/questions")
+    summary("Create new quiz question")
+    description("Create new quiz question.")
+    produces("application/json")
+    tag("Quizzes")
+
+    security([%{bearer: []}])
+
+    parameters do
+      question(:body, Schema.ref(:NewQuestion), "Data to create question", required: true)
+    end
+
+    response(201, "Success", Schema.ref(:Quiz))
+    response(422, "Unprocessable entity (something wrong with body)")
+    response(400, "Bad request (Unknown error)")
+  end
+
+  def create_question(conn, %{"id" => id, "question" => question_params}) do
+    with quiz <-
+           question_params
+           |> Map.put("quiz_id", String.to_integer(id))
+           |> Quizzes.create_question() do
+      conn
+      |> put_status(:created)
+      |> render(:show, quiz: quiz)
     end
   end
 end

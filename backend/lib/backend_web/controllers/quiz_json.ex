@@ -36,13 +36,13 @@ defmodule BackendWeb.QuizJSON do
       subtitle: question.subtitle,
       grade: question.grade,
       quiz_id: question.quiz_id,
-      answers: for(answer <- question.answers, do: date_answer(answer)),
+      answers: for(answer <- question.answers, do: data_answer(answer)),
       inserted_at: question.inserted_at,
       updated_at: question.updated_at
     }
   end
 
-  defp date_answer(%Answer{} = answer) do
+  defp data_answer(%Answer{} = answer) do
     %{
       id: answer.id,
       title: answer.title,

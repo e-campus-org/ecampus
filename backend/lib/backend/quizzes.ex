@@ -9,6 +9,8 @@ defmodule Backend.Quizzes do
 
   alias Backend.Quizzes.Quiz
 
+  alias Backend.Questions.Question
+
   @doc """
   Returns the list of quizzes.
 
@@ -132,5 +134,68 @@ defmodule Backend.Quizzes do
   """
   def change_quiz(%Quiz{} = quiz, attrs \\ %{}) do
     Quiz.changeset(quiz, attrs)
+  end
+
+  @doc """
+  Creates a question.
+
+  ## Examples
+
+      iex> create_question(%{field: value})
+      {:ok, %Question{}}
+
+      iex> create_question(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_question(attrs \\ %{}) do
+    changeset =
+      %Question{}
+      |> Question.changeset(attrs)
+
+    with {:ok, question} <- Repo.insert(changeset) do
+      get_quiz!(question.quiz_id)
+    end
+  end
+
+  @doc """
+  Updates a question.
+
+  ## Examples
+
+      iex> update_question(question, %{field: new_value})
+      {:ok, %Question{}}
+
+      iex> update_question(question, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_question(%Question{} = question, attrs) do
+    changeset =
+      question
+      |> Question.changeset(attrs)
+
+    with {:ok, question} <- Repo.update(changeset) do
+      get_quiz!(question.quiz_id)
+    end
+  end
+
+  @doc """
+  Deletes a question.
+
+  ## Examples
+
+      iex> delete_question(question)
+      {:ok, %Question{}}
+
+      iex> delete_question(question)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_question(id) do
+    with question <- Repo.get!(Question, id) do
+      Repo.delete(question)
+      get_quiz!(question.quiz_id)
+    end
   end
 end
