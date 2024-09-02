@@ -61,7 +61,12 @@
                     "subjectProfessors": "Subject professors",
                     "leadingProfessors": "Leading current class professors",
                     "topics": "Class topics",
-                    "openTopic": "Open topic"
+                    "openTopic": "Open topic",
+                    "quiz": "Quiz",
+                    "startQuiz": "Start quiz",
+                    "nextQuestion": "Next question",
+                    "previousQuestion": "Previous question",
+                    "finishQuiz": "Finish quiz"
                 }
             },
             "specialities": {

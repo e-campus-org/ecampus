@@ -61,7 +61,12 @@
                     "subjectProfessors": "Преподаватели дисциплины",
                     "leadingProfessors": "Ведущие это занятие преподаватели",
                     "topics": "Учебные вопросы занятия",
-                    "openTopic": "Перейти к изучению"
+                    "openTopic": "Перейти к изучению",
+                    "quiz": "Тест",
+                    "startQuiz": "Начать тестирование",
+                    "nextQuestion": "Следующий вопрос",
+                    "previousQuestion": "Предыдущий вопрос",
+                    "finishQuiz": "Завершить"
                 }
             },
             "specialities": {
