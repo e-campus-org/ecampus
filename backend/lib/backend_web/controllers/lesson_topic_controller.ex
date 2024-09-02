@@ -24,7 +24,7 @@ defmodule BackendWeb.LessonTopicController do
             title(:string, "Lesson topic title")
             description(:string, "Lesson topic description")
             objectives(:string, "Lesson topic objectives")
-            content(:boolean, "Lesson topic content")
+            content(:json, "Lesson topic content")
             lesson_id(:number, "Id of the lesson this topic belongs to")
             inserted_at(:datetime, "Date and time of lesson topic creation")
             updated_at(:datetime, "Date and time of lesson topic last update")
@@ -35,7 +35,7 @@ defmodule BackendWeb.LessonTopicController do
             title: "Lesson Title",
             description: "Lorem ipsum dolor sit amet",
             objectives: "Lesson Objectives",
-            content: "Lorem ipsum dolor sit amet",
+            content: %{},
             lesson_id: 1,
             inserted_at: "2024-07-11T05:47:50Z",
             updated_at: "2024-07-11T05:47:50Z"

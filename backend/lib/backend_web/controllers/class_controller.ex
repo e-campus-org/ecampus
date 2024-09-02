@@ -5,6 +5,7 @@ defmodule BackendWeb.ClassController do
 
   alias Backend.Classes
   alias Backend.Classes.Class
+  alias Backend.TaughtClasses.TaughtClass
 
   import Backend.Auth.Plugs
 
@@ -14,6 +15,177 @@ defmodule BackendWeb.ClassController do
 
   def swagger_definitions do
     %{
+      ClassAnswer:
+        swagger_schema do
+          title("ClassAnswer")
+          description("A quiz question answer object")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Answer title")
+            subtitle(:string, "Answer subtitle")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lorem ipsum dolor sit amet",
+            subtitle: "Lorem ipsum dolor sit amet"
+          })
+        end,
+      ClassAnswers:
+        swagger_schema do
+          title("List of question answers")
+          description("A collection of ClassAnswer")
+          type(:array)
+          items(Schema.ref(:ClassAnswer))
+        end,
+      ClassQuestion:
+        swagger_schema do
+          title("ClassQuestion")
+          description("A quiz question object")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Question title")
+            subtitle(:string, "Question subtitle")
+            grade(:number, "Question grade")
+
+            type(:enum, "Question type",
+              enum: [:single, :multiple, :open, :sequence, :fill],
+              default: [:single]
+            )
+
+            quiz_id(:number, "Question quiz id belongs to")
+            answers(Schema.ref(:ClassAnswers), "List of quiz question answers")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lorem ipsum dolor sit amet",
+            subtitle: "Lorem ipsum dolor sit amet",
+            grade: 5,
+            type: "single",
+            quiz_id: 1,
+            answers: [
+              %{
+                id: 1,
+                title: "Lorem ipsum dolor sit amet",
+                subtitle: "Lorem ipsum dolor sit amet"
+              }
+            ]
+          })
+        end,
+      ClassQuestions:
+        swagger_schema do
+          title("List of questions")
+          description("A collection of Question")
+          type(:array)
+          items(Schema.ref(:ClassQuestion))
+        end,
+      ClassQuiz:
+        swagger_schema do
+          title("ClassQuiz")
+          description("A quiz object")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Quiz title")
+            description(:string, "Quiz description")
+            estimation(:json, "Quiz estimation")
+            lesson_id(:number, "Lesson id belongs to")
+            questions(Schema.ref(:Questions), "List of quiz questions")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lorem ipsum dolor sit amet",
+            description: "Lorem ipsum dolor sit amet",
+            estimation: %{
+              "great" => 9,
+              "good" => 7,
+              "normal" => 5
+            },
+            lesson_id: 1,
+            questions: [
+              %{
+                id: 1,
+                title: "Lorem ipsum dolor sit amet",
+                subtitle: "Lorem ipsum dolor sit amet",
+                grade: 5,
+                type: "single",
+                quiz_id: 1,
+                answers: [
+                  %{
+                    id: 1,
+                    title: "Lorem ipsum dolor sit amet",
+                    subtitle: "Lorem ipsum dolor sit amet"
+                  }
+                ]
+              }
+            ]
+          })
+        end,
+      ClassQuizzes:
+        swagger_schema do
+          title("List of quizzes")
+          description("A collection of Quiz")
+          type(:array)
+          items(Schema.ref(:ClassQuiz))
+        end,
+      ClassTeacher:
+        swagger_schema do
+          title("ClassTeacher")
+          description("An account object to link with teacher")
+
+          properties do
+            id(:number, "Unique identifier")
+            first_name(:string, "Teacher first name")
+            last_name(:string, "Teacher last name")
+          end
+
+          example(%{
+            id: 1,
+            first_name: "John",
+            last_name: "Doe"
+          })
+        end,
+      ClassTeachers:
+        swagger_schema do
+          title("List of class teachers")
+          description("A collection of ClassTeacher")
+          type(:array)
+          items(Schema.ref(:ClassTeacher))
+        end,
+      ClassLessonTopic:
+        swagger_schema do
+          title("LessonTopic")
+          description("A single lesson topic to study")
+
+          properties do
+            id(:number, "Unique identifier")
+            title(:string, "Lesson topic title")
+            content(:json, "Lesson topic content")
+            lesson_id(:number, "Id of the lesson this topic belongs to")
+            inserted_at(:datetime, "Date and time of lesson topic creation")
+            updated_at(:datetime, "Date and time of lesson topic last update")
+          end
+
+          example(%{
+            id: 1,
+            title: "Lesson Title",
+            content: %{},
+            lesson_id: 1,
+            inserted_at: "2024-07-11T05:47:50Z",
+            updated_at: "2024-07-11T05:47:50Z"
+          })
+        end,
+      ClassLessonTopics:
+        swagger_schema do
+          title("List of lesson topics")
+          description("A collection of LessonTopic")
+          type(:array)
+          items(Schema.ref(:ClassLessonTopic))
+        end,
       ClassLesson:
         swagger_schema do
           title("ClassLesson")
@@ -25,6 +197,9 @@ defmodule BackendWeb.ClassController do
             topic(:string, "Lesson topic")
             hours_count(:number, "Academic hours for this lesson")
             subject_id(:number, "Subject id")
+            teachers(Schema.ref(:ClassTeacher), "Subject teachers info")
+            topics(Schema.ref(:ClassLessonTopic), "Lesson topics")
+            quizzes(Schema.ref(:ClassQuizzes), "Lesson quizzes")
           end
 
           example(%{
@@ -32,7 +207,54 @@ defmodule BackendWeb.ClassController do
             title: "Lorem ipsum dolor sit amet",
             topic: "Lorem ipsum dolor sit amet",
             hours_count: 2,
-            subject_id: 1
+            subject_id: 1,
+            teachers: [
+              %{
+                id: 1,
+                first_name: "John",
+                last_name: "Doe"
+              }
+            ],
+            topics: [
+              %{
+                id: 1,
+                title: "Lesson Title",
+                content: %{},
+                lesson_id: 1,
+                inserted_at: "2024-07-11T05:47:50Z",
+                updated_at: "2024-07-11T05:47:50Z"
+              }
+            ],
+            quizzes: [
+              %{
+                id: 1,
+                title: "Lorem ipsum dolor sit amet",
+                description: "Lorem ipsum dolor sit amet",
+                estimation: %{
+                  "great" => 9,
+                  "good" => 7,
+                  "normal" => 5
+                },
+                lesson_id: 1,
+                questions: [
+                  %{
+                    id: 1,
+                    title: "Lorem ipsum dolor sit amet",
+                    subtitle: "Lorem ipsum dolor sit amet",
+                    grade: 5,
+                    type: "single",
+                    quiz_id: 1,
+                    answers: [
+                      %{
+                        id: 1,
+                        title: "Lorem ipsum dolor sit amet",
+                        subtitle: "Lorem ipsum dolor sit amet"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           })
         end,
       ClassGroup:
@@ -61,6 +283,8 @@ defmodule BackendWeb.ClassController do
             classroom(:string, "Classroom number")
             lesson(Schema.ref(:ClassLesson), "Class lesson info")
             group(Schema.ref(:ClassGroup), "Class group info")
+            teachers(Schema.ref(:ClassTeacher), "Class teachers info")
+
             inserted_at(:datetime, "Date and time of class creation")
             updated_at(:datetime, "Date and time of class last update")
           end
@@ -74,12 +298,66 @@ defmodule BackendWeb.ClassController do
               title: "Lorem ipsum dolor sit amet",
               topic: "Lorem ipsum dolor sit amet",
               hours_count: 2,
-              subject_id: 1
+              subject_id: 1,
+              teachers: [
+                %{
+                  id: 1,
+                  first_name: "John",
+                  last_name: "Doe"
+                }
+              ],
+              topics: [
+                %{
+                  id: 1,
+                  title: "Lesson Title",
+                  content: %{},
+                  lesson_id: 1,
+                  inserted_at: "2024-07-11T05:47:50Z",
+                  updated_at: "2024-07-11T05:47:50Z"
+                }
+              ],
+              quizzes: [
+                %{
+                  id: 1,
+                  title: "Lorem ipsum dolor sit amet",
+                  description: "Lorem ipsum dolor sit amet",
+                  estimation: %{
+                    "great" => 9,
+                    "good" => 7,
+                    "normal" => 5
+                  },
+                  lesson_id: 1,
+                  questions: [
+                    %{
+                      id: 1,
+                      title: "Lorem ipsum dolor sit amet",
+                      subtitle: "Lorem ipsum dolor sit amet",
+                      grade: 5,
+                      type: "single",
+                      quiz_id: 1,
+                      answers: [
+                        %{
+                          id: 1,
+                          title: "Lorem ipsum dolor sit amet",
+                          subtitle: "Lorem ipsum dolor sit amet"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             },
             group: %{
               id: 1,
               title: "123a"
             },
+            teachers: [
+              %{
+                id: 1,
+                first_name: "John",
+                last_name: "Doe"
+              }
+            ],
             inserted_at: "2024-07-11T05:47:50Z",
             updated_at: "2024-07-11T05:47:50Z"
           })
@@ -287,6 +565,39 @@ defmodule BackendWeb.ClassController do
 
     with {:ok, %Class{}} <- Classes.delete_class(class) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  swagger_path :link_class_with_teacher do
+    put("/classes/{id}/link")
+    summary("Links class with teacher")
+    description("Links class with teacher.")
+    produces("application/json")
+    tag("Classes")
+
+    security([%{bearer: []}])
+
+    parameters do
+      class_id(:path, :number, "Subject id", required: true)
+      taught_by_id(:body, :number, "Teacher account id", required: true)
+    end
+
+    response(200, "Success", Schema.ref(:Class))
+    response(404, "Not found (class or group or account doesn't exists)")
+    response(422, "Unprocessable entity (something wrong with body)")
+    response(400, "Bad request (Unknown error)")
+  end
+
+  def link_class_with_teacher(
+        conn,
+        %{
+          "class_id" => _subject_id,
+          "taught_by_id" => _account_id
+        } = params
+      ) do
+    with {:ok, class} <-
+           Classes.link_class_with_teacher(params) do
+      render(conn, :show, class: class)
     end
   end
 end

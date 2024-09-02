@@ -178,7 +178,7 @@ defmodule BackendWeb.QuizController do
             id(:number, "Unique identifier")
             title(:string, "Quiz title")
             description(:string, "Quiz description")
-            estimation(:string, "Quiz estimation")
+            estimation(:json, "Quiz estimation")
             lesson_id(:number, "Lesson id belongs to")
             questions(Schema.ref(:Questions), "List of quiz questions")
             inserted_at(:datetime, "Date and time of quiz creation")

@@ -70,6 +70,7 @@ defmodule BackendWeb.Router do
     post("/classes", ClassController, :create)
     put("/classes/:id", ClassController, :update)
     delete("/classes/:id", ClassController, :delete)
+    put("/classes/:class_id/link", ClassController, :link_class_with_teacher)
 
     get("/quizzes", QuizController, :index)
     get("/quizzes/:id", QuizController, :show)

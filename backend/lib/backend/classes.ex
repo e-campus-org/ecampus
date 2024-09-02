@@ -8,6 +8,7 @@ defmodule Backend.Classes do
   alias Backend.Repo
 
   alias Backend.Classes.Class
+  alias Backend.TaughtClasses.TaughtClass
 
   @doc """
   Returns the list of classes.
@@ -73,8 +74,15 @@ defmodule Backend.Classes do
       Repo.get!(Class, id)
       |> Repo.preload([
         :group,
+        :teachers,
         :lesson,
-        lesson: [:topics, :quizzes, quizzes: [:questions, questions: [:answers]]]
+        lesson: [
+          :topics,
+          :quizzes,
+          :subject,
+          quizzes: [:questions, questions: [:answers]],
+          subject: [:teachers]
+        ]
       ])
 
   @doc """
@@ -140,5 +148,27 @@ defmodule Backend.Classes do
   """
   def change_class(%Class{} = class, attrs \\ %{}) do
     Class.changeset(class, attrs)
+  end
+
+  @doc """
+  Links subject with teacher and group.
+
+  ## Examples
+
+      iex> link_class_with_teacher(%{field: value})
+      {:ok, %TaughtSubject{}}
+
+      iex> link_class_with_teacher(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def link_class_with_teacher(attrs) do
+    changeset =
+      %TaughtClass{}
+      |> TaughtClass.changeset(attrs)
+
+    with {:ok, taught_class} <- Repo.insert(changeset) do
+      {:ok, get_class!(taught_class.class_id)}
+    end
   end
 end

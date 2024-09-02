@@ -16,6 +16,11 @@ defmodule Backend.Classes.Class do
     belongs_to(:lesson, Backend.Lessons.Lesson)
     belongs_to(:group, Backend.Groups.Group)
 
+    many_to_many(:teachers, Backend.Accounts.Account,
+      join_through: "taught_classes",
+      join_keys: [class_id: :id, taught_by_id: :id]
+    )
+
     timestamps(type: :utc_datetime)
   end
 

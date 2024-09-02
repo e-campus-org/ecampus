@@ -80,8 +80,6 @@ defmodule Backend.Quizzes do
       %Quiz{}
       |> Quiz.changeset(attrs)
 
-    changeset |> IO.inspect()
-
     with {:ok, quiz} <- Repo.insert(changeset) do
       {:ok, Repo.preload(quiz, [:questions, questions: [:answers]])}
     end

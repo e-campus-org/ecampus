@@ -4,6 +4,7 @@ defmodule BackendWeb.ClassJSON do
   alias Backend.Quizzes.Quiz
   alias Backend.Questions.Question
   alias Backend.Questions.Answer
+  alias Backend.Accounts.Account
 
   @doc """
   Renders a list of classes.
@@ -56,8 +57,10 @@ defmodule BackendWeb.ClassJSON do
         hours_count: class.lesson.hours_count,
         subject_id: class.lesson.subject_id,
         topics: for(topic <- class.lesson.topics, do: data_topic(topic)),
-        quizzes: for(quiz <- class.lesson.quizzes, do: data_quiz(quiz))
+        quizzes: for(quiz <- class.lesson.quizzes, do: data_quiz(quiz)),
+        teachers: for(teacher <- class.lesson.subject.teachers, do: data_account(teacher))
       },
+      teachers: for(teacher <- class.teachers, do: data_account(teacher)),
       group: %{
         id: class.group_id,
         title: class.group.title
@@ -97,15 +100,23 @@ defmodule BackendWeb.ClassJSON do
       subtitle: question.subtitle,
       grade: question.grade,
       quiz_id: question.quiz_id,
-      answers: for(answer <- question.answers, do: date_answer(answer))
+      answers: for(answer <- question.answers, do: data_answer(answer))
     }
   end
 
-  defp date_answer(%Answer{} = answer) do
+  defp data_answer(%Answer{} = answer) do
     %{
       id: answer.id,
       title: answer.title,
       subtitle: answer.subtitle
+    }
+  end
+
+  defp data_account(%Account{} = account) do
+    %{
+      id: account.id,
+      first_name: account.first_name,
+      last_name: account.last_name
     }
   end
 end
