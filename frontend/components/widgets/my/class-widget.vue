@@ -1,15 +1,15 @@
 <template>
     <v-row>
-        <v-col cols="12" md="6">
-            <v-card class="fill-height" :title="$t('components.widgets.my.class.info')" prepend-icon="mdi-clock">
+        <v-col cols="12" md="4" xl="3">
+            <v-card :title="$t('components.widgets.my.class.info')" prepend-icon="mdi-clock">
                 <v-card-text>
                     <p class="text-h5 font-weight-black">{{ currentClass?.lesson?.title || "" }}</p>
                     <p class="my-2 text-medium-emphasis">{{ currentClass?.lesson?.topic || "" }}</p>
                 </v-card-text>
                 <v-card-text>
                     <v-row align="center">
-                        <v-col class="text-h2" cols="12" sm="4"> {{ currentClass?.classroom }} </v-col>
-                        <v-col cols="6" sm="4">
+                        <v-col class="text-h3" cols="12"> {{ currentClass?.classroom }} </v-col>
+                        <v-col cols="6">
                             <p>
                                 {{
                                     $t("components.widgets.my.class.group", { group: currentClass?.group?.title || "" })
@@ -25,7 +25,7 @@
                                 }}
                             </p>
                         </v-col>
-                        <v-col cols="6" sm="4">
+                        <v-col cols="6">
                             <p>
                                 {{
                                     $t("components.widgets.my.class.begin", {
@@ -49,15 +49,21 @@
                         </v-col>
                     </v-row>
                 </v-card-text>
-                <v-card-item :title="$t('components.widgets.my.class.professors')">...</v-card-item>
+                <v-card-item :title="$t('components.widgets.my.class.subjectProfessors')">
+                    <p v-for="teacher of currentClass?.lesson.teachers" :key="teacher.id">
+                        {{ `${teacher.first_name} ${teacher.last_name}` }}
+                    </p>
+                </v-card-item>
+                <v-card-item
+                    v-if="currentClass?.teachers?.length && currentClass?.teachers?.length > 0"
+                    :title="$t('components.widgets.my.class.leadingProfessors')"
+                >
+                    <p v-for="teacher of currentClass?.teachers" :key="teacher.id">
+                        {{ `${teacher.first_name} ${teacher.last_name}` }}
+                    </p>
+                </v-card-item>
             </v-card>
-        </v-col>
-        <v-col cols="12" md="6">
-            <v-card
-                class="fill-height"
-                :title="$t('components.widgets.my.class.topics')"
-                prepend-icon="mdi-list-status"
-            >
+            <v-card class="mt-6" :title="$t('components.widgets.my.class.topics')" prepend-icon="mdi-list-status">
                 <v-card-item>
                     <v-timeline align="start" density="compact">
                         <v-timeline-item v-for="topic in currentClass?.lesson?.topics" :key="topic.id" size="x-small">
@@ -74,7 +80,7 @@
                 </v-card-item>
             </v-card>
         </v-col>
-        <v-col v-if="currentTopic" cols="12">
+        <v-col v-if="currentTopic" cols="12" md="8" xl="9">
             <v-card>
                 <v-card-text>
                     <p class="text-h5 font-weight-black">{{ currentTopic.title || "" }}</p>
@@ -89,7 +95,7 @@
 <script setup lang="ts">
 import { TiptapViewer } from "@/components/shared";
 
-defineProps<{
+const props = defineProps<{
     loading: boolean;
     currentClass: Classes.ReadClassDTO | null;
 }>();
@@ -99,4 +105,10 @@ const currentTopic = ref<Classes.ReadClassLessonTopicInfoDTO | null>(null);
 function onCurrentTopicChanged(topic: Classes.ReadClassLessonTopicInfoDTO) {
     currentTopic.value = topic;
 }
+
+watchEffect(() => {
+    if (props.currentClass) {
+        currentTopic.value = props.currentClass.lesson.topics[0];
+    }
+});
 </script>

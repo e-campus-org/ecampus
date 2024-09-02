@@ -44,8 +44,6 @@ defmodule BackendWeb.ClassJSON do
   end
 
   defp data(%Class{} = class) do
-    class |> IO.inspect()
-
     %{
       id: class.id,
       begin_date: class.begin_date,

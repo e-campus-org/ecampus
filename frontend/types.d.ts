@@ -146,6 +146,12 @@ declare namespace Classes {
         title: string;
     }
 
+    interface ReadClassTeacherDTO {
+        id: number;
+        first_name: string;
+        last_name: string;
+    }
+
     interface ReadClassLessonTopicInfoDTO {
         id: number;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -156,11 +162,38 @@ declare namespace Classes {
         updated_at: string;
     }
 
+    interface ReadClassQuizQuestionAnswerDTO {
+        id: number;
+        title: string;
+        subtitle: string;
+    }
+
+    interface ReadClassQuizQuestionDTO {
+        id: number;
+        type: "single" | "multiple" | "open" | "sequence" | "fill";
+        title: string;
+        subtitle: string;
+        grade: number;
+        quiz_id: number;
+        answers: ReadClassQuizQuestionAnswerDTO[];
+    }
+
+    interface ReadClassQuizDTO {
+        id: number;
+        title: string;
+        description: string;
+        lesson_id: number;
+        questions: ReadClassQuizQuestionDTO[];
+        estimation: Record<string, string | number>;
+    }
+
     interface ReadClassLessonInfoDTO {
         id: number;
         title: string;
         topic: string;
         topics: ReadClassLessonTopicInfoDTO[];
+        teachers: ReadClassTeacherDTO[];
+        quizzes: ReadClassQuizDTO[];
         hours_count: number;
         subject_id: number;
     }
@@ -170,6 +203,7 @@ declare namespace Classes {
         classroom: string;
         group: ReadClassGroupInfoDTO;
         lesson: ReadClassLessonInfoDTO;
+        teachers: ReadClassTeacherDTO[];
         inserted_at: string;
         updated_at: string;
     }

@@ -58,7 +58,8 @@
                     "date": "Date: %{date}",
                     "begin": "Begin: %{begin}",
                     "end": "End: %{end}",
-                    "professors": "Professors",
+                    "subjectProfessors": "Subject professors",
+                    "leadingProfessors": "Leading current class professors",
                     "topics": "Class topics",
                     "openTopic": "Open topic"
                 }
