@@ -34,7 +34,7 @@ defmodule Backend.Quizzes do
       end)
 
     Quiz
-    |> preload([:questions])
+    |> preload([:questions, questions: [:answers]])
     |> Flop.validate_and_run(
       %{
         page: Map.get(params, "page", 1),
@@ -61,7 +61,7 @@ defmodule Backend.Quizzes do
 
   """
   def get_quiz!(id),
-    do: Repo.get!(Quiz, id) |> Repo.preload([:questions])
+    do: Repo.get!(Quiz, id) |> Repo.preload([:questions, questions: [:answers]])
 
   @doc """
   Creates a quiz.
@@ -80,8 +80,10 @@ defmodule Backend.Quizzes do
       %Quiz{}
       |> Quiz.changeset(attrs)
 
+    changeset |> IO.inspect()
+
     with {:ok, quiz} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(quiz, [:questions])}
+      {:ok, Repo.preload(quiz, [:questions, questions: [:answers]])}
     end
   end
 
@@ -103,7 +105,7 @@ defmodule Backend.Quizzes do
       |> Quiz.changeset(attrs)
 
     with {:ok, quiz} <- Repo.update(changeset) do
-      {:ok, Repo.preload(quiz, [:questions])}
+      {:ok, Repo.preload(quiz, [:questions, questions: [:answers]])}
     end
   end
 

@@ -1,7 +1,7 @@
 defmodule BackendWeb.QuizJSON do
   alias Backend.Quizzes.Quiz
   alias Backend.Questions.Question
-  alias Backend.Questions.Question.Answer
+  alias Backend.Questions.Answer
 
   @doc """
   Renders a list of quizzes.
