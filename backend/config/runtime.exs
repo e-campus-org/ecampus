@@ -1,4 +1,18 @@
 import Config
+import Dotenvy
+
+source!([".env", System.get_env()])
+
+# Configure your database
+config :backend, Backend.Repo,
+  username: env!("POSTGRES_USER", :string),
+  password: env!("POSTGRES_PASSWORD", :string),
+  hostname: env!("POSTGRES_HOSTNAME", :string),
+  port: env!("POSTGRES_PORT", :integer),
+  database: env!("POSTGRES_DB", :string),
+  stacktrace: true,
+  show_sensitive_data_on_connection_error: true,
+  pool_size: 10
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the

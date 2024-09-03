@@ -56,7 +56,8 @@ defmodule Backend.MixProject do
       {:guardian, "~> 2.3.2"},
       {:bcrypt_elixir, "~> 3.0"},
       {:flop, "~> 0.25.0"},
-      {:corsica, "~> 2.1.3"}
+      {:corsica, "~> 2.1.3"},
+      {:dotenvy, "~> 0.8.0"}
     ]
   end
 
