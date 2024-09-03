@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid>
+    <v-container>
         <class-widget :loading="loading" :current-class="currentClass" />
     </v-container>
 </template>

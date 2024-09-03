@@ -1,5 +1,5 @@
 <template>
-    <v-card :title="$t('components.widgets.my.class.quiz')" prepend-icon="mdi-help-box">
+    <v-card :title="$t('components.widgets.my.class.quiz')">
         <template v-if="!started && totalQuestions > 0">
             <v-card-item :title="quiz.title" :subtitle="quiz.description" />
             <v-card-actions>
@@ -8,7 +8,24 @@
         </template>
 
         <template v-if="currentQuestion">
-            <v-card-item :title="currentQuestion.title" :subtitle="currentQuestion.subtitle" />
+            <v-card-item>
+                <p>{{ currentQuestion.title }}</p>
+                <small>{{ currentQuestion.subtitle }}</small>
+            </v-card-item>
+            <v-card-text>
+                <template v-if="currentQuestion.type === 'single' && currentQuestion.answers?.length > 0">
+                    <v-radio-group>
+                        <v-radio v-for="answer in currentQuestion.answers" :key="answer.id" :value="answer.id">
+                            <template #label>
+                                <div>
+                                    <div>{{ answer.title }}</div>
+                                    <small>{{ answer.subtitle }}</small>
+                                </div>
+                            </template>
+                        </v-radio>
+                    </v-radio-group>
+                </template>
+            </v-card-text>
             <v-card-actions>
                 <v-btn v-if="currentQuestionIndex > 0" variant="text" @click="currentQuestionIndex--">{{
                     $t("components.widgets.my.class.previousQuestion")

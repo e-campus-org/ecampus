@@ -1,142 +1,52 @@
 <template>
-    <v-row>
-        <v-col cols="12" md="4" xl="3">
-            <v-row>
-                <v-col cols="12">
-                    <v-card :title="$t('components.widgets.my.class.info')" prepend-icon="mdi-clock">
-                        <v-card-text>
-                            <p class="text-h5 font-weight-black">{{ currentClass?.lesson?.title || "" }}</p>
-                            <p class="my-2 text-medium-emphasis">{{ currentClass?.lesson?.topic || "" }}</p>
-                        </v-card-text>
-                        <v-card-text>
-                            <v-row align="center">
-                                <v-col class="text-h3" cols="12"> {{ currentClass?.classroom }} </v-col>
-                                <v-col cols="6">
-                                    <p>
-                                        {{
-                                            $t("components.widgets.my.class.group", {
-                                                group: currentClass?.group?.title || ""
-                                            })
-                                        }}
-                                    </p>
-                                    <p>
-                                        {{
-                                            $t("components.widgets.my.class.date", {
-                                                date: currentClass?.begin_date
-                                                    ? $dayjs(currentClass?.begin_date).format("DD.MM.YYYY")
-                                                    : ""
-                                            })
-                                        }}
-                                    </p>
-                                </v-col>
-                                <v-col cols="6">
-                                    <p>
-                                        {{
-                                            $t("components.widgets.my.class.begin", {
-                                                begin: currentClass?.begin_date
-                                                    ? $dayjs(currentClass?.begin_date).format("HH:mm")
-                                                    : ""
-                                            })
-                                        }}
-                                    </p>
-                                    <p>
-                                        {{
-                                            $t("components.widgets.my.class.end", {
-                                                end: currentClass?.begin_date
-                                                    ? $dayjs(currentClass?.begin_date)
-                                                          .add((currentClass?.lesson?.hours_count || 0) * 45, "minutes")
-                                                          .format("HH:mm")
-                                                    : ""
-                                            })
-                                        }}
-                                    </p>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-item :title="$t('components.widgets.my.class.subjectProfessors')">
-                            <p v-for="teacher of currentClass?.lesson.teachers" :key="teacher.id">
-                                {{ `${teacher.first_name} ${teacher.last_name}` }}
-                            </p>
-                        </v-card-item>
-                        <v-card-item
-                            v-if="currentClass?.teachers?.length && currentClass?.teachers?.length > 0"
-                            :title="$t('components.widgets.my.class.leadingProfessors')"
-                        >
-                            <p v-for="teacher of currentClass?.teachers" :key="teacher.id">
-                                {{ `${teacher.first_name} ${teacher.last_name}` }}
-                            </p>
-                        </v-card-item>
-                    </v-card>
-                </v-col>
-                <v-col cols="12">
-                    <v-card :title="$t('components.widgets.my.class.topics')" prepend-icon="mdi-list-status">
-                        <v-card-item>
-                            <v-timeline align="start" density="compact">
-                                <v-timeline-item
-                                    v-for="topic in currentClass?.lesson?.topics"
-                                    :key="topic.id"
-                                    size="x-small"
-                                >
-                                    <div class="mb-4">
-                                        <div class="font-weight-normal">
-                                            {{ topic.title }}
-                                        </div>
-                                        <v-btn variant="plain" @click="onCurrentTopicChanged(topic)">{{
-                                            $t("components.widgets.my.class.openTopic")
-                                        }}</v-btn>
-                                    </div>
-                                </v-timeline-item>
-                            </v-timeline>
-                        </v-card-item>
-                    </v-card>
-                </v-col>
-            </v-row>
-        </v-col>
-        <v-col v-if="currentTopic" cols="12" md="8" xl="9">
-            <v-row>
-                <v-col cols="12">
-                    <v-card>
-                        <v-card-text>
-                            <p class="text-h5 font-weight-black">{{ currentTopic.title || "" }}</p>
-                        </v-card-text>
-                        <v-card-text>
-                            <tiptap-viewer :content="currentTopic.content" />
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col
-                    v-if="currentClass?.lesson?.quizzes?.length && currentClass?.lesson?.quizzes?.length > 0"
-                    cols="12"
-                >
-                    <class-quiz-widget
-                        v-for="quiz in currentClass?.lesson?.quizzes"
-                        :key="quiz.id"
-                        :loading="loading"
-                        :quiz="quiz"
-                    />
-                </v-col>
-            </v-row>
-        </v-col>
-    </v-row>
+    <v-tabs v-model="tab" color="deep-purple-accent-4">
+        <v-tab :value="1" prepend-icon="mdi-clock">{{ $t("components.widgets.my.class.info") }}</v-tab>
+        <v-tab :value="2" prepend-icon="mdi-list-status">{{ $t("components.widgets.my.class.topics") }}</v-tab>
+        <v-tab :value="3" prepend-icon="mdi-help-box">{{ $t("components.widgets.my.class.quizzes") }}</v-tab>
+    </v-tabs>
+    <v-tabs-window v-model="tab">
+        <v-tabs-window-item :value="1">
+            <v-container>
+                <class-info-widget :loading="loading" :current-class="currentClass" />
+            </v-container>
+        </v-tabs-window-item>
+        <v-tabs-window-item :value="2">
+            <v-container>
+                <v-row>
+                    <v-col v-for="topic in currentClass?.lesson.topics" :key="topic.id" cols="12">
+                        <class-topic-widget :loading="loading" :current-topic="topic" />
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-tabs-window-item>
+        <v-tabs-window-item :value="3">
+            <v-container>
+                <v-row>
+                    <v-col
+                        v-if="currentClass?.lesson?.quizzes?.length && currentClass?.lesson?.quizzes?.length > 0"
+                        cols="12"
+                    >
+                        <class-quiz-widget
+                            v-for="quiz in currentClass?.lesson?.quizzes"
+                            :key="quiz.id"
+                            :loading="loading"
+                            :quiz="quiz"
+                        />
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-tabs-window-item>
+    </v-tabs-window>
 </template>
 <script setup lang="ts">
 import ClassQuizWidget from "./class-quiz-widget.vue";
-import { TiptapViewer } from "@/components/shared";
+import ClassInfoWidget from "./class-info-widget.vue";
+import ClassTopicWidget from "./class-topic-widget.vue";
 
-const props = defineProps<{
+defineProps<{
     loading: boolean;
     currentClass: Classes.ReadClassDTO | null;
 }>();
 
-const currentTopic = ref<Classes.ReadClassLessonTopicInfoDTO | null>(null);
-
-function onCurrentTopicChanged(topic: Classes.ReadClassLessonTopicInfoDTO) {
-    currentTopic.value = topic;
-}
-
-watchEffect(() => {
-    if (props.currentClass) {
-        currentTopic.value = props.currentClass.lesson.topics[0];
-    }
-});
+const tab = ref(1);
 </script>
