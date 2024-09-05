@@ -6,6 +6,9 @@ defmodule BackendWeb.QuizController do
   alias Backend.Quizzes
   alias Backend.Quizzes.Quiz
 
+  alias Backend.Questions
+  alias Backend.Questions.Question
+
   import Backend.Auth.Plugs
 
   action_fallback(BackendWeb.FallbackController)
@@ -458,6 +461,67 @@ defmodule BackendWeb.QuizController do
       conn
       |> put_status(:created)
       |> render(:show, quiz: quiz)
+    end
+  end
+
+  swagger_path :update_question do
+    put("/quizzes/{id}/questions/{question_id}")
+    summary("Update existing question")
+    description("Update existing question.")
+    produces("application/json")
+    tag("Quizzes")
+
+    security([%{bearer: []}])
+
+    parameters do
+      id(:path, :number, "Question id", required: true)
+      quiz(:body, Schema.ref(:UpdateQuestion), "Data to update question", required: true)
+    end
+
+    response(200, "Success", Schema.ref(:Quiz))
+    response(404, "Not found (question doesn't exists)")
+    response(422, "Unprocessable entity (something wrong with body)")
+    response(400, "Bad request (Unknown error)")
+  end
+
+  def update_question(conn, %{
+        "id" => id,
+        "question_id" => question_id,
+        "question" => question_params
+      }) do
+    id |> IO.inspect()
+    question = Questions.get_question!(question_id)
+    question_params = Map.put(question_params, "quiz_id", String.to_integer(id))
+
+    quiz =
+      Questions.get_question!(question_id)
+      |> Quizzes.update_question(question_params)
+
+    render(conn, :show, quiz: quiz)
+  end
+
+  swagger_path :delete_question do
+    PhoenixSwagger.Path.delete("/quizzes/{id}/questions/{question_id}")
+    summary("Delete questions by id")
+    description("Delete questions by id.")
+    tag("Quizzes")
+
+    security([%{bearer: []}])
+
+    parameters do
+      id(:path, :number, "Question id", required: true)
+    end
+
+    response(204, "No content (question deleted)")
+    response(404, "Not found (question doesn't exists)")
+    response(400, "Bad request (Unknown error)")
+  end
+
+  def delete_question(conn, %{"question_id" => question_id}) do
+    question = Questions.get_question!(question_id)
+
+    with {:ok, %Question{}} <- Questions.delete_question(question) do
+      send_resp(conn, :no_content, "")
     end
   end
 end

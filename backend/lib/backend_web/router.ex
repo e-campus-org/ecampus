@@ -78,6 +78,8 @@ defmodule BackendWeb.Router do
     put("/quizzes/:id", QuizController, :update)
     delete("/quizzes/:id", QuizController, :delete)
     post("/quizzes/:id/questions", QuizController, :create_question)
+    put("/quizzes/:id/questions/:question_id", QuizController, :update_question)
+    delete("/quizzes/:id/questions/:question_id", QuizController, :delete_question)
   end
 
   scope "/api/swagger" do
