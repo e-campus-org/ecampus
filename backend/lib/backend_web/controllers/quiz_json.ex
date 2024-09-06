@@ -15,6 +15,8 @@ defmodule BackendWeb.QuizJSON do
   """
   def show(%{quiz: quiz}), do: data(quiz)
 
+  def show_question(%{question: question}), do: data_question(question)
+
   defp data(%Quiz{} = quiz) do
     %{
       id: quiz.id,
@@ -35,7 +37,6 @@ defmodule BackendWeb.QuizJSON do
       title: question.title,
       subtitle: question.subtitle,
       grade: question.grade,
-      quiz_id: question.quiz_id,
       answers: for(answer <- question.answers, do: data_answer(answer)),
       inserted_at: question.inserted_at,
       updated_at: question.updated_at

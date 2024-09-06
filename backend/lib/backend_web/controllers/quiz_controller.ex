@@ -8,6 +8,7 @@ defmodule BackendWeb.QuizController do
 
   alias Backend.Questions
   alias Backend.Questions.Question
+  alias Backend.QuizzesQuestions.QuizQuestion
 
   import Backend.Auth.Plugs
 
@@ -454,13 +455,13 @@ defmodule BackendWeb.QuizController do
   end
 
   def create_question(conn, %{"id" => id, "question" => question_params}) do
-    with quiz <-
+    with question <-
            question_params
            |> Map.put("quiz_id", String.to_integer(id))
            |> Quizzes.create_question() do
       conn
       |> put_status(:created)
-      |> render(:show, quiz: quiz)
+      |> render(:show_question, question: question)
     end
   end
 
@@ -517,10 +518,12 @@ defmodule BackendWeb.QuizController do
     response(400, "Bad request (Unknown error)")
   end
 
-  def delete_question(conn, %{"question_id" => question_id}) do
-    question = Questions.get_question!(question_id)
-
-    with {:ok, %Question{}} <- Questions.delete_question(question) do
+  def delete_question(conn, %{"id" => id, "question_id" => question_id}) do
+    with {:ok, %QuizQuestion{}} <-
+           Quizzes.delete_question(%QuizQuestion{
+             quiz_id: String.to_integer(id),
+             question_id: String.to_integer(question_id)
+           }) do
       send_resp(conn, :no_content, "")
     end
   end

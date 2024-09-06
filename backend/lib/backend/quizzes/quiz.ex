@@ -12,7 +12,12 @@ defmodule Backend.Quizzes.Quiz do
     field(:title, :string)
     field(:estimation, :map)
     belongs_to(:lesson, Backend.Lessons.Lesson)
-    has_many(:questions, Backend.Questions.Question)
+
+    many_to_many(:questions, Backend.Questions.Question,
+      join_through: "quizzes_questions",
+      join_keys: [quiz_id: :id, question_id: :id]
+    )
+
     timestamps(type: :utc_datetime)
   end
 

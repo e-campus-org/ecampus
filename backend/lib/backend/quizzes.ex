@@ -11,6 +11,8 @@ defmodule Backend.Quizzes do
 
   alias Backend.Questions.Question
 
+  alias Backend.QuizzesQuestions.QuizQuestion
+
   @doc """
   Returns the list of quizzes.
 
@@ -149,12 +151,20 @@ defmodule Backend.Quizzes do
 
   """
   def create_question(attrs \\ %{}) do
-    changeset =
-      %Question{}
-      |> Question.changeset(attrs)
-
-    with {:ok, question} <- Repo.insert(changeset) do
-      get_quiz!(question.quiz_id)
+    with {:ok, %{questions: question}} <-
+           Ecto.Multi.new()
+           |> Ecto.Multi.insert(:questions, Question.changeset(%Question{}, attrs))
+           |> Ecto.Multi.insert(
+             :quizzes_questions,
+             fn %{questions: %Question{id: question_id}} ->
+               QuizQuestion.changeset(%QuizQuestion{}, %{
+                 question_id: question_id,
+                 quiz_id: Map.get(attrs, "quiz_id")
+               })
+             end
+           )
+           |> Repo.transaction() do
+      question |> Repo.preload([:answers])
     end
   end
 
@@ -186,16 +196,14 @@ defmodule Backend.Quizzes do
   ## Examples
 
       iex> delete_question(question)
-      {:ok, %Question{}}
+      {:ok, %QuizQuestion{}}
 
       iex> delete_question(question)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_question(id) do
-    with question <- Repo.get!(Question, id) do
-      Repo.delete(question)
-      get_quiz!(question.quiz_id)
-    end
+  def delete_question(%{quiz_id: quiz_id, question_id: question_id}) do
+    Repo.get_by!(QuizQuestion, quiz_id: quiz_id, question_id: question_id)
+    |> Repo.delete()
   end
 end
