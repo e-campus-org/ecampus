@@ -5,6 +5,7 @@ defmodule Backend.Quizzes do
 
   import Ecto.Query, warn: false
   import Backend.Pagination
+
   alias Backend.Repo
 
   alias Backend.Quizzes.Quiz
@@ -12,6 +13,8 @@ defmodule Backend.Quizzes do
   alias Backend.Questions.Question
 
   alias Backend.QuizzesQuestions.QuizQuestion
+
+  alias Backend.AnsweredQuestions.AnsweredQuestion
 
   @doc """
   Returns the list of quizzes.
@@ -205,5 +208,34 @@ defmodule Backend.Quizzes do
   def delete_question(%{quiz_id: quiz_id, question_id: question_id}) do
     Repo.get_by!(QuizQuestion, quiz_id: quiz_id, question_id: question_id)
     |> Repo.delete()
+  end
+
+  def answer_question(%{question_id: question_id, student_id: student_id, answer: answer}) do
+    with processed_answer <-
+           Repo.get!(Question, question_id)
+           |> Repo.preload([:answers])
+           |> apply_answer(answer) do
+      %AnsweredQuestion{}
+      |> AnsweredQuestion.changeset(%{
+        question_id: question_id,
+        student_id: student_id,
+        answer: processed_answer
+      })
+      |> Repo.insert()
+    end
+  end
+
+  defp apply_answer(%{type: :single} = question, %{"answer_id" => answer_id} = answer) do
+    case Enum.find(question.answers, & &1.is_correct) do
+      %{id: ^answer_id} ->
+        Map.merge(answer, %{grade: question.grade, correct: answer_id})
+
+      %{id: correct_id} ->
+        Map.merge(answer, %{grade: 0, correct: correct_id})
+    end
+  end
+
+  defp apply_answer(_question, answer) do
+    Map.merge(answer, %{grade: 0})
   end
 end

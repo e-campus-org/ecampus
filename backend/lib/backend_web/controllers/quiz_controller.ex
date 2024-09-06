@@ -7,14 +7,14 @@ defmodule BackendWeb.QuizController do
   alias Backend.Quizzes.Quiz
 
   alias Backend.Questions
-  alias Backend.Questions.Question
   alias Backend.QuizzesQuestions.QuizQuestion
 
   import Backend.Auth.Plugs
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action in [:index, :show, :create, :update, :delete])
+  plug(:is_teacher when action not in [:answer_question])
+  plug(:is_student when action in [:answer_question])
 
   def swagger_definitions do
     %{
@@ -64,7 +64,7 @@ defmodule BackendWeb.QuizController do
             grade(:number, "Question grade")
 
             type(:enum, "Question type",
-              enum: [:single, :multiple, :open, :sequence, :fill],
+              enum: [:single, :multiple, :sequence],
               default: [:single]
             )
 
@@ -106,7 +106,7 @@ defmodule BackendWeb.QuizController do
             grade(:number, "Question grade", required: true)
 
             type(:enum, "Question type",
-              enum: [:single, :multiple, :open, :sequence, :fill],
+              enum: [:single, :multiple, :sequence],
               default: [:single]
             )
 
@@ -142,7 +142,7 @@ defmodule BackendWeb.QuizController do
             grade(:number, "Question grade")
 
             type(:enum, "Question type",
-              enum: [:single, :multiple, :open, :sequence, :fill],
+              enum: [:single, :multiple, :sequence],
               default: [:single]
             )
 
@@ -491,7 +491,6 @@ defmodule BackendWeb.QuizController do
         "question" => question_params
       }) do
     id |> IO.inspect()
-    question = Questions.get_question!(question_id)
     question_params = Map.put(question_params, "quiz_id", String.to_integer(id))
 
     quiz =
@@ -526,5 +525,17 @@ defmodule BackendWeb.QuizController do
            }) do
       send_resp(conn, :no_content, "")
     end
+  end
+
+  def answer_question(conn, %{"id" => id, "question_id" => question_id, "answer" => answer}) do
+    %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
+
+    Quizzes.answer_question(%{
+      question_id: String.to_integer(question_id),
+      student_id: account_id,
+      answer: answer
+    })
+
+    send_resp(conn, :no_content, "")
   end
 end

@@ -10,7 +10,7 @@ defmodule Backend.Questions.Question do
   }
 
   schema "questions" do
-    field(:type, Ecto.Enum, values: [:single, :multiple, :open, :sequence, :fill])
+    field(:type, Ecto.Enum, values: [:single, :multiple, :sequence])
     field(:title, :string)
     field(:subtitle, :string)
     field(:grade, :integer)
@@ -19,6 +19,11 @@ defmodule Backend.Questions.Question do
     many_to_many(:quizzes, Backend.Quizzes.Quiz,
       join_through: "quizzes_questions",
       join_keys: [quiz_id: :id, question_id: :id]
+    )
+
+    many_to_many(:answered_by, Backend.Accounts.Account,
+      join_through: "answered_questions",
+      join_keys: [student_id: :id, question_id: :id]
     )
 
     timestamps(type: :utc_datetime)

@@ -97,7 +97,6 @@ defmodule BackendWeb.ClassJSON do
       title: question.title,
       subtitle: question.subtitle,
       grade: question.grade,
-      quiz_id: question.quiz_id,
       answers: for(answer <- question.answers, do: data_answer(answer))
     }
   end

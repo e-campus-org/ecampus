@@ -5,7 +5,6 @@ defmodule BackendWeb.ClassController do
 
   alias Backend.Classes
   alias Backend.Classes.Class
-  alias Backend.TaughtClasses.TaughtClass
 
   import Backend.Auth.Plugs
 
@@ -51,7 +50,7 @@ defmodule BackendWeb.ClassController do
             grade(:number, "Question grade")
 
             type(:enum, "Question type",
-              enum: [:single, :multiple, :open, :sequence, :fill],
+              enum: [:single, :multiple, :sequence],
               default: [:single]
             )
 
