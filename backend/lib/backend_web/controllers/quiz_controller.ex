@@ -153,17 +153,7 @@ defmodule BackendWeb.QuizController do
             title: "Lorem ipsum dolor sit amet",
             subtitle: "Lorem ipsum dolor sit amet",
             grade: 5,
-            type: "single",
-            answers: [
-              %{
-                id: 1,
-                title: "Lorem ipsum dolor sit amet",
-                subtitle: "Lorem ipsum dolor sit amet",
-                is_correct: true,
-                correct_value: "Lorem ipsum dolor sit amet",
-                sequence_order_number: 1
-              }
-            ]
+            type: "single"
           })
         end,
       Questions:
