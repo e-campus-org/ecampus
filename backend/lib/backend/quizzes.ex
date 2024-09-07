@@ -210,13 +210,19 @@ defmodule Backend.Quizzes do
     |> Repo.delete()
   end
 
-  def answer_question(%{question_id: question_id, student_id: student_id, answer: answer}) do
+  def answer_question(%{
+        quiz_id: quiz_id,
+        question_id: question_id,
+        student_id: student_id,
+        answer: answer
+      }) do
     with processed_answer <-
            Repo.get!(Question, question_id)
            |> Repo.preload([:answers])
            |> apply_answer(answer) do
       %AnsweredQuestion{}
       |> AnsweredQuestion.changeset(%{
+        quiz_id: quiz_id,
         question_id: question_id,
         student_id: student_id,
         answer: processed_answer

@@ -26,6 +26,8 @@ defmodule Backend.Questions.Question do
       join_keys: [student_id: :id, question_id: :id]
     )
 
+    has_many(:answered_questions, Backend.AnsweredQuestions.AnsweredQuestion)
+
     timestamps(type: :utc_datetime)
   end
 

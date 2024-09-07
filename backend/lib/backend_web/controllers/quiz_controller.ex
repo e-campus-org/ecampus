@@ -531,6 +531,7 @@ defmodule BackendWeb.QuizController do
     %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
 
     Quizzes.answer_question(%{
+      quiz_id: String.to_integer(id),
       question_id: String.to_integer(question_id),
       student_id: account_id,
       answer: answer

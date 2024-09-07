@@ -5,6 +5,7 @@ defmodule BackendWeb.ClassJSON do
   alias Backend.Questions.Question
   alias Backend.Questions.Answer
   alias Backend.Accounts.Account
+  alias Backend.AnsweredQuestions.AnsweredQuestion
 
   @doc """
   Renders a list of classes.
@@ -97,7 +98,12 @@ defmodule BackendWeb.ClassJSON do
       title: question.title,
       subtitle: question.subtitle,
       grade: question.grade,
-      answers: for(answer <- question.answers, do: data_answer(answer))
+      answers: for(answer <- question.answers, do: data_answer(answer)),
+      your_answer:
+        for(
+          answered_question <- question.answered_questions,
+          do: data_answered_question(answered_question)
+        )
     }
   end
 
@@ -108,6 +114,8 @@ defmodule BackendWeb.ClassJSON do
       subtitle: answer.subtitle
     }
   end
+
+  defp data_answered_question(%AnsweredQuestion{} = answer), do: answer.answer
 
   defp data_account(%Account{} = account) do
     %{

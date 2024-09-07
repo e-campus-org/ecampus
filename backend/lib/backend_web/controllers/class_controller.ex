@@ -56,6 +56,7 @@ defmodule BackendWeb.ClassController do
 
             quiz_id(:number, "Question quiz id belongs to")
             answers(Schema.ref(:ClassAnswers), "List of quiz question answers")
+            your_answer(:json, "Question answer by student")
           end
 
           example(%{
@@ -71,7 +72,8 @@ defmodule BackendWeb.ClassController do
                 title: "Lorem ipsum dolor sit amet",
                 subtitle: "Lorem ipsum dolor sit amet"
               }
-            ]
+            ],
+            your_answer: [%{}]
           })
         end,
       ClassQuestions:
@@ -119,7 +121,8 @@ defmodule BackendWeb.ClassController do
                     title: "Lorem ipsum dolor sit amet",
                     subtitle: "Lorem ipsum dolor sit amet"
                   }
-                ]
+                ],
+                your_answer: [%{}]
               }
             ]
           })
@@ -249,7 +252,8 @@ defmodule BackendWeb.ClassController do
                         title: "Lorem ipsum dolor sit amet",
                         subtitle: "Lorem ipsum dolor sit amet"
                       }
-                    ]
+                    ],
+                    your_answer: [%{}]
                   }
                 ]
               }
@@ -340,7 +344,8 @@ defmodule BackendWeb.ClassController do
                           title: "Lorem ipsum dolor sit amet",
                           subtitle: "Lorem ipsum dolor sit amet"
                         }
-                      ]
+                      ],
+                      your_answer: [%{}]
                     }
                   ]
                 }

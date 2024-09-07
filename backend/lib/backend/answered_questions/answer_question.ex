@@ -16,13 +16,15 @@ defmodule Backend.AnsweredQuestions.AnsweredQuestion do
       primary_key: true
     )
 
+    belongs_to(:quizzes, Backend.Quizzes.Quiz, foreign_key: :quiz_id)
+
     timestamps(type: :utc_datetime)
   end
 
   @doc false
   def changeset(answer_question, attrs) do
     answer_question
-    |> cast(attrs, [:answer, :student_id, :question_id])
+    |> cast(attrs, [:answer, :student_id, :question_id, :quiz_id])
     |> validate_required([:student_id, :question_id])
     |> foreign_key_constraint(:student_id)
     |> foreign_key_constraint(:question_id)
