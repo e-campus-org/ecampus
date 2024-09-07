@@ -235,6 +235,36 @@ defmodule Backend.Quizzes do
     end
   end
 
+  defp apply_answer(%{type: :multiple} = question, %{"answer_ids" => answer_ids} = answer) do
+    correct_ids =
+      question.answers
+      |> Enum.filter(& &1.is_correct)
+      |> Enum.map(& &1.id)
+      |> Enum.sort()
+
+    answer_ids = answer_ids |> Enum.sort()
+
+    cond do
+      answer_ids == correct_ids ->
+        Map.merge(answer, %{grade: question.grade, correct: answer_ids})
+
+      true ->
+        points_per_answer = question.grade / length(correct_ids)
+
+        correct_count =
+          answer_ids
+          |> Enum.filter(&Enum.member?(correct_ids, &1))
+          |> length()
+
+        incorrect_count = length(answer_ids) - correct_count
+
+        Map.merge(answer, %{
+          grade: max(0, points_per_answer * (correct_count - incorrect_count)),
+          correct: correct_ids
+        })
+    end
+  end
+
   defp apply_answer(_question, answer) do
     Map.merge(answer, %{grade: 0})
   end
