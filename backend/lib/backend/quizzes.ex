@@ -229,6 +229,8 @@ defmodule Backend.Quizzes do
       })
       |> Repo.insert()
     end
+
+    Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])
   end
 
   defp apply_answer(%{type: :single} = question, %{"answer_id" => answer_id} = answer) do

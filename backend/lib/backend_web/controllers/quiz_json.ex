@@ -2,6 +2,7 @@ defmodule BackendWeb.QuizJSON do
   alias Backend.Quizzes.Quiz
   alias Backend.Questions.Question
   alias Backend.Questions.Answer
+  alias Backend.AnsweredQuestions.AnsweredQuestion
 
   @doc """
   Renders a list of quizzes.
@@ -16,6 +17,8 @@ defmodule BackendWeb.QuizJSON do
   def show(%{quiz: quiz}), do: data(quiz)
 
   def show_question(%{question: question}), do: data_question(question)
+
+  def show_student_question(%{question: question}), do: data_student_question(question)
 
   defp data(%Quiz{} = quiz) do
     %{
@@ -53,4 +56,30 @@ defmodule BackendWeb.QuizJSON do
       sequence_order_number: answer.sequence_order_number
     }
   end
+
+  defp data_student_question(%Question{} = question) do
+    %{
+      id: question.id,
+      type: question.type,
+      title: question.title,
+      subtitle: question.subtitle,
+      grade: question.grade,
+      answers: for(answer <- question.answers, do: data_student_answer(answer)),
+      your_answer:
+        for(
+          answered_question <- question.answered_questions,
+          do: data_answered_question(answered_question)
+        )
+    }
+  end
+
+  defp data_student_answer(%Answer{} = answer) do
+    %{
+      id: answer.id,
+      title: answer.title,
+      subtitle: answer.subtitle
+    }
+  end
+
+  defp data_answered_question(%AnsweredQuestion{} = answer), do: answer.answer
 end
