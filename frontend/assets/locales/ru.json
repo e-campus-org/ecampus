@@ -67,7 +67,8 @@
                     "startQuiz": "Начать тестирование",
                     "nextQuestion": "Следующий вопрос",
                     "previousQuestion": "Предыдущий вопрос",
-                    "submitQuestion": "Ответить"
+                    "submitQuestion": "Ответить",
+                    "mark": "Ваша оценка: %{mark}"
                 }
             },
             "specialities": {

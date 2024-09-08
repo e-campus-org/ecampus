@@ -192,7 +192,10 @@ declare namespace Classes {
         description: string;
         lesson_id: number;
         questions: ReadClassQuizQuestionDTO[];
-        estimation: Record<string, string | number>;
+        estimation: {
+            value: number;
+            key: string;
+        }[];
     }
 
     interface ReadClassLessonInfoDTO {

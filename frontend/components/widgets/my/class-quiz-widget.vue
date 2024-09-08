@@ -1,5 +1,14 @@
 <template>
-    <v-card :title="$t('components.widgets.my.class.quiz')">
+    <v-card>
+        <template #title>
+            <div class="d-flex flex-row justify-space-between align-center w-100">
+                <div>{{ $t("components.widgets.my.class.quiz") }}</div>
+                <div>
+                    <span>{{ totalAnsweredQuestion }} / {{ totalQuestions }}</span>
+                    <span v-if="mark" class="ml-2">{{ $t("components.widgets.my.class.mark", { mark }) }}</span>
+                </div>
+            </div>
+        </template>
         <template v-if="!started && totalQuestions > 0">
             <v-card-item :title="quiz.title" :subtitle="quiz.description" />
             <v-card-actions>
@@ -100,6 +109,9 @@ const checkboxModel = ref<number[]>([]);
 const currentQuestionIndex = ref(-1);
 const currentQuestion = computed(() => props.quiz?.questions?.[currentQuestionIndex.value] || null);
 const totalQuestions = computed(() => props.quiz?.questions?.length || 0);
+const totalAnsweredQuestion = computed(
+    () => props.quiz?.questions?.filter(q => q.your_answer?.length > 0)?.length || 0
+);
 
 const answers = computed(() => currentQuestion.value?.answers || []);
 
@@ -118,6 +130,15 @@ const canAnswer = computed(() => {
 });
 
 const showAnswerButton = computed(() => currentQuestion.value?.your_answer?.length === 0);
+
+const mark = computed(() => {
+    if (totalAnsweredQuestion.value === totalQuestions.value) {
+        // TODO
+        return 0;
+    } else {
+        return null;
+    }
+});
 
 function startQuiz() {
     started.value = true;

@@ -67,7 +67,8 @@
                     "startQuiz": "Start quiz",
                     "nextQuestion": "Next question",
                     "previousQuestion": "Previous question",
-                    "submitQuestion": "Submit"
+                    "submitQuestion": "Submit",
+                    "mark": "Your mark: %{mark}"
                 }
             },
             "specialities": {
