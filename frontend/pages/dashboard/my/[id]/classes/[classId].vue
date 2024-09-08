@@ -57,7 +57,8 @@ async function onQuestionAnswered({
                     answer
                 },
                 method: "POST"
-            }
+            },
+            false
         );
         const quizToUpdate = currentClass.value?.lesson.quizzes.find(q => q.id === quiz_id);
         if (quizToUpdate) {

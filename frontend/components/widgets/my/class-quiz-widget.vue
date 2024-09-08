@@ -14,26 +14,52 @@
             </v-card-item>
             <v-card-text>
                 <template v-if="currentQuestion.type === 'single' && currentQuestion.answers?.length > 0">
-                    <v-radio-group v-model="radioModel">
+                    <v-radio-group v-model="radioModel" :disabled="disableAnswer">
                         <v-radio v-for="answer in currentQuestion.answers" :key="answer.id" :value="answer.id">
                             <template #label>
                                 <div>
-                                    <div>{{ answer.title }}</div>
-                                    <small>{{ answer.subtitle }}</small>
+                                    <div>
+                                        {{ answer.title }}
+                                    </div>
+                                    <template v-if="answer.subtitle">
+                                        <small
+                                            :class="{
+                                                'text-red': answer.id !== currentQuestion.your_answer?.[0].correct,
+                                                'text-green': answer.id === currentQuestion.your_answer?.[0].correct
+                                            }"
+                                        >
+                                            {{ answer.subtitle }}
+                                        </small>
+                                    </template>
                                 </div>
                             </template>
                         </v-radio>
                     </v-radio-group>
                 </template>
                 <template v-else-if="currentQuestion.type === 'multiple' && answers?.length > 0">
-                    <v-checkbox v-for="answer in answers" :key="answer.id">
+                    <v-checkbox
+                        v-for="answer in answers"
+                        :key="answer.id"
+                        :disabled="disableAnswer"
+                        :model-value="checkboxModel.includes(answer.id)"
+                        @update:model-value="updateCheckbox(answer.id, $event as boolean)"
+                    >
                         <template #label>
                             <div>
                                 <div>{{ answer.title }}</div>
-                                <small>{{ answer.subtitle }}</small>
+                                <template v-if="answer.subtitle">
+                                    <small
+                                        :class="{
+                                            'text-red': !(currentQuestion.your_answer?.[0].correct as number[])?.includes?.(answer.id),
+                                            'text-green': (currentQuestion.your_answer?.[0].correct as number[])?.includes?.(answer.id)
+                                        }"
+                                    >
+                                        {{ answer.subtitle }}
+                                    </small>
+                                </template>
                             </div>
-                        </template></v-checkbox
-                    >
+                        </template>
+                    </v-checkbox>
                 </template>
             </v-card-text>
             <v-card-actions>
@@ -43,7 +69,7 @@
                 <v-btn v-if="canGoNext" variant="text" @click="currentQuestionIndex++">{{
                     $t("components.widgets.my.class.nextQuestion")
                 }}</v-btn>
-                <v-btn v-if="canAnswerQuestion" variant="text" @click="answerQuestion">{{
+                <v-btn v-if="showAnswerButton" :disabled="!canAnswer" variant="text" @click="answerQuestion">{{
                     $t("components.widgets.my.class.submitQuestion")
                 }}</v-btn>
             </v-card-actions>
@@ -77,15 +103,33 @@ const totalQuestions = computed(() => props.quiz?.questions?.length || 0);
 
 const answers = computed(() => currentQuestion.value?.answers || []);
 
-const canGoNext = computed(
-    () => currentQuestionIndex.value < totalQuestions.value - 1 && currentQuestion.value?.your_answer?.length > 0
-);
+const canGoNext = computed(() => currentQuestionIndex.value < totalQuestions.value - 1 && disableAnswer.value);
 
-const canAnswerQuestion = computed(() => currentQuestion.value?.your_answer?.length === 0);
+const disableAnswer = computed(() => currentQuestion.value?.your_answer?.length > 0);
+
+const canAnswer = computed(() => {
+    if (currentQuestion.value?.type === "single") {
+        return radioModel.value > 0;
+    } else if (currentQuestion.value?.type === "multiple") {
+        return checkboxModel.value?.length > 0;
+    } else {
+        return false;
+    }
+});
+
+const showAnswerButton = computed(() => currentQuestion.value?.your_answer?.length === 0);
 
 function startQuiz() {
     started.value = true;
     currentQuestionIndex.value = 0;
+}
+
+function updateCheckbox(id: number, value: boolean) {
+    if (value) {
+        checkboxModel.value = [...checkboxModel.value, id];
+    } else {
+        checkboxModel.value = checkboxModel.value.filter(val => val !== id);
+    }
 }
 
 function answerQuestion() {
@@ -113,13 +157,25 @@ watch(
     newVal => {
         if (newVal?.your_answer?.length > 0) {
             if (newVal.type === "single") {
-                radioModel.value = newVal.your_answer[0].answer?.answer_id;
+                radioModel.value = newVal.your_answer[0]?.answer_id || 0;
             } else if (newVal.type === "multiple") {
-                checkboxModel.value = newVal.your_answer[0].answer?.answer_ids;
+                checkboxModel.value = newVal.your_answer[0]?.answer_ids || [];
             }
         } else {
             radioModel.value = 0;
             checkboxModel.value = [];
+        }
+    },
+    {
+        immediate: true
+    }
+);
+
+watch(
+    () => props.quiz,
+    newVal => {
+        if (newVal && newVal.questions?.find(q => q.your_answer?.length > 0)) {
+            startQuiz();
         }
     },
     {

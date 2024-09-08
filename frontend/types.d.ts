@@ -168,16 +168,9 @@ declare namespace Classes {
         subtitle: string;
     }
 
-    interface ReadSingleQuestionAnswerDTO {
-        answer_id: number;
-    }
-
-    interface ReadMultipleQuestionAnswerDTO {
-        answer_ids: number[];
-    }
-
     interface ReadQuizQuestionYourAnswerDTO {
-        answer: ReadSingleQuestionAnswerDTO & ReadMultipleQuestionAnswerDTO;
+        answer_id?: number;
+        answer_ids?: number[];
         grade: number;
         correct: number | number[];
     }
@@ -223,7 +216,11 @@ declare namespace Classes {
         updated_at: string;
     }
 
-    interface CreateSingleQuestionAnswerDTO extends ReadSingleQuestionAnswerDTO {}
+    interface CreateSingleQuestionAnswerDTO {
+        answer_id: number;
+    }
 
-    interface CreateMultipleQuestionAnswerDTO extends CreateMultipleQuestionAnswerDTO {}
+    interface CreateMultipleQuestionAnswerDTO {
+        answer_ids: number[];
+    }
 }
