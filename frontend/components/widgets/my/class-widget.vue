@@ -31,6 +31,7 @@
                             :key="quiz.id"
                             :loading="loading"
                             :quiz="quiz"
+                            @question-answered="$emit('question-answered', $event)"
                         />
                     </v-col>
                 </v-row>
@@ -46,6 +47,17 @@ import ClassTopicWidget from "./class-topic-widget.vue";
 defineProps<{
     loading: boolean;
     currentClass: Classes.ReadClassDTO | null;
+}>();
+
+defineEmits<{
+    (
+        e: "question-answered",
+        payload: {
+            answer: Classes.CreateMultipleQuestionAnswerDTO | Classes.CreateSingleQuestionAnswerDTO;
+            quiz_id: number;
+            question_id: number;
+        }
+    ): void;
 }>();
 
 const tab = ref(1);

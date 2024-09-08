@@ -67,7 +67,7 @@
                     "startQuiz": "Начать тестирование",
                     "nextQuestion": "Следующий вопрос",
                     "previousQuestion": "Предыдущий вопрос",
-                    "finishQuiz": "Завершить"
+                    "submitQuestion": "Ответить"
                 }
             },
             "specialities": {

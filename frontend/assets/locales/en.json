@@ -67,7 +67,7 @@
                     "startQuiz": "Start quiz",
                     "nextQuestion": "Next question",
                     "previousQuestion": "Previous question",
-                    "finishQuiz": "Finish quiz"
+                    "submitQuestion": "Submit"
                 }
             },
             "specialities": {
