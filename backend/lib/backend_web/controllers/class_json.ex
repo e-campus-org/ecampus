@@ -96,9 +96,17 @@ defmodule BackendWeb.ClassJSON do
       id: question.id,
       type: question.type,
       title: question.title,
-      subtitle: question.subtitle,
+      subtitle:
+        case question.answered_questions do
+          [_ | _] -> question.subtitle
+          _ -> nil
+        end,
       grade: question.grade,
-      answers: for(answer <- question.answers, do: data_answer(answer)),
+      answers:
+        for(
+          answer <- question.answers,
+          do: data_answer(answer, length(question.answered_questions) > 0)
+        ),
       your_answer:
         for(
           answered_question <- question.answered_questions,
@@ -107,11 +115,15 @@ defmodule BackendWeb.ClassJSON do
     }
   end
 
-  defp data_answer(%Answer{} = answer) do
+  defp data_answer(%Answer{} = answer, show_subtitle) do
     %{
       id: answer.id,
       title: answer.title,
-      subtitle: answer.subtitle
+      subtitle:
+        case show_subtitle do
+          true -> answer.subtitle
+          _ -> nil
+        end
     }
   end
 
