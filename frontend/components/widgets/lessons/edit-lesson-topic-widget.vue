@@ -25,7 +25,14 @@
                 />
             </v-col>
             <v-col cols="12">
-                <tiptap-editor v-model="content.value.value" />
+                <client-only>
+                    <vuetify-tiptap
+                        v-model="content.value.value"
+                        :disabled="loading"
+                        :disable-toolbar="loading"
+                        output="json"
+                    />
+                </client-only>
             </v-col>
         </v-row>
         <v-btn class="mt-4" type="submit" :loading="loading">
@@ -35,7 +42,18 @@
 </template>
 <script setup lang="ts">
 import { useField, useForm } from "vee-validate";
-import { TiptapEditor } from "@/components/shared";
+
+/**
+ * :hide-toolbar="hideToolbar"
+          :disable-toolbar="disableToolbar"
+          :outlined="outlined"
+          :dense="dense"
+          :error-messages="errorMessages"
+          rounded
+          :max-height="465"
+          :max-width="maxWidth"
+          :extensions="extensions"
+ */
 
 const props = defineProps<{
     topic: Lessons.ReadLessonTopicDTO | null;

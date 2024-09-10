@@ -29,6 +29,7 @@
         "sass": "^1.77.8",
         "vue": "latest",
         "vuetify-nuxt-module": "^0.16.1",
+        "vuetify-pro-tiptap": "^2.5.4",
         "yup": "^1.4.0"
     },
     "devDependencies": {

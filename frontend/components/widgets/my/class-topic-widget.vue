@@ -4,12 +4,13 @@
             <p class="text-h5 font-weight-black">{{ currentTopic.title || "" }}</p>
         </v-card-text>
         <v-card-text>
-            <tiptap-viewer :content="currentTopic.content" />
+            <client-only>
+                <vuetify-viewer :value="currentTopic.content" />
+            </client-only>
         </v-card-text>
     </v-card>
 </template>
 <script setup lang="ts">
-import { TiptapViewer } from "@/components/shared";
 defineProps<{
     loading: boolean;
     currentTopic: Classes.ReadClassLessonTopicInfoDTO;
