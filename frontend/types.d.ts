@@ -182,6 +182,7 @@ declare namespace Classes {
         subtitle: string;
         grade: number;
         quiz_id: number;
+        order: number;
         answers: ReadClassQuizQuestionAnswerDTO[];
         your_answer: ReadQuizQuestionYourAnswerDTO[];
     }
@@ -192,10 +193,7 @@ declare namespace Classes {
         description: string;
         lesson_id: number;
         questions: ReadClassQuizQuestionDTO[];
-        estimation: {
-            value: number;
-            key: string;
-        }[];
+        estimation: Record<string, number>;
     }
 
     interface ReadClassLessonInfoDTO {

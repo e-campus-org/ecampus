@@ -106,12 +106,22 @@ const started = ref(false);
 const radioModel = ref<number>(0);
 const checkboxModel = ref<number[]>([]);
 
+const questions = computed(() => {
+    if (Array.isArray(props.quiz.questions)) {
+        const questions = [...props.quiz.questions];
+        return questions.sort((a, b) => a.order - b.order);
+    } else {
+        return [];
+    }
+});
+
 const currentQuestionIndex = ref(-1);
-const currentQuestion = computed(() => props.quiz?.questions?.[currentQuestionIndex.value] || null);
+const currentQuestion = computed(() => questions.value?.[currentQuestionIndex.value] || null);
 const totalQuestions = computed(() => props.quiz?.questions?.length || 0);
 const totalAnsweredQuestion = computed(
     () => props.quiz?.questions?.filter(q => q.your_answer?.length > 0)?.length || 0
 );
+const totalGrade = computed(() => props.quiz?.questions?.reduce((acc, curr) => acc + curr.your_answer[0].grade, 0));
 
 const answers = computed(() => currentQuestion.value?.answers || []);
 
@@ -133,8 +143,20 @@ const showAnswerButton = computed(() => currentQuestion.value?.your_answer?.leng
 
 const mark = computed(() => {
     if (totalAnsweredQuestion.value === totalQuestions.value) {
-        // TODO
-        return 0;
+        const estimationArr = [];
+        for (const key of Object.keys(props.quiz.estimation)) {
+            estimationArr.push({
+                key,
+                value: props.quiz.estimation[key]
+            });
+        }
+        estimationArr.sort((a, b) => b.value - a.value);
+        for (const { key, value } of estimationArr) {
+            if (totalGrade.value >= value) {
+                return key;
+            }
+        }
+        return null;
     } else {
         return null;
     }

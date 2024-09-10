@@ -14,6 +14,7 @@ defmodule Backend.Questions.Question do
     field(:title, :string)
     field(:subtitle, :string)
     field(:grade, :integer)
+    field(:show_correct_answer, :boolean)
     has_many(:answers, Backend.Questions.Answer)
 
     many_to_many(:quizzes, Backend.Quizzes.Quiz,
@@ -27,6 +28,7 @@ defmodule Backend.Questions.Question do
     )
 
     has_many(:answered_questions, Backend.AnsweredQuestions.AnsweredQuestion)
+    has_many(:quizzes_questions, Backend.QuizzesQuestions.QuizQuestion)
 
     timestamps(type: :utc_datetime)
   end
@@ -34,7 +36,7 @@ defmodule Backend.Questions.Question do
   @doc false
   def changeset(question, attrs) do
     question
-    |> cast(attrs, [:title, :subtitle, :type, :grade])
+    |> cast(attrs, [:title, :subtitle, :type, :grade, :show_correct_answer])
     |> cast_assoc(:answers, with: &Answer.changeset/2)
     |> validate_required([:title, :type])
   end

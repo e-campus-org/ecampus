@@ -11,6 +11,8 @@ defmodule Backend.QuizzesQuestions.QuizQuestion do
 
     belongs_to(:quizzes, Backend.Quizzes.Quiz, foreign_key: :quiz_id, primary_key: true)
 
+    field(:order, :integer)
+
     timestamps(type: :utc_datetime)
   end
 

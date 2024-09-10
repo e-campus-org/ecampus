@@ -87,30 +87,40 @@ defmodule BackendWeb.ClassJSON do
       description: quiz.description,
       estimation: quiz.estimation,
       lesson_id: quiz.lesson_id,
-      questions: for(question <- quiz.questions, do: data_question(question))
+      questions: for(question <- quiz.questions, do: data_question(question, quiz.id))
     }
   end
 
-  defp data_question(%Question{} = question) do
+  defp data_question(%Question{} = question, quiz_id) do
     %{
       id: question.id,
       type: question.type,
       title: question.title,
+      order:
+        case question.quizzes_questions
+             |> Enum.find(fn qq -> qq.quiz_id == quiz_id end) do
+          %{order: order} -> order
+          _ -> 1
+        end,
       subtitle:
-        case question.answered_questions do
-          [_ | _] -> question.subtitle
+        case {question.answered_questions, question.show_correct_answer} do
+          {[_ | _], true} -> question.subtitle
           _ -> nil
         end,
       grade: question.grade,
       answers:
         for(
           answer <- question.answers,
-          do: data_answer(answer, length(question.answered_questions) > 0)
+          do:
+            data_answer(
+              answer,
+              length(question.answered_questions) > 0 and question.show_correct_answer
+            )
         ),
       your_answer:
         for(
           answered_question <- question.answered_questions,
-          do: data_answered_question(answered_question)
+          do: data_answered_question(answered_question, question.show_correct_answer)
         )
     }
   end
@@ -127,7 +137,10 @@ defmodule BackendWeb.ClassJSON do
     }
   end
 
-  defp data_answered_question(%AnsweredQuestion{} = answer), do: answer.answer
+  defp data_answered_question(%AnsweredQuestion{} = answer, true), do: answer.answer
+
+  defp data_answered_question(%AnsweredQuestion{} = answer, false),
+    do: %{answer_id: Map.get(answer.answer, "answer_id"), grade: Map.get(answer.answer, "grade")}
 
   defp data_account(%Account{} = account) do
     %{
