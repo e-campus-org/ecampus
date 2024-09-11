@@ -35,6 +35,32 @@
                 </v-list>
                 <template #append>
                     <v-list density="compact" nav>
+                        <v-menu width="200px" rounded>
+                            <template #activator="{ props }">
+                                <v-list-item
+                                    v-bind="props"
+                                    prepend-icon="mdi-translate"
+                                    :title="$t('layouts.internal.sideMenu.changeLocale')"
+                                >
+                                    <v-tooltip v-if="$vuetify.display.mdAndUp" activator="parent" location="end">
+                                        {{ $t("layouts.internal.sideMenu.changeLocale") }}
+                                    </v-tooltip>
+                                </v-list-item>
+                            </template>
+                            <v-card>
+                                <v-list density="compact">
+                                    <v-list-item
+                                        :title="$t('layouts.internal.sideMenu.locales.english')"
+                                        @click="toggleLocale('en')"
+                                    />
+                                    <v-list-item
+                                        :title="$t('layouts.internal.sideMenu.locales.russian')"
+                                        @click="toggleLocale('ru')"
+                                    />
+                                </v-list>
+                            </v-card>
+                        </v-menu>
+
                         <v-list-item
                             :prepend-icon="isDarkThemeApplied ? 'mdi-weather-night' : 'mdi-weather-sunny'"
                             :title="
@@ -86,7 +112,7 @@
                                         prepend-icon="mdi-cog"
                                         :to="{ name: 'dashboard-settings' }"
                                     >
-                                        {{ t("layouts.internal.header.settings") }}
+                                        {{ $t("layouts.internal.header.settings") }}
                                     </v-btn>
                                     <v-btn
                                         variant="text"
@@ -94,10 +120,10 @@
                                         prepend-icon="mdi-account-circle"
                                         :to="{ name: 'dashboard-profile' }"
                                     >
-                                        {{ t("layouts.internal.header.profile") }}
+                                        {{ $t("layouts.internal.header.profile") }}
                                     </v-btn>
                                     <v-btn variant="text" rounded prepend-icon="mdi-logout" @click="logout">
-                                        {{ t("layouts.internal.header.logout") }}
+                                        {{ $t("layouts.internal.header.logout") }}
                                     </v-btn>
                                 </div>
                             </div>
@@ -126,7 +152,7 @@ const vuetify = useVuetify();
 
 const isDesktop = computed(() => (vuetify.display.mdAndUp as unknown as globalThis.ComputedRef<boolean>).value);
 
-const { t } = useI18n();
+const i18n = useI18n();
 
 // should use isDesktop value because if initial is false,
 // then in desktop mode drawer will hide after moving to another layout
@@ -141,5 +167,9 @@ const logout = useLogout();
 const { accountInfo } = useJwt();
 function toggleTheme() {
     settingsStore.switchTheme();
+}
+
+function toggleLocale(locale: "en" | "ru") {
+    i18n.locale.value = locale;
 }
 </script>

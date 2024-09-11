@@ -9,7 +9,12 @@
             "sideMenu": {
                 "admin": "Панель администратора",
                 "darkTheme": "Включить темную тему",
-                "lightTheme": "Включить светлую тему"
+                "lightTheme": "Включить светлую тему",
+                "changeLocale": "Сменить язык",
+                "locales": {
+                    "english": "English",
+                    "russian": "Русский"
+                }
             }
         },
         "dashboard": {

@@ -9,7 +9,12 @@
             "sideMenu": {
                 "admin": "Admin panel",
                 "darkTheme": "Toggle dark theme",
-                "lightTheme": "Toggle light theme"
+                "lightTheme": "Toggle light theme",
+                "changeLocale": "Change locale",
+                "locales": {
+                    "english": "English",
+                    "russian": "Русский"
+                }
             }
         },
         "dashboard": {
