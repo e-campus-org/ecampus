@@ -1,5 +1,7 @@
-import { VuetifyTiptap, VuetifyViewer, createVuetifyProTipTap } from "vuetify-pro-tiptap";
 import {
+    VuetifyTiptap,
+    VuetifyViewer,
+    createVuetifyProTipTap,
     BaseKit,
     Bold,
     Italic,
@@ -25,11 +27,9 @@ import {
     Code,
     CodeBlock,
     Clear,
-    Fullscreen,
     History
 } from "vuetify-pro-tiptap";
 import "vuetify-pro-tiptap/style.css";
-import { TiptapSelectImage } from "@/components/shared";
 
 export default defineNuxtPlugin(nuxtApp => {
     const vuetifyProTipTap = createVuetifyProTipTap({
@@ -63,12 +63,16 @@ export default defineNuxtPlugin(nuxtApp => {
             Indent.configure({ divider: true }),
             Link,
             Image.configure({
-                imageTabs: [{ name: "SELECT", component: markRaw(TiptapSelectImage) }],
-                // hiddenTabs: ['upload'],
-                upload(file: File) {
-                    const url = URL.createObjectURL(file);
-                    console.log("mock upload api :>> ", url);
-                    return Promise.resolve(url);
+                async upload(file: File) {
+                    return Promise.resolve(
+                        await ((file: File) =>
+                            new Promise((resolve, reject) => {
+                                const reader = new FileReader();
+                                reader.readAsDataURL(file);
+                                reader.onload = () => resolve(reader.result as string);
+                                reader.onerror = reject;
+                            }))(file)
+                    );
                 }
             }),
             Video,
@@ -76,8 +80,7 @@ export default defineNuxtPlugin(nuxtApp => {
             Blockquote,
             HorizontalRule,
             CodeBlock.configure({ divider: true }),
-            History.configure({ divider: true }),
-            Fullscreen
+            History.configure({ divider: true })
         ]
     });
 
