@@ -6,6 +6,8 @@
             :loading="loading"
             :items-per-page="props.pageSize"
             :mobile-breakpoint="0"
+            hover
+            @click:row="handleRowClick"
         >
             <template #bottom>
                 <div class="text-center pt-2">
@@ -25,6 +27,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "page-changed", page: number): void;
+    (e: "lesson-selected", topic: Lessons.ReadLessonDTO): void;
 }>();
 
 const { t } = useI18n();
@@ -81,4 +84,8 @@ const headers = computed(() => [
         value: (item: Lessons.ReadLessonDTO) => dayjs(item.updated_at).format("DD.MM.YYYY HH:mm:ss")
     }
 ]);
+
+function handleRowClick(_: PointerEvent, { item }: { item: Lessons.ReadLessonDTO }) {
+    emit("lesson-selected", item);
+}
 </script>

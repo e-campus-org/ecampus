@@ -6,6 +6,7 @@
             :page="page"
             :page-size="pageSize"
             @page-changed="page = $event"
+            @lesson-selected="onLessonSelected"
         />
     </v-container>
 </template>
@@ -30,4 +31,11 @@ const { data: lessonsListData, status } = await useAsyncData(
         watch: [page, pageSize]
     }
 );
+
+function onLessonSelected(lesson: Lessons.ReadLessonDTO) {
+    navigateTo({
+        name: "admin-lessons-id",
+        params: { id: lesson.id }
+    });
+}
 </script>
