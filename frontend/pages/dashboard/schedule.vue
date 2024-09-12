@@ -17,11 +17,7 @@ const { data: classesListData, status } = await useAsyncData(
     "classes-list-data",
     () => {
         if (account.value?.group_id && account.value.group_id > 0) {
-            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(
-                `/classes?group_id=${account.value?.group_id}`,
-                {},
-                false
-            );
+            return useFetch<Shared.ListData<Classes.ReadClassDTO>>(`/classes?group_id=${account.value?.group_id}`, {});
         } else {
             return Promise.resolve(null);
         }

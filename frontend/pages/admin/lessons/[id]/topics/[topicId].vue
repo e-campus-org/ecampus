@@ -29,7 +29,7 @@ const { data: currentLessonTopic, status: status } = await useAsyncData(
     "admin-current-lesson-topic-data",
     () => {
         if (topicId.value && topicId.value > 0) {
-            return useFetch<Lessons.ReadLessonTopicDTO>(`/lesson_topics/${topicId.value}`, {}, false);
+            return useFetch<Lessons.ReadLessonTopicDTO>(`/lesson_topics/${topicId.value}`, {});
         } else {
             return Promise.resolve(null);
         }
@@ -45,14 +45,10 @@ const { data: currentLessonTopic, status: status } = await useAsyncData(
 async function updateLessonTopic(dto: Lessons.UpdateLessonTopicDTO) {
     try {
         localLoading.value = true;
-        currentLessonTopic.value = await useFetch<Lessons.ReadLessonTopicDTO>(
-            `/lesson_topics/${topicId.value}`,
-            {
-                body: { lesson_topic: { ...dto, lesson_id: lessonId.value } },
-                method: "PUT"
-            },
-            false
-        );
+        currentLessonTopic.value = await useFetch<Lessons.ReadLessonTopicDTO>(`/lesson_topics/${topicId.value}`, {
+            body: { lesson_topic: { ...dto, lesson_id: lessonId.value } },
+            method: "PUT"
+        });
     } catch (e: unknown) {
         if (e instanceof FetchError && e.status === 401) {
             useEvent("notify:error", t("errors.unauthorized"));

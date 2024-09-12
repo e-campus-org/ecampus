@@ -37,7 +37,7 @@ const { data: currentLesson, status: lessonStatus } = await useAsyncData(
     "admin-current-lesson-data",
     () => {
         if (lessonId.value && lessonId.value > 0) {
-            return useFetch<Lessons.ReadLessonDTO>(`/lessons/${lessonId.value}`, {}, false);
+            return useFetch<Lessons.ReadLessonDTO>(`/lessons/${lessonId.value}`, {});
         } else {
             return Promise.resolve(null);
         }
@@ -66,14 +66,10 @@ const { data: lessonTopicsListData, status: lessonTopicsStatus } = await useAsyn
 async function updateLesson(lesson: Lessons.UpdateLessonDTO) {
     try {
         localLoading.value = true;
-        currentLesson.value = await useFetch<Lessons.ReadLessonDTO>(
-            `/lessons/${lessonId.value}`,
-            {
-                body: { lesson },
-                method: "PUT"
-            },
-            false
-        );
+        currentLesson.value = await useFetch<Lessons.ReadLessonDTO>(`/lessons/${lessonId.value}`, {
+            body: { lesson },
+            method: "PUT"
+        });
     } catch (e: unknown) {
         if (e instanceof FetchError && e.status === 401) {
             useEvent("notify:error", t("errors.unauthorized"));

@@ -1,4 +1,4 @@
-export async function useAccount(forceRefresh?: boolean) {
+export async function useAccount() {
     const { accountInfo } = useJwt();
 
     const loading = computed(() => status.value === "pending");
@@ -7,7 +7,7 @@ export async function useAccount(forceRefresh?: boolean) {
         "current-account",
         () => {
             if (accountInfo.value) {
-                return useFetch<Accounts.ReadAccountDTO>(`/accounts/${accountInfo.value?.id}`, {}, !forceRefresh);
+                return useFetch<Accounts.ReadAccountDTO>(`/accounts/${accountInfo.value?.id}`, {});
             } else {
                 return Promise.resolve(null);
             }

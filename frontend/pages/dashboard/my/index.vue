@@ -18,7 +18,7 @@ const { data: mySubjects, status } = await useAsyncData(
     "subjects-list-data",
     () => {
         if (account.value?.group_id && account.value.group_id > 0) {
-            return useFetch<Subjects.ReadSubjectDTO[]>(`/groups/${account.value?.group_id}/subjects`, {}, false);
+            return useFetch<Subjects.ReadSubjectDTO[]>(`/groups/${account.value?.group_id}/subjects`, {});
         } else {
             return Promise.resolve([]);
         }

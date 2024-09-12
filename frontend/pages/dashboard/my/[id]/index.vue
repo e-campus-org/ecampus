@@ -34,8 +34,7 @@ const { data: classesData, status } = await useAsyncData(
         if (subjectId.value && subjectId.value > 0) {
             return useFetch<Shared.ListData<Classes.ReadClassDTO>>(
                 `/classes?subject_id=${subjectId.value}&group_id=${account.value?.group_id}&page=${page.value}&page_size=${pageSize.value}`,
-                {},
-                false
+                {}
             );
         } else {
             return Promise.resolve(null);

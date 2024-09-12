@@ -26,7 +26,7 @@ const { data: currentClass, status } = await useAsyncData(
     "dashboard-current-class-data",
     () => {
         if (classId.value && classId.value > 0) {
-            return useFetch<Classes.ReadClassDTO>(`/classes/${classId.value}`, {}, false);
+            return useFetch<Classes.ReadClassDTO>(`/classes/${classId.value}`, {});
         } else {
             return Promise.resolve(null);
         }
@@ -57,8 +57,7 @@ async function onQuestionAnswered({
                     answer
                 },
                 method: "POST"
-            },
-            false
+            }
         );
         const quizToUpdate = currentClass.value?.lesson.quizzes.find(q => q.id === quiz_id);
         if (quizToUpdate) {
