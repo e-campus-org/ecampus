@@ -1,6 +1,5 @@
+# build stage
 FROM hexpm/elixir:1.14.5-erlang-24.2.2-alpine-3.18.9 AS build
-
-
 
 RUN apk add --no-cache build-base git python3 curl
 
@@ -9,32 +8,12 @@ WORKDIR /app
 RUN mix local.hex --force && mix local.rebar --force
 
 ARG MIX_ENV
-ARG PHX_SERVER
-ARG POSTGRES_DB
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-ARG POSTGRES_PORT
-ARG POSTGRES_HOSTNAME
-ARG MINIO_ROOT_USER
-ARG MINIO_ROOT_PASSWORD
-ARG JWT_TOKEN_SECRET
-
-ENV MIX_ENV=${MIX_ENV}
-ENV PHX_SERVER=${PHX_SERVER}
-ENV POSTGRES_DB=${POSTGRES_DB}
-ENV POSTGRES_USER=${POSTGRES_USER}
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-ENV POSTGRES_PORT=${POSTGRES_PORT}
-ENV POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
-ENV MINIO_ROOT_USER=${MINIO_ROOT_USER}
-ENV MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-ENV JWT_TOKEN_SECRET=${JWT_TOKEN_SECRET}
 
 COPY mix.exs mix.lock ./
-RUN mix deps.get --only $MIX_ENV
+RUN mix deps.get --only ${MIX_ENV}
 
 RUN mkdir config
-COPY config/config.exs config/$MIX_ENV.exs config/
+COPY config/config.exs config/${MIX_ENV}.exs config/
 
 RUN mix deps.compile
 
@@ -45,41 +24,21 @@ COPY config/runtime.exs config/
 RUN mix release
 
 # app stage
-FROM alpine:3.14.2 AS app
+FROM alpine:3.18.9 AS app
 
 ARG MIX_ENV
-ARG PHX_SERVER
-ARG POSTGRES_DB
-ARG POSTGRES_USER
-ARG POSTGRES_PASSWORD
-ARG POSTGRES_PORT
-ARG POSTGRES_HOSTNAME
-ARG MINIO_ROOT_USER
-ARG MINIO_ROOT_PASSWORD
-ARG JWT_TOKEN_SECRET
-
-ENV MIX_ENV=${MIX_ENV}
-ENV PHX_SERVER=${PHX_SERVER}
-ENV POSTGRES_DB=${POSTGRES_DB}
-ENV POSTGRES_USER=${POSTGRES_USER}
-ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-ENV POSTGRES_PORT=${POSTGRES_PORT}
-ENV POSTGRES_HOSTNAME=${POSTGRES_HOSTNAME}
-ENV MINIO_ROOT_USER=${MINIO_ROOT_USER}
-ENV MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-ENV JWT_TOKEN_SECRET=${JWT_TOKEN_SECRET}
 
 RUN apk add --no-cache libstdc++ openssl ncurses-libs
 
-ENV USER="elixir"
+ENV USER=${MIX_ENV}
 WORKDIR "/home/${USER}/app"
 
 RUN addgroup -g 1000 -S "${USER}" && adduser -s /bin/sh -u 1000 -G "${USER}" -h "/home/${USER}" -D "${USER}" && su "${USER}"
 
 USER "${USER}"
 
-COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/api_release_demo ./
+COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/backend ./
 
-ENTRYPOINT ["bin/api_release_demo"]
+ENTRYPOINT ["bin/backend"]
 
 CMD ["start"]
