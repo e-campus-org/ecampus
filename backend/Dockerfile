@@ -17,6 +17,7 @@ COPY config/config.exs config/${MIX_ENV}.exs config/
 
 RUN mix deps.compile
 
+COPY priv priv
 COPY lib lib
 RUN mix compile
 
@@ -39,6 +40,4 @@ USER "${USER}"
 
 COPY --from=build --chown="${USER}":"${USER}" /app/_build/"${MIX_ENV}"/rel/backend ./
 
-ENTRYPOINT ["bin/backend"]
-
-CMD ["start"]
+CMD ["sh", "-c", "bin/backend eval Backend.Release.migrate && bin/backend start"]
