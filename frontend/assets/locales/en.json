@@ -81,19 +81,55 @@
                     "id": "ID",
                     "code": "Speciality code",
                     "description": "Description",
-                    "title": "title",
+                    "title": "Title",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "action": {
+                    "delete": "Delete a specialty",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a specialty",
+                    "create_title": "Create a specialty",
+                    "delete_title": "Delete a specialty",
+                    "delete_text": "Do you really want to delete a specialty",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "code": "Code is required.",
+                    "description": "Description is required."
                 }
             },
             "groups": {
                 "headers": {
                     "id": "ID",
-                    "title": "title",
+                    "title": "Title",
                     "description": "Description",
                     "specialityId": "Speciality",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "action": {
+                    "delete": "Delete a group",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a group",
+                    "create_title": "Create a group",
+                    "delete_title": "Delete a group",
+                    "delete_text": "Do you really want to delete a group",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "specialityId": "SpecialityId is required.",
+                    "description": "Description is required."
                 }
             },
             "accounts": {
@@ -106,6 +142,33 @@
                     "roles": "Roles",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "action": {
+                    "delete": "Delete a account",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a account",
+                    "create_title": "Create a account",
+                    "delete_title": "Delete a account",
+                    "delete_text": "Do you really want to delete a account",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete",
+                    "hint": "Select the roles for the user",
+                    "selected": "Selected",
+                    "password": "Password",
+                    "password_confirmation": "Password confirmation"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "specialityId": "SpecialityId is required.",
+                    "description": "Description is required."
+                },
+                "roles": {
+                    "admin": "admin",
+                    "teacher": "teacher",
+                    "student": "student"
                 }
             },
             "subjects": {
@@ -119,6 +182,24 @@
                     "requiredTexts": "Required texts",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "action": {
+                    "delete": "Delete a subject",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a subject",
+                    "create_title": "Create a subject",
+                    "delete_title": "Delete a subject",
+                    "delete_text": "Do you really want to delete a subject",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "specialityId": "SpecialityId is required.",
+                    "description": "Description is required."
                 }
             },
             "lessons": {
