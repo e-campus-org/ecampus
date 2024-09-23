@@ -76,6 +76,7 @@ declare namespace Accounts {
         inserted_at: string;
         updated_at: string;
     }
+    
 }
 
 declare namespace Subjects {

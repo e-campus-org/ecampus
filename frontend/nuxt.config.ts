@@ -53,7 +53,7 @@ export default defineNuxtConfig({
     },
     runtimeConfig: {
         public: {
-            apiUrl: ""
+            apiUrl: process.env.URL_VUE_APP
         }
     },
     app: {
