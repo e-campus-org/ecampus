@@ -1,16 +1,38 @@
 <template>
     <v-container>
         <list-widget
+            v-model:dialog="dialogAdd"
             :data="accountsListData"
             :loading="loading"
             :page="page"
             :page-size="pageSize"
             @page-changed="page = $event"
+            @row-delete="onClickDelete"
+            @row-edit="onClickEdit"
         />
+
+        <modal-add 
+            v-model:dialog="dialogAdd"
+            :id-list="groupsListId"
+            @add-confirm="addConfirm"
+        />
+
+        <modal-delete 
+            v-model:dialog="dialogDelete"
+            :item="deletedAccount || {}"
+            @delete-confirm="deleteConfirm"
+        />
+
+        <modal-edit 
+            v-model:dialog="dialogEdit"
+            :item="editedItem || {}"
+             @edit-confirm="editConfirm"
+        />
+
     </v-container>
 </template>
 <script setup lang="ts">
-import { ListWidget } from "@/components/widgets/accounts";
+import { ListWidget, ModalAdd, ModalDelete, ModalEdit } from "@/components/widgets/accounts";
 
 definePageMeta({
     layout: "admin"
@@ -18,6 +40,19 @@ definePageMeta({
 
 const page = ref(1);
 const pageSize = ref(10);
+const dialogDelete = ref(false);
+const dialogAdd = ref(false);
+const dialogEdit = ref(false);
+const deletedAccount = ref<Accounts.ReadAccountDTO>();
+const editedItem = ref<Accounts.ReadAccountDTO>();
+const groupsListId = computed(() => groupsListData.list.map(item => item.id));
+const groupsListData = await useFetch<Shared.ListData<Groups.ReadGroupDTO>>(
+    `/groups`,
+    {
+        method: "GET"
+    }
+);
+
 
 const loading = computed(() => status.value === "pending");
 
@@ -33,4 +68,75 @@ const { data: accountsListData, status } = await useAsyncData(
         watch: [page, pageSize]
     }
 );
+
+const onClickDelete = (item: Accounts.ReadAccountDTO) => {
+    deletedAccount.value = item
+    dialogDelete.value = true
+}
+
+const onClickEdit = (item: Accounts.ReadAccountDTO) => {
+    editedItem.value = item
+    dialogEdit.value = true
+}
+
+const addConfirm = async (item: object) => {
+    try {
+        const body = {
+            account: item
+        };
+
+        const data = await useFetch<Accounts.ReadAccountDTO>('/accounts', {
+            method: 'POST',
+            body
+        });
+        
+
+        if(accountsListData.value && data) {
+            accountsListData.value.list.push(data)
+        }
+    
+    } catch (error) {
+        console.log(error);
+    }
+    dialogAdd.value = false;
+}
+
+const deleteConfirm = async () => {
+    console.log(deletedAccount.value)
+    try {
+        if (accountsListData.value && deletedAccount.value) {
+            await useFetch(`/accounts/${deletedAccount.value.id}`, { method: 'DELETE' })
+            accountsListData.value.list = accountsListData.value.list.filter((item: Accounts.ReadAccountDTO) => item.id !== deletedAccount.value.id)
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    dialogDelete.value = false;
+}
+
+const editConfirm = async (item: object) => {
+    try {
+        if (accountsListData.value && editedItem.value) {
+            const data = await useFetch(`/accounts/${editedItem.value.id}`, {
+                method: 'PUT',
+                body: {
+                    account: item
+                }
+            });
+
+            console.log(data)
+            accountsListData.value.list = accountsListData.value.list.map((item: Accounts.ReadAccountDTO) => {
+                if(item.id === data.id) {
+                    return data
+                }
+                return item
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    dialogEdit.value = false
+}
+
+
 </script>
