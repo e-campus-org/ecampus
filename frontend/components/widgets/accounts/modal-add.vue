@@ -9,70 +9,73 @@
             prepend-icon="mdi-account"
             title="Новый пользователь"
         >
-            <v-card-text>
-                <v-row dense>
-                    <v-col>
-                    <v-text-field
-                        v-model="item.first_name"
-                        label="First name*"
-                        required
-                    ></v-text-field>
-                    </v-col>
-                    <v-col>
-                    <v-text-field
-                        v-model="item.last_name"
-                        label="Last name*"
-                        required
-                    ></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col>
-                        <v-select 
-                            v-model="item.group_id"
-                            :items="idList"
-                            label="Group*"
-                            required
-                        />
-                    </v-col>
-                    <v-col>
-                        <v-select 
-                            v-model="item.roles"
-                            :items="['student', 'admin']"
-                            label="Role*"
-                            required
-                            multiple
-                        />
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col>
-                    <v-text-field
-                        v-model="item.email"
-                        label="Email*"
-                        required
-                    ></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col>
-                    <v-text-field
-                        v-model="item.password"
-                        label="Password*"
-                        required
-                    ></v-text-field>
-                    </v-col>
-                </v-row>
-                <v-row dense>
-                    <v-col>
+            <v-form v-model="formIsValid">
+                <v-card-text>
+                    <v-row dense>
+                        <v-col>
                         <v-text-field
-                            v-model="item.password_confirmation"
-                            label="Password confirm*"
-                            required
+                            v-model="item.first_name"
+                            label="First name*"
+                            :rules="rules"
                         ></v-text-field>
-                    </v-col>
-                </v-row>
-            </v-card-text>
+                        </v-col>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.last_name"
+                            label="Last name*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                            <v-select 
+                                v-model="item.group_id"
+                                :items="idList"
+                                label="Group*"
+                            />
+                        </v-col>
+                        <v-col>
+                            <v-select 
+                                v-model="item.roles"
+                                :items="['student', 'admin']"
+                                label="Role*"
+                                multiple
+                                :rules="rules"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.email"
+                            label="Email*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.password"
+                            label="Password*"
+                            :rules="rules"
+                            type="password"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                            <v-text-field
+                                v-model="item.password_confirmation"
+                                label="Password confirm*"
+                                :rules="rules"
+                                type="password"
+                            ></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-form>
 
             <v-divider></v-divider>
 
@@ -82,13 +85,14 @@
             <v-btn
                 text="Отмена"
                 variant="plain"
-                @click="dialog = false"
+                @click="onClose"
             ></v-btn>
 
             <v-btn
                 color="primary"
                 text="Создать"
                 variant="tonal"
+                :disabled="!formIsValid"
                 @click="confirm"
             ></v-btn>
             </v-card-actions>
@@ -100,6 +104,8 @@
 <script setup lang="ts">
 const dialog = defineModel<boolean>('dialog')
 const item = ref({})
+const rules = [value => !!value || 'Обязательное поле']
+const formIsValid = ref(false)
 
 defineProps<{
     idList: number[]
@@ -111,6 +117,11 @@ const emit = defineEmits<{
 
 const confirm = () => {
     emit('add-confirm', item.value)
+    dialog.value = false
+    item.value = {}
+}
+
+const onClose = () => {
     dialog.value = false
     item.value = {}
 }

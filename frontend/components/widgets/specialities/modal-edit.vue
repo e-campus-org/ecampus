@@ -9,35 +9,38 @@
           prepend-icon="mdi-account"
           title="Профиль"
         >
-          <v-card-text>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.title"
-                    label="Title*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.code"
-                    label="Speciality code*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.description"
-                    label="Description*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-          </v-card-text>
+          <v-form v-model="formIsValid">
+            <v-card-text>
+              <v-row dense>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.title"
+                      label="Title*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+              </v-row>
+              <v-row dense>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.code"
+                      label="Speciality code*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+              </v-row>
+              <v-row dense>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.description"
+                      label="Description*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+              </v-row>
+            </v-card-text>
+          </v-form>
+          
   
           <v-divider />
   
@@ -54,6 +57,7 @@
               color="primary"
               text="Изменить"
               variant="tonal"
+              :disabled="!formIsValid"
               @click="onEdit"
             ></v-btn>
           </v-card-actions>
@@ -65,6 +69,8 @@
 <script setup lang="ts">
 
     const dialog = defineModel<boolean>('dialog')
+    const formIsValid = ref(false)
+    const rules = [value => !!value || 'Обязательное поле']
 
     const props = defineProps<{
         item: Specialities.ReadSpecialityDTO

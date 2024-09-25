@@ -9,35 +9,37 @@
             prepend-icon="mdi-account"
             title="User Profile"
         >
-            <v-card-text>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="item.title"
-                    label="Title*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="item.code"
-                    label="Speciality code*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="item.description"
-                    label="Description*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            </v-card-text>
+            <v-form v-model="formIsValid">
+                <v-card-text>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.title"
+                            label="Title*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.code"
+                            label="Speciality code*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="item.description"
+                            label="Description*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-form>
 
             <v-divider />
 
@@ -47,13 +49,14 @@
             <v-btn
                 text="Отмена"
                 variant="plain"
-                @click="dialog = false"
+                @click="onClose"
             ></v-btn>
 
             <v-btn
                 color="primary"
                 text="Создать"
                 variant="tonal"
+                :disabled="!formIsValid"
                 @click="confirm"
             ></v-btn>
             </v-card-actions>
@@ -64,6 +67,8 @@
 
 <script setup lang="ts">
 const dialog = defineModel<boolean>('dialog')
+const formIsValid = ref(false)
+const rules = [value => !!value || 'Обязательное поле']
 const emit = defineEmits<{ 
     (e: 'add-confirm', item: object): void 
 }>()
@@ -72,6 +77,11 @@ const item = ref({})
 
 const confirm = () => {
     emit('add-confirm', item.value)
+    dialog.value = false
+    item.value = {}
+}
+
+const onClose = () => {
     dialog.value = false
     item.value = {}
 }

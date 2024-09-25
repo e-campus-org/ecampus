@@ -9,36 +9,38 @@
             prepend-icon="mdi-account"
             title="User Profile"
         >
-            <v-card-text>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.title"
-                    label="Title*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.description"
-                    label="Description*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                    <v-select 
-                        v-model="localItem.speciality_id"
-                        :items="idList"
-                        label="Speciality id"
-                        required
-                    />
-                </v-col>
-            </v-row>
-            </v-card-text>
+            <v-form v-model="formIsValid">
+                <v-card-text>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="localItem.title"
+                            label="Title*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                        <v-text-field
+                            v-model="localItem.description"
+                            label="Description*"
+                            :rules="rules"
+                        ></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row dense>
+                        <v-col>
+                            <v-select 
+                                v-model="localItem.speciality_id"
+                                :items="idList"
+                                label="Speciality id"
+                                :rules="rules"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-form>
 
             <v-divider />
 
@@ -55,6 +57,7 @@
                 color="primary"
                 text="Изменить"
                 variant="tonal"
+                :disabled="!formIsValid"
                 @click="confirm"
             ></v-btn>
             </v-card-actions>
@@ -65,6 +68,8 @@
 
 <script setup lang="ts">
 const dialog = defineModel<boolean>('dialog')
+const rules = [value => !!value || 'Обязательное поле']
+const formIsValid = ref(false)
 const emit = defineEmits<{ 
     (e: 'edit-confirm', item: object): void 
 }>()

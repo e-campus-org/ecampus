@@ -7,56 +7,56 @@
 
       <v-card
         prepend-icon="mdi-account"
-        title="В процессе доработки"
-        disabled
-        color="red"
+        title="Изменения пользователя"
       >
-        <v-card-text>
-          <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.first_name"
-                    label="First name*"
-                    required
-                ></v-text-field>
-                </v-col>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.last_name"
-                    label="Last name*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
+
+        <v-form v-model="formIsValid">
+          <v-card-text>
             <v-row dense>
-                <v-col>
-                    <v-select 
-                        v-model="localItem.group_id"
-                        :items="idList"
-                        label="Group*"
-                        required
-                    />
-                </v-col>
-                <v-col>
-                    <v-select 
-                        v-model="localItem.roles"
-                        :items="['student', 'admin']"
-                        label="Role*"
-                        required
-                        multiple
-                    />
-                </v-col>
-            </v-row>
-            <v-row dense>
-                <v-col>
-                <v-text-field
-                    v-model="localItem.email"
-                    label="Email*"
-                    required
-                ></v-text-field>
-                </v-col>
-            </v-row>
-        </v-card-text>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.first_name"
+                      label="First name*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.last_name"
+                      label="Last name*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+              </v-row>
+              <v-row dense>
+                  <v-col>
+                      <v-select 
+                          v-model="localItem.group_id"
+                          :items="idList"
+                          label="Group*"
+                      />
+                  </v-col>
+                  <v-col>
+                      <v-select 
+                          v-model="localItem.roles"
+                          :rules="rules"
+                          :items="['student', 'admin']"
+                          label="Role*"
+                          multiple
+                      />
+                  </v-col>
+              </v-row>
+              <v-row dense>
+                  <v-col>
+                  <v-text-field
+                      v-model="localItem.email"
+                      label="Email*"
+                      :rules="rules"
+                  ></v-text-field>
+                  </v-col>
+              </v-row>
+          </v-card-text>
+        </v-form>
 
         <v-divider></v-divider>
 
@@ -66,6 +66,7 @@
           <v-btn
             text="Отмена"
             variant="plain"
+            :rules="rules"
             @click="dialog = false"
           ></v-btn>
 
@@ -73,6 +74,7 @@
             color="primary"
             text="Изменить"
             variant="tonal"
+            :disabled="!formIsValid"
             @click="onEdit"
           ></v-btn>
         </v-card-actions>
@@ -83,6 +85,8 @@
 
 <script setup lang="ts">
   const dialog = defineModel<boolean>('dialog')
+  const rules = [value => !!value || 'Обязательное поле']
+  const formIsValid = ref(false)
 
   const props = defineProps<{
     item: Accounts.ReadAccountDTO,
@@ -102,12 +106,12 @@
   });
 
   watch(() => props.item, (newItem) => {
-    localItem.first_name = newItem.first_name,
-    localItem.last_name = newItem.last_name,
-    localItem.group_id = newItem.group_id,
-    localItem.roles = newItem.roles,
-    localItem.email = newItem.email
-});
+      localItem.first_name = newItem.first_name,
+      localItem.last_name = newItem.last_name,
+      localItem.group_id = newItem.group_id,
+      localItem.roles = newItem.roles,
+      localItem.email = newItem.email
+  });
   const onEdit = () => {
     emit('edit-confirm', localItem)
   }

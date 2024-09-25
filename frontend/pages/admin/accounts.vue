@@ -25,6 +25,7 @@
 
         <modal-edit 
             v-model:dialog="dialogEdit"
+            :id-list="groupsListId"
             :item="editedItem || {}"
              @edit-confirm="editConfirm"
         />
