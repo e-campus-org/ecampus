@@ -17,6 +17,12 @@ defmodule Backend.Lessons.Lesson do
     has_many(:quizzes, Backend.Quizzes.Quiz)
     has_many(:topics, Backend.LessonTopics.LessonTopic)
     has_many(:classes, Backend.Classes.Class)
+
+    many_to_many(:lessons, Backend.Polls.Poll,
+      join_through: "lessons_polls",
+      join_keys: [poll_id: :id, lesson_id: :id]
+    )
+
     timestamps(type: :utc_datetime)
   end
 
