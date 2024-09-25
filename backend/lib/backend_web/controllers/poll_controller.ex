@@ -1,8 +1,6 @@
 defmodule BackendWeb.PollController do
   use BackendWeb, :controller
 
-  use PhoenixSwagger
-
   alias Backend.Polls
   alias Backend.Polls.Poll
 
@@ -18,7 +16,7 @@ defmodule BackendWeb.PollController do
   end
 
   def index(conn, _params) do
-    data = Polls.list_accounts(%{"page" => 1, "page_size" => 10})
+    data = Polls.list_polls(%{"page" => 1, "page_size" => 10})
     render(conn, :index, data: data)
   end
 

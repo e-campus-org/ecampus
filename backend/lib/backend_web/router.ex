@@ -89,10 +89,6 @@ defmodule BackendWeb.Router do
     delete("/polls/:id", PollController, :delete)
   end
 
-  scope "/api/swagger" do
-    forward("/", PhoenixSwagger.Plug.SwaggerUI, otp_app: :backend, swagger_file: "swagger.json")
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", BackendWeb do
   #   pipe_through :api
