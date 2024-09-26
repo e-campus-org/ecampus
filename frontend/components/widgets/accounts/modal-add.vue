@@ -56,21 +56,25 @@
                     </v-row>
                     <v-row dense>
                         <v-col>
-                        <v-text-field
-                            v-model="item.password"
-                            label="Password*"
-                            :rules="rules"
-                            type="password"
-                        ></v-text-field>
+                            <v-text-field
+                                v-model="item.password"
+                                :append-inner-icon="visiblePassword ? 'mdi-eye-off' : 'mdi-eye'"
+                                :type="visiblePassword ? 'text' : 'password'"
+                                label="Password*"
+                                :rules="passwordRules"
+                                @click:append-inner="visiblePassword = !visiblePassword"
+                            ></v-text-field>
                         </v-col>
                     </v-row>
                     <v-row dense>
                         <v-col>
                             <v-text-field
                                 v-model="item.password_confirmation"
+                                :append-inner-icon="visiblePasswordConfirm ? 'mdi-eye-off' : 'mdi-eye'"
+                                :type="visiblePasswordConfirm ? 'text' : 'password'"
                                 label="Password confirm*"
-                                :rules="rules"
-                                type="password"
+                                :rules="passwordConfirmRules"
+                                @click:append-inner="visiblePasswordConfirm = !visiblePasswordConfirm"
                             ></v-text-field>
                         </v-col>
                     </v-row>
@@ -104,7 +108,20 @@
 <script setup lang="ts">
 const dialog = defineModel<boolean>('dialog')
 const item = ref({})
-const rules = [value => !!value || 'Обязательное поле']
+const visiblePassword = ref(false)
+const visiblePasswordConfirm = ref(false)
+
+const rules = [(v: string) => !!v || 'Обязательное поле']
+const passwordRules = [
+    (v: string) => !!v || 'Обязательное поле',
+    (v: string) => v.length >= 6 || 'Password must be at least 6 characters',
+]
+
+const passwordConfirmRules = computed(() => [
+    (v: string) => !!v || 'Обязательное поле',
+    (v: string) => v === item.value.password || 'Пароли не совпадают',
+])
+
 const formIsValid = ref(false)
 
 defineProps<{
