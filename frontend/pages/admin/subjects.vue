@@ -6,6 +6,10 @@
             :page="page"
             :page-size="pageSize"
             @page-changed="page = $event"
+            @get-item="handleGetItem"
+            @save-item="handleSaveItem"
+            @add-item="handleAddItem"
+            @delete-item="handleDeleteItem"
         />
     </v-container>
 </template>
@@ -33,4 +37,84 @@ const { data: subjectsListData, status } = await useAsyncData(
         watch: [page, pageSize]
     }
 );
+async function handleGetItem(item) {
+    const index = subjectsListData.value?.list?.findIndex(i => i.id === item.id);
+    if (index !== -1) {
+        try {
+            const response = await useFetch(`/subjects/${item.id}`, {
+                method: "GET"
+            });
+
+            if (response) {
+                subjectsListData.value.list[index] = response;
+                return response;
+            }
+        } catch (error) {
+            console.error("Ошибка при получении данных:", error);
+        }
+    }
+    return null;
+}
+async function handleSaveItem(updatedItem) {
+    const index = subjectsListData.value?.list?.findIndex(i => i.id === updatedItem.id);
+    if (index !== -1) {
+        try {
+            const payload = {
+                subject: {
+                    title: updatedItem.title,
+                    short_title: updatedItem.shortTitle,
+                    description: updatedItem.description,
+                    prerequisites: updatedItem.prerequisites,
+                    objectives: updatedItem.objectives,
+                    required_texts: updatedItem.requiredTexts
+                }
+            };
+            const response = await useFetch(`/subjects/${updatedItem.id}`, {
+                method: "PUT",
+                body: payload
+            });
+
+            if (response) {
+                subjectsListData.value.list[index] = { ...updatedItem };
+            }
+        } catch (error) {
+            console.error("Ошибка при отправке данных на сервер:", error);
+        }
+    }
+}
+async function handleAddItem(newItem) {
+    try {
+        const payload = {
+            subject: {
+                title: newItem.title,
+                short_title: newItem.shortTitle,
+                description: newItem.description,
+                prerequisites: newItem.prerequisites,
+                objectives: newItem.objectives,
+                required_texts: newItem.requiredTexts
+            }
+        };
+
+        const response = await useFetch(`/subjects`, {
+            method: "POST",
+            body: payload
+        });
+
+        if (response) {
+            subjectsListData.value.list.push({ ...response });
+        }
+    } catch (error) {
+        console.error("Ошибка при отправке данных на сервер:", error);
+    }
+}
+
+async function handleDeleteItem(deleteItem) {
+    try {
+        await useFetch(`/subjects/${deleteItem.id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        console.error("Ошибка при удалении элемента:", error);
+    }
+}
 </script>
