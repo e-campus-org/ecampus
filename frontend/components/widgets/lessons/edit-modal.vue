@@ -12,16 +12,27 @@
                         :error-messages="titleErrorMessages"
                     />
                     <v-text-field
-                        v-model="editedItem.shortTitle"
-                        :label="headers.shortTitle"
+                        v-model="editedItem.topic"
+                        :label="headers.topic"
                         required
-                        :error-messages="shortTitleErrorMessages"
+                        :error-messages="topicErrorMessages"
                     />
                     <v-text-field
-                        v-model="editedItem.description"
-                        :label="headers.description"
+                        v-model="editedItem.hours_count"
+                        :label="headers.hours_count"
                         required
-                        :error-messages="descriptionErrorMessages"
+                        :error-messages="hours_countErrorMessages"
+                    />
+
+                    <v-select
+                        v-model="editedItem.is_draft"
+                        :items="selectItems"
+                        :item-text="'text'"
+                        :item-value="'value'"
+                        persistent-hint
+                        :hint="hint"
+                        :label="headers.is_draft"
+                        :error-messages="is_draftErrorMessages"
                     />
                     <v-text-field
                         v-model="editedItem.objectives"
@@ -30,16 +41,10 @@
                         :error-messages="objectivesErrorMessages"
                     />
                     <v-text-field
-                        v-model="editedItem.prerequisites"
-                        :label="headers.prerequisites"
+                        v-model="editedItem.subject_id"
+                        :label="headers.subject_id"
                         required
-                        :error-messages="prerequisitesErrorMessages"
-                    />
-                    <v-text-field
-                        v-model="editedItem.requiredTexts"
-                        :label="headers.requiredTexts"
-                        required
-                        :error-messages="requiredTextsErrorMessages"
+                        :error-messages="subject_idErrorMessages"
                     />
                 </v-form>
             </v-card-text>
@@ -52,7 +57,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, onMounted } from "vue";
+import { ref, reactive, watch, computed, onMounted } from "vue";
+const { t } = useI18n();
 
 const props = defineProps({
     modelValue: Boolean,
@@ -72,24 +78,32 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue", "save"]);
+const hint = computed(() => t("components.widgets.lessons.modal.hint"));
+
+const selectItems = [t("components.widgets.lessons.draft.trueValue"), t("components.widgets.lessons.draft.falseValue")];
+
+const correlate = {
+    true: t("components.widgets.lessons.draft.trueValue"),
+    false: t("components.widgets.lessons.draft.falseValue")
+};
 
 const dialog = ref(false);
 const editedItem = reactive({
     id: null,
     title: "",
-    shortTitle: "",
-    description: "",
+    topic: "",
+    hours_count: "",
+    is_draft: "",
     objectives: "",
-    prerequisites: "",
-    requiredTexts: ""
+    subject_id: ""
 });
 
 const titleErrorMessages = ref<string[]>([]);
-const shortTitleErrorMessages = ref<string[]>([]);
-const descriptionErrorMessages = ref<string[]>([]);
+const topicErrorMessages = ref<string[]>([]);
+const hours_countErrorMessages = ref<string[]>([]);
+const is_draftErrorMessages = ref<string[]>([]);
 const objectivesErrorMessages = ref<string[]>([]);
-const prerequisitesErrorMessages = ref<string[]>([]);
-const requiredTextsErrorMessages = ref<string[]>([]);
+const subject_idErrorMessages = ref<string[]>([]);
 
 const titleInput = ref<HTMLInputElement | null>(null);
 
@@ -100,11 +114,11 @@ watch(
         if (newVal && props.item) {
             editedItem.id = props.item.id;
             editedItem.title = props.item.title;
-            editedItem.shortTitle = props.item.short_title;
-            editedItem.description = props.item.description;
+            editedItem.topic = props.item.topic;
+            editedItem.hours_count = props.item.hours_count;
+            editedItem.is_draft = props.item.is_draft;
             editedItem.objectives = props.item.objectives;
-            editedItem.prerequisites = props.item.prerequisites;
-            editedItem.requiredTexts = props.item.required_texts;
+            editedItem.subject_id = props.item.subject_id;
 
             setTimeout(() => {
                 titleInput.value?.focus();
@@ -123,11 +137,11 @@ function close() {
 
 function validateInputs() {
     titleErrorMessages.value = [];
-    shortTitleErrorMessages.value = [];
-    descriptionErrorMessages.value = [];
+    topicErrorMessages.value = [];
+    hours_countErrorMessages.value = [];
+    is_draftErrorMessages.value = [];
     objectivesErrorMessages.value = [];
-    prerequisitesErrorMessages.value = [];
-    requiredTextsErrorMessages.value = [];
+    subject_idErrorMessages.value = [];
 
     let isValid = true;
 
@@ -135,24 +149,24 @@ function validateInputs() {
         titleErrorMessages.value.push(props.err.title || "Title is required.");
         isValid = false;
     }
-    if (!editedItem.shortTitle) {
-        shortTitleErrorMessages.value.push(props.err.shortTitle || "Code is required.");
+    if (!editedItem.topic) {
+        topicErrorMessages.value.push(props.err.topic || "Topic is required.");
         isValid = false;
     }
-    if (!editedItem.description) {
-        descriptionErrorMessages.value.push(props.err.description || "Description is required.");
+    if (!editedItem.hours_count) {
+        hours_countErrorMessages.value.push(props.err.hours_count || "Hours_count is required.");
+        isValid = false;
+    }
+    if (!editedItem.is_draft) {
+        is_draftErrorMessages.value.push(props.err.is_draft || "Is_draft is required.");
         isValid = false;
     }
     if (!editedItem.objectives) {
         objectivesErrorMessages.value.push(props.err.objectives || "Objectives is required.");
         isValid = false;
     }
-    if (!editedItem.prerequisites) {
-        prerequisitesErrorMessages.value.push(props.err.prerequisites || "Prerequisites is required.");
-        isValid = false;
-    }
-    if (!editedItem.requiredTexts) {
-        requiredTextsErrorMessages.value.push(props.err.requiredTexts || "RequiredTexts is required.");
+    if (!editedItem.subject_id) {
+        subject_idErrorMessages.value.push(props.err.subject_id || "Subject_id is required.");
         isValid = false;
     }
 
@@ -161,7 +175,15 @@ function validateInputs() {
 
 function save() {
     if (validateInputs()) {
-        emit("save", { ...editedItem });
+        const itemToSave = { ...editedItem };
+
+        const key = Object.keys(correlate).find(key => correlate[key] === itemToSave.is_draft);
+
+        if (key) {
+            itemToSave.is_draft = key;
+        }
+
+        emit("save", itemToSave);
         close();
     }
 }

@@ -158,12 +158,17 @@
                     "hint": "Select the roles for the user",
                     "selected": "Selected",
                     "password": "Password",
-                    "password_confirmation": "Password confirmation"
+                    "passwordConfirmation": "Password confirmation"
                 },
                 "error": {
-                    "title": "Title is required.",
-                    "specialityId": "SpecialityId is required.",
-                    "description": "Description is required."
+                    "email": "Email is required.",
+                    "firstName": "FirstName is required.",
+                    "lastName": "LastName is required.",
+                    "group": "Group is required.",
+                    "rolesRequired": "Roles is required.",
+                    "rolesSame": "You cannot have the roles 'admin' and 'student' or 'teacher' and 'student' at the same time.",
+                    "password": "Password is required.",
+                    "passwordConfirmation": "Password confirmation is required."
                 },
                 "roles": {
                     "admin": "admin",
@@ -196,10 +201,14 @@
                     "save": "Save",
                     "delete": "Delete"
                 },
+
                 "error": {
                     "title": "Title is required.",
-                    "specialityId": "SpecialityId is required.",
-                    "description": "Description is required."
+                    "shortTitle": "Short title is required.",
+                    "description": "Description is required.",
+                    "objectives": "Objectives is required.",
+                    "prerequisites": "Prerequisites is required.",
+                    "requiredTexts": "Required texts is required."
                 }
             },
             "lessons": {
@@ -218,6 +227,7 @@
                     "headers": {
                         "id": "ID",
                         "title": "Title",
+                        "topic": "Topic",
                         "content": "Content",
                         "objectives": "Objectives",
                         "insertedAt": "Creation date",
@@ -242,6 +252,32 @@
                     "titleIsRequired": "Title is required",
                     "topicIsRequired": "Topic is required",
                     "wrongHours": "Wrong hours count"
+                },
+                "action": {
+                    "delete": "Delete a lessons",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a lessons",
+                    "create_title": "Create a lessons",
+                    "delete_title": "Delete a lessons",
+                    "delete_text": "Do you really want to delete a lessons",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete",
+                    "hint": "Choose whether there is a draft or not"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "topic": "Topic is required.",
+                    "hours_count": "Hours count is required.",
+                    "is_draft": "Draft is required.",
+                    "objectives": "Objectives is required.",
+                    "subject_id": "Subject is required."
+                },
+                "draft": {
+                    "trueValue": "Yes",
+                    "falseValue": "No"
                 }
             }
         }

@@ -43,12 +43,11 @@ async function handleSaveItem(updatedItem) {
         try {
             const payload = {
                 email: updatedItem.email,
-                first_name: updatedItem.firstName, // Исправил опечатки
-                last_name: updatedItem.lastName, // Исправил опечатки
+                first_name: updatedItem.firstName,
+                last_name: updatedItem.lastName,
                 group_id: updatedItem.group,
                 roles: updatedItem.roles
             };
-            console.log(payload);
             const response = await useFetch(`/accounts/${updatedItem.id}`, {
                 method: "PUT",
                 body: payload
@@ -75,23 +74,17 @@ async function handleAddItem(newItem) {
                 roles: newItem.roles
             }
         };
-        console.log("Payload:", payload);
 
-        // Отправка запроса с явной сериализацией в JSON и указанием заголовков
         const response = await useFetch(`/accounts`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json" // Важно указать, что данные в формате JSON
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(payload) // Сериализация объекта в строку JSON
+            body: JSON.stringify(payload)
         });
 
-        console.log("Response:", response);
-
-        // Проверка успешного ответа
-        if (response.ok) {
-            const responseData = await response.json(); // Преобразование ответа в JSON
-            accountsListData.value.list.push({ ...responseData });
+        if (response) {
+            accountsListData.value.list.push({ ...response });
         } else {
             console.error("Ошибка: запрос завершился с кодом", response.status);
         }

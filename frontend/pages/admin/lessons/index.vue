@@ -7,6 +7,10 @@
             :page-size="pageSize"
             @page-changed="page = $event"
             @lesson-selected="onLessonSelected"
+            @get-item="handleGetItem"
+            @save-item="handleSaveItem"
+            @add-item="handleAddItem"
+            @delete-item="handleDeleteItem"
         />
     </v-container>
 </template>
@@ -37,5 +41,86 @@ function onLessonSelected(lesson: Lessons.ReadLessonDTO) {
         name: "admin-lessons-id",
         params: { id: lesson.id }
     });
+}
+async function handleGetItem(item) {
+    const index = lessonsListData.value?.list?.findIndex(i => i.id === item.id);
+    if (index !== -1) {
+        try {
+            const response = await useFetch(`/lessons/${item.id}`, {
+                method: "GET"
+            });
+
+            if (response) {
+                lessonsListData.value.list[index] = response;
+                return response;
+            }
+        } catch (error) {
+            console.error("Ошибка при получении данных:", error);
+        }
+    }
+    return null;
+}
+async function handleSaveItem(updatedItem) {
+    const index = lessonsListData.value?.list?.findIndex(i => i.id === updatedItem.id);
+    if (index !== -1) {
+        try {
+            const payload = {
+                lesson: {
+                    title: updatedItem.title,
+                    topic: updatedItem.topic,
+                    hours_count: updatedItem.hours_count,
+                    is_draft: updatedItem.is_draft,
+                    objectives: updatedItem.objectives,
+                    subject_id: updatedItem.subject_id
+                }
+            };
+            const response = await useFetch(`/lessons/${updatedItem.id}`, {
+                method: "PUT",
+                body: payload
+            });
+
+            if (response) {
+                lessonsListData.value.list[index] = { ...updatedItem };
+            }
+        } catch (error) {
+            console.error("Ошибка при отправке данных на сервер:", error);
+        }
+    }
+}
+async function handleAddItem(newItem) {
+    try {
+        console.log(newItem);
+        const payload = {
+            lesson: {
+                title: newItem.title,
+                topic: newItem.topic,
+                hours_count: newItem.hours_count,
+                is_draft: newItem.is_draft,
+                objectives: newItem.objectives,
+                subject_id: newItem.subject_id
+            }
+        };
+
+        const response = await useFetch(`/lessons`, {
+            method: "POST",
+            body: payload
+        });
+
+        if (response) {
+            lessonsListData.value.list.push({ ...response });
+        }
+    } catch (error) {
+        console.error("Ошибка при отправке данных на сервер:", error);
+    }
+}
+
+async function handleDeleteItem(deleteItem) {
+    try {
+        await useFetch(`/lessons/${deleteItem.id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        console.error("Ошибка при удалении элемента:", error);
+    }
 }
 </script>

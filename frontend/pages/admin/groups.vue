@@ -43,7 +43,6 @@ async function handleSaveItem(updatedItem) {
                     description: updatedItem.description
                 }
             };
-            console.log(updatedItem);
             const response = await useFetch(`/groups/${updatedItem.id}`, {
                 method: "PUT",
                 body: payload

@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import EditModal from "./edit-modal.vue";
 import DeleteModal from "./delete-modul.vue";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 
 const props = defineProps<{
     data: Shared.ListData<Subjects.ReadSubjectDTO> | null;
@@ -54,6 +54,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "page-changed", page: number): void;
+    (e: "get-item", item: Subjects.ReadSubjectDTO): Promise<Subjects.ReadSubjectDTO | null>;
     (e: "save-item", item: Subjects.ReadSubjectDTO): void;
     (e: "add-item", item: Subjects.ReadSubjectDTO): void;
     (e: "delete-item", item: Subjects.ReadSubjectDTO): void;
@@ -61,15 +62,19 @@ const emit = defineEmits<{
 
 const isEditModal = ref(false);
 const isDeleteModal = ref(false);
-const selectedItem = ref({});
+const selectedItem = ref<Subjects.ReadSubjectDTO | null>(null);
 const isNewItem = ref(false);
 
 function openEditModal(item: any) {
-    isNewItem.value = false;
-    selectedItem.value = { ...item };
-    isEditModal.value = true;
+    emit("get-item", item);
+    setTimeout(() => {
+        const data = props.data?.list.find(el => el.id === item.id);
+        if (data) {
+            selectedItem.value = data;
+            isEditModal.value = true;
+        }
+    }, 400);
 }
-
 function openDeleteModal(item: any) {
     isNewItem.value = false;
     selectedItem.value = { ...item };

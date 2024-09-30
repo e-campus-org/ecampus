@@ -29,7 +29,6 @@
                         required
                         :error-messages="groupErrorMessages"
                     />
-                    <!-- Поля для пароля отображаются только при создании -->
                     <v-text-field
                         v-if="!props.item.created_at"
                         v-model="createItem.password"
@@ -40,7 +39,7 @@
                     <v-text-field
                         v-if="!props.item.created_at"
                         v-model="createItem.passwordConfirmation"
-                        :label="headers.password_confirmation"
+                        :label="headers.passwordConfirmation"
                         required
                         :error-messages="passwordConfirmationErrorMessages"
                     />
@@ -53,6 +52,7 @@
                         persistent-hint
                         :hint="hint"
                         :label="selected"
+                        :error-messages="rolesErrorMessages"
                     />
                 </v-form>
             </v-card-text>
@@ -71,7 +71,19 @@ const { t } = useI18n();
 
 const selected = computed(() => t("components.widgets.accounts.modal.selected"));
 const hint = computed(() => t("components.widgets.accounts.modal.hint"));
-const selectItems = ["admin", "teacher", "student"];
+
+const selectItems = [
+    t("components.widgets.accounts.roles.admin"),
+    t("components.widgets.accounts.roles.teacher"),
+    t("components.widgets.accounts.roles.student")
+];
+
+const correlate = {
+    admin: t("components.widgets.accounts.roles.admin"),
+    teacher: t("components.widgets.accounts.roles.teacher"),
+    student: t("components.widgets.accounts.roles.student")
+};
+
 const props = defineProps({
     modelValue: Boolean,
     item: Object,
@@ -113,7 +125,6 @@ const rolesErrorMessages = ref<string[]>([]);
 
 const titleInput = ref<HTMLInputElement | null>(null);
 
-// Watcher для отслеживания изменения диалога
 watch(
     () => props.modelValue,
     newVal => {
@@ -125,7 +136,7 @@ watch(
             createItem.lastName = props.item.last_name;
             createItem.group = props.item.group_id;
             createItem.roles = props.item.roles || [];
-            // Сброс паролей при редактировании
+
             createItem.password = "";
             createItem.passwordConfirmation = "";
             setTimeout(() => {
@@ -166,16 +177,21 @@ function validateInputs() {
         lastNameErrorMessages.value.push(props.err.lastName || "Last name is required.");
         isValid = false;
     }
-    if (!createItem.group) {
-        groupErrorMessages.value.push(props.err.group || "Group is required.");
-        isValid = false;
-    }
-    if (!createItem.roles.length) {
-        rolesErrorMessages.value.push(props.err.roles || "Roles are required.");
-        isValid = false;
-    }
 
-    // Проверка пароля только при создании
+    if (!createItem.roles.length) {
+        rolesErrorMessages.value.push(props.err.rolesRequired || "Roles are required.");
+        isValid = false;
+    }
+    if (
+        (createItem.roles.includes("admin") || createItem.roles.includes("teacher")) &&
+        createItem.roles.includes("student")
+    ) {
+        rolesErrorMessages.value.push(
+            props.err.rolesSame ||
+                "You cannot have the roles 'admin' and 'student' or 'teacher' and 'student' at the same time"
+        );
+        isValid = false;
+    }
     if (!props.item.created_at) {
         if (!createItem.password) {
             passwordErrorMessages.value.push(props.err.password || "Password is required.");
@@ -200,7 +216,11 @@ function save() {
     if (validateInputs()) {
         const itemToSave = { ...createItem };
 
-        // При редактировании убираем поля пароля
+        itemToSave.roles = createItem.roles.map(role => {
+            const matchedRole = Object.keys(correlate).find(key => correlate[key] === role);
+            return matchedRole || role;
+        });
+
         if (props.item.created_at) {
             delete itemToSave.password;
             delete itemToSave.passwordConfirmation;

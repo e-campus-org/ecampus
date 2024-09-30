@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
             <v-card-title class="headline">{{ name.title }}</v-card-title>
-            <v-card-text> {{ name.text }} "{{ item.email }}"? </v-card-text>
+            <v-card-text> {{ name.text }} "{{ item.title }}"? </v-card-text>
             <v-card-actions>
                 <v-btn text @click="close">{{ name.cancel }}</v-btn>
                 <v-btn text @click="remove">{{ name.delete }}</v-btn>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
     modelValue: Boolean,

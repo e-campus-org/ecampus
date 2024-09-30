@@ -197,7 +197,6 @@ const headers = computed(() => [
 ]);
 
 const sortedItems = computed(() => {
-    console.log(props.data?.list);
     return props.data?.list ? [...props.data.list].sort((a, b) => a.id - b.id) : [];
 });
 </script>
