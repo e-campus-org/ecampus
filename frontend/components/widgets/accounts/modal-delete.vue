@@ -7,17 +7,17 @@
         >
         <v-card
             :text="text"
-            title="Подтверждение"
+            :title="$t('components.widgets.accounts.edit.deleteTitle')"
         >
             <template v-slot:actions>
                 <v-spacer></v-spacer>
 
                 <v-btn @click="dialog = false">
-                    Назад
+                    {{ $t('components.widgets.accounts.edit.cancel') }}
                 </v-btn>
 
                 <v-btn  color="error" @click="onDelete">
-                    Удалить
+                    {{ $t('components.widgets.accounts.edit.delete') }}
                 </v-btn>
             </template>
         </v-card>
@@ -31,9 +31,13 @@ const dialog = defineModel<boolean>('dialog')
     item: Accounts.ReadAccountDTO
 }>()
 
+const { t } = useI18n();
+
 const text = computed(() =>
-    (`Вы действительно хотите удалить ${props.item.first_name} ${props.item.last_name}?`)
-)
+    t('components.widgets.accounts.edit.deleteText',{
+        firstName: props.item.first_name,
+        lastName: props.item.last_name
+    }))
 const emit = defineEmits<{
     (e: "delete-confirm"): void;
 }>()

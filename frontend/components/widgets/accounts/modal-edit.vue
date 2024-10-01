@@ -7,7 +7,7 @@
 
       <v-card
         prepend-icon="mdi-account"
-        title="Изменения пользователя"
+        :title="$t('components.widgets.accounts.edit.editTitle')"
       >
 
         <v-form v-model="formIsValid">
@@ -16,14 +16,14 @@
                   <v-col>
                   <v-text-field
                       v-model="localItem.first_name"
-                      label="First name*"
+                      :label="$t('components.widgets.accounts.edit.firstName')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
                   <v-col>
                   <v-text-field
                       v-model="localItem.last_name"
-                      label="Last name*"
+                      :label="$t('components.widgets.accounts.edit.lastName')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
@@ -32,16 +32,18 @@
                   <v-col>
                       <v-select 
                           v-model="localItem.group_id"
-                          :items="idList"
-                          label="Group*"
+                          :items="groupList"
+                          item-value="id"
+						              item-title="title"
+                          :label="$t('components.widgets.accounts.edit.group')"
                       />
                   </v-col>
                   <v-col>
                       <v-select 
                           v-model="localItem.roles"
                           :rules="rules"
-                          :items="['student', 'admin']"
-                          label="Role*"
+                          :items="['student', 'admin', 'teacher']"
+                          :label="$t('components.widgets.accounts.edit.roles')"
                           multiple
                       />
                   </v-col>
@@ -50,7 +52,7 @@
                   <v-col>
                   <v-text-field
                       v-model="localItem.email"
-                      label="Email*"
+                      :label="$t('components.widgets.accounts.edit.email')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
@@ -64,7 +66,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            text="Отмена"
+            :text="$t('components.widgets.accounts.edit.cancel')"
             variant="plain"
             :rules="rules"
             @click="dialog = false"
@@ -72,7 +74,7 @@
 
           <v-btn
             color="primary"
-            text="Изменить"
+            :text="$t('components.widgets.accounts.edit.save')"
             variant="tonal"
             :disabled="!formIsValid"
             @click="onEdit"
@@ -84,40 +86,33 @@
 </template>
 
 <script setup lang="ts">
-  const dialog = defineModel<boolean>('dialog')
-  const rules = [value => !!value || 'Обязательное поле']
-  const formIsValid = ref(false)
+    const dialog = defineModel<boolean>('dialog')
+    const { t } = useI18n();
+    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
+    const formIsValid = ref(false)
 
-  const props = defineProps<{
-    item: Accounts.ReadAccountDTO,
-    idList: number[]
-  }>()
+    const props = defineProps<{
+      item: Accounts.ReadAccountDTO,
+      groupList: object[]
+    }>()
 
-  const emit = defineEmits<{
-    (e: 'edit-confirm', item: object): void
-  }>()
+    const emit = defineEmits<{
+      (e: 'edit-confirm', item: Accounts.UpdateAccountDTO): void
+    }>()
 
-  const localItem = reactive({ 
-      first_name: props.item.first_name,
-      last_name: props.item.last_name,
-      group_id: props.item.group_id,
-      roles: props.item.roles,
-      email: props.item.email,
-  });
+    const localItem = ref<Accounts.UpdateAccountDTO>(
+      updateDefaultAccountDTO()
+    )
 
-  watch(() => props.item, (newItem) => {
-      localItem.first_name = newItem.first_name,
-      localItem.last_name = newItem.last_name,
-      localItem.group_id = newItem.group_id,
-      localItem.roles = newItem.roles,
-      localItem.email = newItem.email
-  });
-  const onEdit = () => {
-    emit('edit-confirm', localItem)
-  }
+    watch(
+      () => props.item, 
+      (newItem) => {
+        localItem.value = updateDefaultAccountDTO(newItem)
+      }, 
+      { immediate: true }
+    );
+    const onEdit = () => {
+      emit('edit-confirm', localItem.value)
+    }
 
 </script>
-
-<style>
-
-</style>

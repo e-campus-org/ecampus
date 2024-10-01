@@ -76,7 +76,24 @@ declare namespace Accounts {
         inserted_at: string;
         updated_at: string;
     }
-    
+
+    interface CreateAccountDTO {
+        email: string;
+        first_name: string;
+        last_name: string;
+        group_id: number | null;
+        roles: string[];
+        password: string;
+        password_confirm: string;
+    }
+
+    interface UpdateAccountDTO {
+        first_name?: string;
+        last_name?: string;
+        group_id?: number | null;
+        roles?: string[];
+        email?: string;
+    }
 }
 
 declare namespace Subjects {

@@ -81,7 +81,6 @@ const addConfirm = async (item: object) => {
             method: 'POST',
             body
         });
-        
 
         if(specialitiesListData.value && data) {
             specialitiesListData.value.list.push(data)

@@ -7,7 +7,7 @@
 
         <v-card
             prepend-icon="mdi-account"
-            title="Новый пользователь"
+            :title="$t('components.widgets.accounts.edit.createTitle')"
         >
             <v-form v-model="formIsValid">
                 <v-card-text>
@@ -15,14 +15,14 @@
                         <v-col>
                         <v-text-field
                             v-model="item.first_name"
-                            label="First name*"
+                            :label="$t('components.widgets.accounts.edit.firstName')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
                         <v-col>
                         <v-text-field
                             v-model="item.last_name"
-                            label="Last name*"
+                            :label="$t('components.widgets.accounts.edit.lastName')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -31,15 +31,17 @@
                         <v-col>
                             <v-select 
                                 v-model="item.group_id"
-                                :items="idList"
-                                label="Group*"
+                                :items="groupList"
+                                item-value="id"
+						        item-title="title"
+                                :label="$t('components.widgets.accounts.edit.group')"
                             />
                         </v-col>
                         <v-col>
                             <v-select 
                                 v-model="item.roles"
-                                :items="['student', 'admin']"
-                                label="Role*"
+                                :items="['student', 'admin', 'teacher']"
+                                :label="$t('components.widgets.accounts.edit.roles')"
                                 multiple
                                 :rules="rules"
                             />
@@ -49,7 +51,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.email"
-                            label="Email*"
+                            :label="$t('components.widgets.accounts.edit.email')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -60,7 +62,7 @@
                                 v-model="item.password"
                                 :append-inner-icon="visiblePassword ? 'mdi-eye-off' : 'mdi-eye'"
                                 :type="visiblePassword ? 'text' : 'password'"
-                                label="Password*"
+                                :label="$t('components.widgets.accounts.edit.password')"
                                 :rules="passwordRules"
                                 @click:append-inner="visiblePassword = !visiblePassword"
                             ></v-text-field>
@@ -72,7 +74,7 @@
                                 v-model="item.password_confirmation"
                                 :append-inner-icon="visiblePasswordConfirm ? 'mdi-eye-off' : 'mdi-eye'"
                                 :type="visiblePasswordConfirm ? 'text' : 'password'"
-                                label="Password confirm*"
+                                :label="$t('components.widgets.accounts.edit.passwordConfirm')"
                                 :rules="passwordConfirmRules"
                                 @click:append-inner="visiblePasswordConfirm = !visiblePasswordConfirm"
                             ></v-text-field>
@@ -87,14 +89,14 @@
             <v-spacer></v-spacer>
 
             <v-btn
-                text="Отмена"
+                :text="$t('components.widgets.accounts.edit.cancel')"
                 variant="plain"
                 @click="onClose"
             ></v-btn>
 
             <v-btn
                 color="primary"
-                text="Создать"
+                :text="$t('components.widgets.accounts.edit.create')"
                 variant="tonal"
                 :disabled="!formIsValid"
                 @click="confirm"
@@ -106,40 +108,42 @@
 </template>
 
 <script setup lang="ts">
-const dialog = defineModel<boolean>('dialog')
-const item = ref({})
-const visiblePassword = ref(false)
-const visiblePasswordConfirm = ref(false)
+import { createDefaultAccountDTO } from '~/utils/constructor';
 
-const rules = [(v: string) => !!v || 'Обязательное поле']
-const passwordRules = [
-    (v: string) => !!v || 'Обязательное поле',
-    (v: string) => v.length >= 6 || 'Password must be at least 6 characters',
-]
+    const item = ref<Accounts.CreateAccountDTO>(
+        createDefaultAccountDTO()
+    )
+    const dialog = defineModel<boolean>('dialog')
+    const visiblePassword = ref(false)
+    const formIsValid = ref(false)
+    const visiblePasswordConfirm = ref(false)
+    const { t } = useI18n();
+    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
+    const passwordRules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default'),
+        (v: string) => v.length >= 6 || t('components.widgets.accounts.rules.password'),
+    ]
+    const passwordConfirmRules = computed(() => [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default'),
+        (v: string) => v === item.value.password || t('components.widgets.accounts.rules.passwordConfirm'),
+    ])
 
-const passwordConfirmRules = computed(() => [
-    (v: string) => !!v || 'Обязательное поле',
-    (v: string) => v === item.value.password || 'Пароли не совпадают',
-])
+    defineProps<{
+        groupList: object[]
+    }>()
 
-const formIsValid = ref(false)
+    const emit = defineEmits<{ 
+        (e: 'add-confirm', item: Accounts.CreateAccountDTO): void 
+    }>()
 
-defineProps<{
-    idList: number[]
-}>()
+    const confirm = () => {
+        emit('add-confirm', item.value)
+        dialog.value = false
+        item.value = createDefaultAccountDTO()
+    }
 
-const emit = defineEmits<{ 
-    (e: 'add-confirm', item: object): void 
-}>()
-
-const confirm = () => {
-    emit('add-confirm', item.value)
-    dialog.value = false
-    item.value = {}
-}
-
-const onClose = () => {
-    dialog.value = false
-    item.value = {}
-}
+    const onClose = () => {
+        dialog.value = false
+        item.value = createDefaultAccountDTO()
+    }
 </script>

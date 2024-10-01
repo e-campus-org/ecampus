@@ -10,7 +10,7 @@
 
             <template #top>
                 <v-btn width="10%" color="primary" class="ml-auto mt-2 mr-2" @click="onAdd">
-                    Добавить
+                    {{ buttonName }}
                 </v-btn>
             </template>
             <template #bottom>
@@ -55,6 +55,8 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const dayjs = useDayjs();
+
+const buttonName = t("components.widgets.table.buttons.add")
 
 const currentPage = computed({
     get: () => props.page,
@@ -107,7 +109,7 @@ const headers = computed(() => [
         value: (item: Groups.ReadGroupDTO) => dayjs(item.updated_at).format("DD.MM.YYYY HH:mm:ss")
     },
     {
-        title: "Действия",
+        title: t("components.widgets.table.actions"),
         align: "start",
         sortable: false,
         key: "actions"

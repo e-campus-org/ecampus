@@ -7,7 +7,7 @@
 
         <v-card
             prepend-icon="mdi-account"
-            title="User Profile"
+            :title="$t('components.widgets.groups.edit.editTitle')"
         >
             <v-form v-model="formIsValid">
                 <v-card-text>
@@ -15,7 +15,7 @@
                         <v-col>
                         <v-text-field
                             v-model="localItem.title"
-                            label="Title*"
+                            :label="$t('components.widgets.groups.edit.title')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -24,7 +24,7 @@
                         <v-col>
                         <v-text-field
                             v-model="localItem.description"
-                            label="Description*"
+                            :label="$t('components.widgets.groups.edit.description')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -33,8 +33,10 @@
                         <v-col>
                             <v-select 
                                 v-model="localItem.speciality_id"
-                                :items="idList"
-                                label="Speciality id"
+                                :items="groupList"
+                                item-value="id"
+						        item-title="title"
+                                :label="$t('components.widgets.groups.edit.specialityId')"
                                 :rules="rules"
                             />
                         </v-col>
@@ -48,14 +50,14 @@
             <v-spacer />
 
             <v-btn
-                text="Отмена"
+                :text="$t('components.widgets.groups.edit.cancel')"
                 variant="plain"
                 @click="dialog = false"
             ></v-btn>
 
             <v-btn
                 color="primary"
-                text="Изменить"
+                :text="$t('components.widgets.groups.edit.create')"
                 variant="tonal"
                 :disabled="!formIsValid"
                 @click="confirm"
@@ -67,34 +69,34 @@
 </template>
 
 <script setup lang="ts">
-const dialog = defineModel<boolean>('dialog')
-const rules = [value => !!value || 'Обязательное поле']
-const formIsValid = ref(false)
-const emit = defineEmits<{ 
-    (e: 'edit-confirm', item: object): void 
-}>()
+    const { t } = useI18n();
+    const dialog = defineModel<boolean>('dialog')
+        const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
+    const formIsValid = ref(false)
+    const emit = defineEmits<{ 
+        (e: 'edit-confirm', item: object): void 
+    }>()
 
-const props = defineProps<{
-    idList: number[],
-    item: Groups.ReadGroupDTO
-}>()
-
-const localItem = reactive({ 
-    title: props.item.title,
-    speciality_id: props.item.speciality_id,
-    description: props.item.description
-});
-
-watch(() => props.item, (newItem) => {
-    localItem.title = newItem.title;
-    localItem.speciality_id = newItem.speciality_id;
-    localItem.description = newItem.description;
-});
+    const props = defineProps<{
+        groupList: object[],
+        item: Groups.ReadGroupDTO
+    }>()
 
 
-const confirm = () => {
-    emit('edit-confirm', localItem)
-}
+    const localItem = reactive({ 
+        title: '',
+        speciality_id: '',
+        description: ''
+    });
+
+    watch(() => props.item, (newItem) => {
+            Object.assign(localItem, newItem);
+        }, { deep: true, immediate: true });
+
+
+    const confirm = () => {
+        emit('edit-confirm', localItem)
+    }
 
 
 </script>

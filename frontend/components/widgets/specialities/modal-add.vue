@@ -7,7 +7,7 @@
 
         <v-card
             prepend-icon="mdi-account"
-            title="User Profile"
+            :title="$t('components.widgets.specialities.edit.createTitle')"
         >
             <v-form v-model="formIsValid">
                 <v-card-text>
@@ -15,7 +15,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.title"
-                            label="Title*"
+                            :label="$t('components.widgets.specialities.edit.title')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -24,7 +24,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.code"
-                            label="Speciality code*"
+                            :label="$t('components.widgets.specialities.edit.code')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -33,7 +33,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.description"
-                            label="Description*"
+                            :label="$t('components.widgets.specialities.edit.description')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -47,14 +47,14 @@
             <v-spacer />
 
             <v-btn
-                text="Отмена"
+                :text="$t('components.widgets.specialities.edit.cancel')"
                 variant="plain"
                 @click="onClose"
             ></v-btn>
 
             <v-btn
                 color="primary"
-                text="Создать"
+                :text="$t('components.widgets.specialities.edit.create')"
                 variant="tonal"
                 :disabled="!formIsValid"
                 @click="confirm"
@@ -66,9 +66,10 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n();
 const dialog = defineModel<boolean>('dialog')
 const formIsValid = ref(false)
-const rules = [value => !!value || 'Обязательное поле']
+const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
 const emit = defineEmits<{ 
     (e: 'add-confirm', item: object): void 
 }>()

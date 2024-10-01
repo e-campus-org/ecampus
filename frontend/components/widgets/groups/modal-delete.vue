@@ -7,17 +7,17 @@
         >
         <v-card
             :text=text
-            title="Подтверждение"
+            :title="$t('components.widgets.groups.edit.deleteTitle')"
         >
             <template #actions>
             <v-spacer />
 
             <v-btn @click="dialog = false">
-                Назад
+                {{ $t('components.widgets.groups.edit.cancel') }}
             </v-btn>
 
             <v-btn  color="error" @click="onDelete">
-                Удалить
+                {{ $t('components.widgets.groups.edit.delete') }}
             </v-btn>
             </template>
         </v-card>
@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n();
 const dialog = defineModel<boolean>('dialog')
 const emit = defineEmits<{
     (e: "delete-confirm"): void;
@@ -36,8 +37,10 @@ const props = defineProps<{
 }>()
 
 const text = computed(() =>
-    (`Вы действительно хотите удалить ${props.item.title} группу?`)
-)
+    t('components.widgets.groups.edit.deleteText', {
+        title: props.item.title
+    }
+))
 
 const onDelete = () => {
     emit('delete-confirm')

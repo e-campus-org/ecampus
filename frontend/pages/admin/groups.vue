@@ -13,7 +13,7 @@
 
         <modal-add 
             v-model:dialog="dialogAdd"
-            :id-list="specialitiesListId"
+            :group-list="groupList"
             @add-confirm="addConfirm"
         />
 
@@ -26,7 +26,7 @@
         <modal-edit 
             v-model:dialog="dialogEdit"
             :item="editedItem || {}"
-            :id-list="specialitiesListId"
+            :group-list="groupList"
             @edit-confirm="editConfirm"
         />
     </v-container>
@@ -47,7 +47,7 @@ const deletedGroup = ref<Groups.ReadGroupDTO>();
 const editedItem = ref<Groups.ReadGroupDTO>();
 
 const loading = computed(() => status.value === "pending");
-const specialitiesListId = computed(() => specialitiesListData.list.map(item => item.id))
+const groupList = computed(() => specialitiesListData.list)
 
 const { data: groupsListData, status } = await useAsyncData(
     "groups-list-data",

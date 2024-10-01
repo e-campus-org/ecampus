@@ -7,7 +7,7 @@
   
         <v-card
           prepend-icon="mdi-account"
-          title="Профиль"
+          :title="$t('components.widgets.specialities.edit.editTitle')"
         >
           <v-form v-model="formIsValid">
             <v-card-text>
@@ -15,7 +15,7 @@
                   <v-col>
                   <v-text-field
                       v-model="localItem.title"
-                      label="Title*"
+                      :label="$t('components.widgets.specialities.edit.title')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
@@ -24,7 +24,7 @@
                   <v-col>
                   <v-text-field
                       v-model="localItem.code"
-                      label="Speciality code*"
+                      :label="$t('components.widgets.specialities.edit.code')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
@@ -33,7 +33,7 @@
                   <v-col>
                   <v-text-field
                       v-model="localItem.description"
-                      label="Description*"
+                      :label="$t('components.widgets.specialities.edit.description')"
                       :rules="rules"
                   ></v-text-field>
                   </v-col>
@@ -48,14 +48,14 @@
             <v-spacer />
   
             <v-btn
-              text="Отмена"
+              :text="$t('components.widgets.specialities.edit.cancel')"
               variant="plain"
               @click="dialog = false"
             ></v-btn>
   
             <v-btn
               color="primary"
-              text="Изменить"
+              :text="$t('components.widgets.specialities.edit.save')"
               variant="tonal"
               :disabled="!formIsValid"
               @click="onEdit"
@@ -67,10 +67,10 @@
   </template>
   
 <script setup lang="ts">
-
+    const { t } = useI18n();
     const dialog = defineModel<boolean>('dialog')
     const formIsValid = ref(false)
-    const rules = [value => !!value || 'Обязательное поле']
+    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
 
     const props = defineProps<{
         item: Specialities.ReadSpecialityDTO
@@ -81,16 +81,14 @@
     }>()
 
     const localItem = reactive({ 
-        title: props.item.title,
-        code: props.item.code,
-        description: props.item.description
+        title: '',
+        code: '',
+        description: ''
      });
 
-    watch(() => props.item, (newItem) => {
-        localItem.title = newItem.title;
-        localItem.code = newItem.code;
-        localItem.description = newItem.description;
-    });
+     watch(() => props.item, (newItem) => {
+          Object.assign(localItem, newItem);
+      }, { deep: true, immediate: true });
 
     const onEdit = () => {
         emit('edit-confirm', localItem)

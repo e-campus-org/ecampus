@@ -7,7 +7,7 @@
 
         <v-card
             prepend-icon="mdi-account"
-            title="User Profile"
+            :title="$t('components.widgets.groups.edit.createTitle')"
         >
             <v-form v-model="formIsValid">
                 <v-card-text>
@@ -15,7 +15,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.title"
-                            label="Title*"
+                            :label="$t('components.widgets.groups.edit.title')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -24,7 +24,7 @@
                         <v-col>
                         <v-text-field
                             v-model="item.description"
-                            label="Description*"
+                            :label="$t('components.widgets.groups.edit.description')"
                             :rules="rules"
                         ></v-text-field>
                         </v-col>
@@ -33,8 +33,10 @@
                         <v-col>
                             <v-select 
                                 v-model="item.speciality_id"
-                                :items="idList"
-                                label="Speciality id"
+                                :items="groupList"
+                                item-value="id"
+						        item-title="title"
+                                :label="$t('components.widgets.groups.edit.specialityId')"
                                 :rules="rules"
                             />
                         </v-col>
@@ -48,14 +50,14 @@
             <v-spacer />
 
             <v-btn
-                text="Отмена"
+                :text="$t('components.widgets.groups.edit.cancel')"
                 variant="plain"
                 @click="onClose"
             ></v-btn>
 
             <v-btn
                 color="primary"
-                text="Создать"
+                :text="$t('components.widgets.groups.edit.create')"
                 variant="tonal"
                 :disabled="!formIsValid"
                 @click="confirm"
@@ -67,16 +69,18 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n();
 const dialog = defineModel<boolean>('dialog')
 const formIsValid = ref(false)
-const rules = [value => !!value || 'Обязательное поле']
+const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
 const emit = defineEmits<{ 
     (e: 'add-confirm', item: object): void 
 }>()
 
 defineProps<{
-    idList: number[]
+    groupList: object[]
 }>()
+
 
 const item = ref({})
 
