@@ -94,6 +94,7 @@
             }
 
         } catch (error) {
+            
             console.log(error);
         }
         dialogAdd.value = false;

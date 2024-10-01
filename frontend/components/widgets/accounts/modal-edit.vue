@@ -86,19 +86,24 @@
 </template>
 
 <script setup lang="ts">
-    const dialog = defineModel<boolean>('dialog')
-    const { t } = useI18n();
-    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
-    const formIsValid = ref(false)
+    import { updateDefaultAccountDTO } from '~/helpers/accountHelpers';
 
     const props = defineProps<{
       item: Accounts.ReadAccountDTO,
       groupList: object[]
-    }>()
-
+    }>();
     const emit = defineEmits<{
       (e: 'edit-confirm', item: Accounts.UpdateAccountDTO): void
-    }>()
+    }>();
+    const dialog = defineModel<boolean>(
+      'dialog'
+    );
+
+    const { t } = useI18n();
+    const rules = [
+      (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const formIsValid = ref(false)
 
     const localItem = ref<Accounts.UpdateAccountDTO>(
       updateDefaultAccountDTO()
@@ -111,6 +116,7 @@
       }, 
       { immediate: true }
     );
+    
     const onEdit = () => {
       emit('edit-confirm', localItem.value)
     }

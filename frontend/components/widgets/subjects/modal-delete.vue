@@ -26,20 +26,23 @@
 </template>
 
 <script setup lang="ts">
-    const { t } = useI18n();
-    const dialog = defineModel<boolean>('dialog')
+    const dialog = defineModel<boolean>(
+        'dialog'
+    );
+    const emit = defineEmits<{
+        (e: "delete-confirm"): void;
+    }>();
     const props = defineProps<{
         item: Subjects.ReadSubjectDTO
-    }>()
+    }>();
 
+    const { t } = useI18n();
     const text = computed(() =>
         t('components.widgets.specialities.edit.deleteText', {
             title: props.item.title
-        }))
+        }
+    ));
         
-    const emit = defineEmits<{
-        (e: "delete-confirm"): void;
-    }>()
 
     const onDelete = () => {
         emit('delete-confirm')

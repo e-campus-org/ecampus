@@ -69,33 +69,37 @@
 </template>
 
 <script setup lang="ts">
-    const { t } = useI18n();
-    const dialog = defineModel<boolean>('dialog')
-        const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
-    const formIsValid = ref(false)
+    import { updateDefaultGroupDTO } from '~/helpers/groupHelpers';
+
     const emit = defineEmits<{ 
         (e: 'edit-confirm', item: object): void 
-    }>()
-
+    }>();
     const props = defineProps<{
         groupList: object[],
         item: Groups.ReadGroupDTO
-    }>()
+    }>();
+    const dialog = defineModel<boolean>('dialog');
 
+    const { t } = useI18n();
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const formIsValid = ref(false);
+    const localItem = ref<Groups.UpdateGroupDTO>(
+        updateDefaultGroupDTO()
+    )
 
-    const localItem = reactive({ 
-        title: '',
-        speciality_id: '',
-        description: ''
-    });
-
-    watch(() => props.item, (newItem) => {
-            Object.assign(localItem, newItem);
-        }, { deep: true, immediate: true });
+    watch(
+      () => props.item, 
+      (newItem) => {
+        localItem.value = updateDefaultGroupDTO(newItem)
+      }, 
+      { immediate: true }
+    );
 
 
     const confirm = () => {
-        emit('edit-confirm', localItem)
+        emit('edit-confirm', localItem.value)
     }
 
 

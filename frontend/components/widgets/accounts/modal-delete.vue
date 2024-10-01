@@ -1,9 +1,9 @@
 <template>
     <div class="text-center pa-4">
         <v-dialog
-        v-model="dialog"
-        max-width="400"
-        persistent
+            v-model="dialog"
+            max-width="400"
+            persistent
         >
         <v-card
             :text="text"
@@ -26,23 +26,23 @@
 </template>
 
 <script setup lang="ts">
-const dialog = defineModel<boolean>('dialog')
+    const dialog = defineModel<boolean>('dialog')
     const props = defineProps<{
-    item: Accounts.ReadAccountDTO
-}>()
+        item: Accounts.ReadAccountDTO
+    }>()
+    const emit = defineEmits<{
+        (e: "delete-confirm"): void;
+    }>()
 
-const { t } = useI18n();
-
-const text = computed(() =>
-    t('components.widgets.accounts.edit.deleteText',{
-        firstName: props.item.first_name,
-        lastName: props.item.last_name
-    }))
-const emit = defineEmits<{
-    (e: "delete-confirm"): void;
-}>()
-
-const onDelete = () => {
-    emit('delete-confirm')
-}
+    const { t } = useI18n();
+    const text = computed(() =>
+        t('components.widgets.accounts.edit.deleteText',{
+            firstName: props.item.first_name,
+            lastName: props.item.last_name
+        }
+    ));
+    
+    const onDelete = () => {
+        emit('delete-confirm')
+    }
 </script>

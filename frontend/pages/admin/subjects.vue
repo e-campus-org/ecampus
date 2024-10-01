@@ -69,17 +69,16 @@ const onClickEdit = (item: Subjects.ReadSubjectDTO) => {
     dialogEdit.value = true
 }
 
-const addConfirm = async (item: object) => {
+const addConfirm = async (item: Subjects.CreateSubjectDTO) => {
     try {
-        const body = {
-            subject: item
-        };
-
-        const data = await useFetch<Subjects.ReadSubjectDTO>('/subjects', {
-            method: 'POST',
-            body
-        });
-        
+        const data = await useFetch<Subjects.ReadSubjectDTO>(
+            '/subjects', {
+                method: 'POST',
+                body: {
+                    subject: item
+                } 
+            }
+        );
 
         if(subjectsListData.value && data) {
             subjectsListData.value.list.push(data)
@@ -92,10 +91,13 @@ const addConfirm = async (item: object) => {
 }
 
 const deleteConfirm = async () => {
-    console.log(deletedItem.value)
     try {
         if (subjectsListData.value && deletedItem.value) {
-            await useFetch(`/subjects/${deletedItem.value.id}`, { method: 'DELETE' })
+            await useFetch(
+                `/subjects/${deletedItem.value.id}`, {
+                     method: 'DELETE' 
+                }
+            );
             subjectsListData.value.list = subjectsListData.value.list.filter((item: Subjects.ReadSubjectDTO) => item.id !== deletedItem.value.id)
             
         }
@@ -105,17 +107,18 @@ const deleteConfirm = async () => {
     dialogDelete.value = false;
 }
 
-const editConfirm = async (item: object) => {
+const editConfirm = async (item: Subjects.UpdateSubjectDTO) => {
     try {
         if (subjectsListData.value && editedItem.value) {
-            const data = await useFetch(`/subjects/${editedItem.value.id}`, {
-                method: 'PUT',
-                body: {
-                    subject: item
+            const data = await useFetch(
+                `/subjects/${editedItem.value.id}`, {
+                    method: 'PUT',
+                    body: {
+                        subject: item
+                    }
                 }
-            });
+            );
 
-            console.log(data)
             subjectsListData.value.list = subjectsListData.value.list.map((item: Subjects.ReadSubjectDTO) => {
                 if(item.id === data.id) {
                     return data

@@ -45,9 +45,7 @@ const props = defineProps<{
     page: number;
     pageSize: number;
 }>();
-
-const dialog = defineModel<boolean>('dialog')
-
+const dialog = defineModel<boolean>('dialog');
 const emit = defineEmits<{
     (e: "page-changed", page: number): void;
     (e: "delete-row" | "edit-row", item: Groups.ReadGroupDTO): void;
@@ -55,9 +53,7 @@ const emit = defineEmits<{
 
 const { t } = useI18n();
 const dayjs = useDayjs();
-
 const buttonName = t("components.widgets.table.buttons.add")
-
 const currentPage = computed({
     get: () => props.page,
     set: page => emit("page-changed", page)

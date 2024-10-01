@@ -100,26 +100,32 @@
 </template>
 
 <script setup lang="ts">
-    const { t } = useI18n();
+    import { createDefaultSubjectDTO } from '~/helpers/subjectHelpers';
+
     const dialog = defineModel<boolean>('dialog')
-    const teachersList = ref([])
-    const formIsValid = ref(false)
-    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
     const emit = defineEmits<{ 
-        (e: 'add-confirm', item: object): void 
+        (e: 'add-confirm', item: Subjects.CreateSubjectDTO): void 
     }>()
 
-    const item = ref({})
+    const { t } = useI18n();
+    const item = ref<Subjects.CreateSubjectDTO>(
+        createDefaultSubjectDTO()
+    )
+    const teachersList = ref([])
+    const formIsValid = ref(false)
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
 
     const confirm = () => {
         emit('add-confirm', item.value)
         dialog.value = false
-        item.value = {}
+        item.value = createDefaultSubjectDTO()
     }
 
     const onClose = () => {
         dialog.value = false
-        item.value = {}
+        item.value = createDefaultSubjectDTO()
     }
 
 </script>

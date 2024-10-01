@@ -26,24 +26,23 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
-const dialog = defineModel<boolean>('dialog')
-const emit = defineEmits<{
-    (e: "delete-confirm"): void;
-}>()
+    const dialog = defineModel<boolean>('dialog')
+    const emit = defineEmits<{
+        (e: "delete-confirm"): void;
+    }>()
+    const props = defineProps<{
+        item: Groups.ReadGroupDTO
+    }>();
 
-const props = defineProps<{
-    item: Groups.ReadGroupDTO
-}>()
+    const { t } = useI18n();
+    const text = computed(() =>
+        t('components.widgets.groups.edit.deleteText', {
+            title: props.item.title
+        }
+    ))
 
-const text = computed(() =>
-    t('components.widgets.groups.edit.deleteText', {
-        title: props.item.title
+    const onDelete = () => {
+        emit('delete-confirm')
     }
-))
-
-const onDelete = () => {
-    emit('delete-confirm')
-}
 
 </script>

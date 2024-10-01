@@ -69,30 +69,34 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
-const dialog = defineModel<boolean>('dialog')
-const formIsValid = ref(false)
-const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
-const emit = defineEmits<{ 
-    (e: 'add-confirm', item: object): void 
-}>()
+import { createDefaultGroupDTO } from '~/helpers/groupHelpers';
 
-defineProps<{
-    groupList: object[]
-}>()
+    const emit = defineEmits<{ 
+        (e: 'add-confirm', item: Groups.CreateGroupDTO): void 
+    }>();
+    defineProps<{
+        groupList: object[]
+    }>();
+    const dialog = defineModel<boolean>('dialog');
 
+    const { t } = useI18n();
+    const formIsValid = ref(false)
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const item = ref<Groups.CreateGroupDTO>(
+        createDefaultGroupDTO()
+    )
 
-const item = ref({})
+    const confirm = () => {
+        emit('add-confirm', item.value)
+        dialog.value = false
+        item.value = createDefaultGroupDTO()
+    }
 
-const confirm = () => {
-    emit('add-confirm', item.value)
-    dialog.value = false
-    item.value = {}
-}
-
-const onClose = () => {
-    dialog.value = false
-    item.value = {}
-}
+    const onClose = () => {
+        dialog.value = false
+        item.value = createDefaultGroupDTO()
+    }
 
 </script>

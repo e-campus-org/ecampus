@@ -67,31 +67,35 @@
   </template>
   
 <script setup lang="ts">
-    const { t } = useI18n();
-    const dialog = defineModel<boolean>('dialog')
-    const formIsValid = ref(false)
-    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
+    import { updateDefaultSpecialityDTO } from '~/helpers/specialityHelpers';
 
     const props = defineProps<{
         item: Specialities.ReadSpecialityDTO
-    }>()
-
+    }>();
     const emit = defineEmits<{
-        (e: 'edit-confirm', item: object): void
-    }>()
+        (e: 'edit-confirm', item: Specialities.UpdateSpecialityDTO): void
+    }>();
+    const dialog = defineModel<boolean>('dialog');
 
-    const localItem = reactive({ 
-        title: '',
-        code: '',
-        description: ''
-     });
+    const { t } = useI18n();
+    const formIsValid = ref(false)
+    const rules = [
+      (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const localItem = ref<Specialities.UpdateSpecialityDTO>(
+      updateDefaultSpecialityDTO()
+    );
 
-     watch(() => props.item, (newItem) => {
-          Object.assign(localItem, newItem);
-      }, { deep: true, immediate: true });
+    watch(
+      () => props.item, 
+      (newItem) => {
+        localItem.value = updateDefaultSpecialityDTO(newItem)
+      }, 
+      { immediate: true }
+    );
 
     const onEdit = () => {
-        emit('edit-confirm', localItem)
+        emit('edit-confirm', localItem.value)
     }
 
 

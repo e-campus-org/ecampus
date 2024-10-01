@@ -90,34 +90,38 @@
 </template>
 
 <script setup lang="ts">
-    const { t } = useI18n();
-    const dialog = defineModel<boolean>('dialog')
-    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
-    const formIsValid = ref(false)
-    const emit = defineEmits<{ 
-        (e: 'edit-confirm', item: object): void 
-    }>()
+    import { updateDefaultSubjectDTO } from '~/helpers/subjectHelpers';
 
+    const dialog = defineModel<boolean>(
+        'dialog'
+    );
+    const emit = defineEmits<{ 
+        (e: 'edit-confirm', item: Subjects.UpdateSubjectDTO): void 
+    }>();
     const props = defineProps<{
         item: Subjects.ReadSubjectDTO
-    }>()
+    }>();
 
-    const localItem = reactive({ 
-        title: '',
-        short_title: '',
-        prerequisites: '',
-        objectives: '',
-        required_texts: '',
-        description: ''
-    });
+    const { t } = useI18n();
+    const localItem = ref<Subjects.UpdateSubjectDTO>(
+        updateDefaultSubjectDTO()
+    )
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const formIsValid = ref(false);
 
-    watch(() => props.item, (newItem) => {
-        Object.assign(localItem, newItem);
-    }, { deep: true, immediate: true });
+    watch(
+      () => props.item, 
+      (newItem) => {
+        localItem.value = updateDefaultSubjectDTO(newItem)
+      }, 
+      { immediate: true }
+    );
 
 
     const confirm = () => {
-        emit('edit-confirm', localItem)
+        emit('edit-confirm', localItem.value)
     }
 
 

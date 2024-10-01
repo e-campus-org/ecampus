@@ -66,26 +66,31 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
-const dialog = defineModel<boolean>('dialog')
-const formIsValid = ref(false)
-const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
-const emit = defineEmits<{ 
-    (e: 'add-confirm', item: object): void 
-}>()
+    import { createDefaultSpecialityDTO } from '~/helpers/specialityHelpers';
 
-const item = ref({})
+    const emit = defineEmits<{ 
+        (e: 'add-confirm', item: Specialities.CreateSpecialityDTO): void 
+    }>();
+    const dialog = defineModel<boolean>('dialog');
 
-const confirm = () => {
-    emit('add-confirm', item.value)
-    dialog.value = false
-    item.value = {}
-}
+    const { t } = useI18n();
+    const formIsValid = ref(false)
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
+    const item = ref<Specialities.CreateSpecialityDTO>(
+        createDefaultSpecialityDTO()
+    );
 
-const onClose = () => {
-    dialog.value = false
-    item.value = {}
-}
+    const confirm = () => {
+        emit('add-confirm', item.value)
+        dialog.value = false
+        item.value = createDefaultSpecialityDTO()
+    }
 
+    const onClose = () => {
+        dialog.value = false
+        item.value = createDefaultSpecialityDTO()
+    }
 
 </script>

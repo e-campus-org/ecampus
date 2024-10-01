@@ -108,17 +108,28 @@
 </template>
 
 <script setup lang="ts">
-import { createDefaultAccountDTO } from '~/utils/constructor';
+    import { createDefaultAccountDTO } from '~/helpers/accountHelpers';
+
+    defineProps<{
+        groupList: object[]
+    }>();
+    const emit = defineEmits<{ 
+        (e: 'add-confirm', item: Accounts.CreateAccountDTO): void 
+    }>();
+    const dialog = defineModel<boolean>(
+        'dialog'
+    );
 
     const item = ref<Accounts.CreateAccountDTO>(
         createDefaultAccountDTO()
     )
-    const dialog = defineModel<boolean>('dialog')
     const visiblePassword = ref(false)
     const formIsValid = ref(false)
     const visiblePasswordConfirm = ref(false)
     const { t } = useI18n();
-    const rules = [(v: string) => !!v || t('components.widgets.accounts.rules.default')];
+    const rules = [
+        (v: string) => !!v || t('components.widgets.accounts.rules.default')
+    ];
     const passwordRules = [
         (v: string) => !!v || t('components.widgets.accounts.rules.default'),
         (v: string) => v.length >= 6 || t('components.widgets.accounts.rules.password'),
@@ -127,14 +138,6 @@ import { createDefaultAccountDTO } from '~/utils/constructor';
         (v: string) => !!v || t('components.widgets.accounts.rules.default'),
         (v: string) => v === item.value.password || t('components.widgets.accounts.rules.passwordConfirm'),
     ])
-
-    defineProps<{
-        groupList: object[]
-    }>()
-
-    const emit = defineEmits<{ 
-        (e: 'add-confirm', item: Accounts.CreateAccountDTO): void 
-    }>()
 
     const confirm = () => {
         emit('add-confirm', item.value)

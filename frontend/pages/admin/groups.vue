@@ -45,7 +45,6 @@ const dialogDelete = ref(false);
 const dialogEdit = ref(false);
 const deletedGroup = ref<Groups.ReadGroupDTO>();
 const editedItem = ref<Groups.ReadGroupDTO>();
-
 const loading = computed(() => status.value === "pending");
 const groupList = computed(() => specialitiesListData.list)
 
@@ -75,17 +74,16 @@ const specialitiesListData = await useFetch<Shared.ListData<Specialities.ReadSpe
     }
 );
 
-const addConfirm = async (item: object) => {
+const addConfirm = async (item: Groups.CreateGroupDTO) => {
     try {
-        const body = {
-            group: item
-        };
-
-        const data = await useFetch<Groups.ReadGroupDTO>('/groups', {
-            method: 'POST',
-            body
-        });
-        
+        const data = await useFetch<Groups.ReadGroupDTO>(
+            '/groups', {
+                method: 'POST',
+                body : {
+                    group: item
+                }
+            }
+        );
 
         if(groupsListData.value && data) {
             groupsListData.value.list.push(data)
@@ -100,7 +98,11 @@ const addConfirm = async (item: object) => {
 const deleteConfirm = async () => {
     try {
         if (groupsListData.value && deletedGroup.value) {
-            await useFetch(`/groups/${deletedGroup.value.id}`, { method: 'DELETE' })
+            await useFetch(
+                `/groups/${deletedGroup.value.id}`, {
+                     method: 'DELETE' 
+                }
+            );
             groupsListData.value.list = groupsListData.value.list.filter((item: Groups.ReadGroupDTO) => item.id !== deletedGroup.value.id)
         }
     } catch (error) {
@@ -109,7 +111,7 @@ const deleteConfirm = async () => {
     dialogDelete.value = false;
 }
 
-const editConfirm = async (item: object) => {
+const editConfirm = async (item: Groups.UpdateGroupDTO) => {
     try {
         if (groupsListData.value && editedItem.value) {
             const data = await useFetch(`/groups/${editedItem.value.id}`, {
@@ -119,7 +121,6 @@ const editConfirm = async (item: object) => {
                 }
             });
 
-            console.log(data)
             groupsListData.value.list = groupsListData.value.list.map((item: Groups.ReadGroupDTO) => {
                 if(item.id === data.id) {
                     return data
