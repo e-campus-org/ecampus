@@ -68,21 +68,30 @@
         dialogEdit.value = true
     }
 
+    const fetchSpecialitiesList = async () => {
+        specialitiesListData.value = await useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
+            `/specialities?page=${page.value}&page_size=${pageSize.value}`,
+            {}
+        );
+    }
+
     const addConfirm = async (item: Specialities.CreateSpecialityDTO) => {
         try {
             const data = await useFetch<Specialities.ReadSpecialityDTO>(
                 '/specialities', {
-                method: 'POST',
-                body: {
-                    speciality: item
+                    method: 'POST',
+                    body: {
+                        speciality: item
+                    }
                 }
-            });
+            );
 
-            if(specialitiesListData.value && data) {
-                specialitiesListData.value.list.push(data)
+            if (data) {
+                fetchSpecialitiesList();
             }
         
         } catch (error) {
+            useEvent("notify:error", String(error));
             console.log(error);
         }
         dialogAdd.value = false;
@@ -90,14 +99,17 @@
 
     const deleteConfirm = async () => {
         try {
-            if (specialitiesListData.value && deletedId.value) {
+            if (deletedId.value) {
                 await useFetch(
                     `/specialities/${deletedId.value}`, {
                          method: 'DELETE' 
-                });
-                specialitiesListData.value.list = specialitiesListData.value.list.filter((item: Specialities.ReadSpecialityDTO) => item.id !== deletedId.value)
+                    }
+                );
+
+                fetchSpecialitiesList();
             }
         } catch (error) {
+            useEvent("notify:error", String(error));
             console.log(error)
         }
         dialogDelete.value = false;
@@ -108,17 +120,17 @@
             if (specialitiesListData.value && editedItem.value) {
                 const data = await useFetch(
                     `/specialities/${editedItem.value.id}`, {
-                    method: 'PUT',
-                    body: {
-                        speciality: item
+                        method: 'PUT',
+                        body: {
+                            speciality: item
+                        }
                     }
-                });
-                specialitiesListData.value.list = specialitiesListData.value.list.map((item: Specialities.ReadSpecialityDTO) => {
-                    if(item.id === data.id) {
-                        return data
-                    }
-                    return item
-                })
+                );
+                
+                if (data) {
+                    useEvent("notify:error", String(error));
+                    fetchSpecialitiesList();
+                }
             }
         } catch (error) {
             console.log(error)

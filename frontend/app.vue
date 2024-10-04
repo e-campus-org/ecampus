@@ -4,6 +4,7 @@
             <nuxt-page />
         </v-app>
         <v-snackbar-queue v-model="queue" />
+
     </nuxt-layout>
 </template>
 <script setup lang="ts">

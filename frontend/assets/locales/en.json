@@ -52,12 +52,11 @@
         },
         "widgets": {
             "table": {
-                "actions": "Действия",
+                "actions": "Actions",
                 "buttons": {
                     "edit": "Edit",
                     "delete": "Delete",
-                    "add": "Add",
-                    "createAccount": "Create account"
+                    "add": "Add"
                 }
             },
             "schedule": {

@@ -79,6 +79,13 @@
         dialogEdit.value = true
     }
 
+    const fetchAccountsList = async () => {
+        accountsListData.value = await useFetch<Shared.ListData<Accounts.ReadAccountDTO>>(
+            `/accounts?page=${page.value}&page_size=${pageSize.value}`,
+            {}
+        );
+    }
+
     const addConfirm = async (item: Accounts.CreateAccountDTO) => {
         try {
             const data = await useFetch<Accounts.ReadAccountDTO>(
@@ -89,12 +96,11 @@
                 }
             });
 
-            if(accountsListData.value && data) {
-                accountsListData.value.list.push(data)
+            if (data) {
+                fetchAccountsList();
             }
-
-        } catch (error) {
-            
+        } catch (error) {          
+            useEvent("notify:error", String(error));
             console.log(error);
         }
         dialogAdd.value = false;
@@ -102,15 +108,18 @@
 
     const deleteConfirm = async () => {
         try {
-            if (accountsListData.value && deletedAccount.value) {
+            if (deletedAccount.value) {
                 await useFetch(
                     `/accounts/${deletedAccount.value.id}`, { 
                         method: 'DELETE' 
                     }
                 );
-                accountsListData.value.list = accountsListData.value.list.filter((item: Accounts.ReadAccountDTO) => item.id !== deletedAccount.value.id)
+
+                fetchAccountsList();
             }
+
         } catch (error) {
+            useEvent("notify:error", String(error));
             console.log(error)
         }
         dialogDelete.value = false;
@@ -118,7 +127,7 @@
 
     const editConfirm = async (item: Accounts.UpdateAccountDTO) => {
         try {
-            if (accountsListData.value && editedItem.value) {
+            if (editedItem.value) {
                 const data = await useFetch<Accounts.ReadAccountDTO>(
                     `/accounts/${editedItem.value.id}`, {
                         method: 'PUT',
@@ -128,14 +137,12 @@
                     }
                 );
 
-                accountsListData.value.list = accountsListData.value.list.map((item: Accounts.ReadAccountDTO) => {
-                    if(item.id === data.id) {
-                        return data
-                    }
-                    return item
-                })
+                if (data) {
+                    fetchAccountsList();
+                }
             }
         } catch (error) {
+            useEvent("notify:error", String(error));
             console.log(error)
         }
         dialogEdit.value = false

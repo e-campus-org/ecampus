@@ -20,7 +20,6 @@
             </template>
 
             <template #item.actions="{ item }">
-                <template v-if="!item.roles.includes('admin')">
                     <v-icon
                         class="me-2"
                         size="small"
@@ -35,7 +34,6 @@
                 >
                     mdi-delete
                 </v-icon>
-                </template>
             </template>
         </v-data-table>
     </div>

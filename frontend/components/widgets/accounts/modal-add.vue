@@ -109,7 +109,6 @@
 
 <script setup lang="ts">
     import { createDefaultAccountDTO } from '~/helpers/accountHelpers';
-
     defineProps<{
         groupList: object[]
     }>();

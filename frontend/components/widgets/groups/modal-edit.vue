@@ -57,7 +57,7 @@
 
             <v-btn
                 color="primary"
-                :text="$t('components.widgets.groups.edit.create')"
+                :text="$t('components.widgets.groups.edit.save')"
                 variant="tonal"
                 :disabled="!formIsValid"
                 @click="confirm"

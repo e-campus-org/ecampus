@@ -50,7 +50,10 @@ const groupList = computed(() => specialitiesListData.list)
 
 const { data: groupsListData, status } = await useAsyncData(
     "groups-list-data",
-    () => useFetch<Shared.ListData<Groups.ReadGroupDTO>>(`/groups?page=${page.value}&page_size=${pageSize.value}`, {}),
+    () => useFetch<Shared.ListData<Groups.ReadGroupDTO>>(
+        `/groups?page=${page.value}&page_size=${pageSize.value}`, 
+        {}
+    ),
     {
         server: false,
         watch: [page, pageSize]
@@ -65,6 +68,13 @@ const onClickDelete = (item: Groups.ReadGroupDTO) => {
 const onClickEdit = (item: Groups.ReadGroupDTO) => {
     editedItem.value = item
     dialogEdit.value = true
+}
+
+const fetchGroupList = async () => {
+    groupsListData.value = await useFetch<Shared.ListData<Groups.ReadGroupDTO>>(
+        `/groups?page=${page.value}&page_size=${pageSize.value}`, 
+        {}
+    );
 }
 
 const specialitiesListData = await useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
@@ -85,11 +95,12 @@ const addConfirm = async (item: Groups.CreateGroupDTO) => {
             }
         );
 
-        if(groupsListData.value && data) {
-            groupsListData.value.list.push(data)
+        if (data) {
+            fetchGroupList();
         }
     
     } catch (error) {
+        useEvent("notify:error", String(error));
         console.log(error);
     }
     dialogAdd.value = false;
@@ -97,15 +108,17 @@ const addConfirm = async (item: Groups.CreateGroupDTO) => {
 
 const deleteConfirm = async () => {
     try {
-        if (groupsListData.value && deletedGroup.value) {
+        if (deletedGroup.value) {
             await useFetch(
                 `/groups/${deletedGroup.value.id}`, {
                      method: 'DELETE' 
                 }
             );
-            groupsListData.value.list = groupsListData.value.list.filter((item: Groups.ReadGroupDTO) => item.id !== deletedGroup.value.id)
+
+            fetchGroupList();
         }
     } catch (error) {
+        useEvent("notify:error", String(error));
         console.log(error)
     }
     dialogDelete.value = false;
@@ -113,22 +126,22 @@ const deleteConfirm = async () => {
 
 const editConfirm = async (item: Groups.UpdateGroupDTO) => {
     try {
-        if (groupsListData.value && editedItem.value) {
-            const data = await useFetch(`/groups/${editedItem.value.id}`, {
-                method: 'PUT',
-                body: {
-                    group: item
+        if (editedItem.value) {
+            const data = await useFetch(
+                `/groups/${editedItem.value.id}`, {
+                    method: 'PUT',
+                    body: {
+                        group: item
+                    }
                 }
-            });
+            );
 
-            groupsListData.value.list = groupsListData.value.list.map((item: Groups.ReadGroupDTO) => {
-                if(item.id === data.id) {
-                    return data
-                }
-                return item
-            })
+            if (data) {
+                fetchGroupList();
+            }
         }
     } catch (error) {
+        useEvent("notify:error", String(error));
         console.log(error)
     }
     dialogEdit.value = false

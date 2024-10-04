@@ -43,7 +43,6 @@ const dialogDelete = ref(false);
 const dialogEdit = ref(false);
 const deletedItem = ref<Subjects.ReadSubjectDTO>();
 const editedItem = ref<Subjects.ReadSubjectDTO>();
-
 const loading = computed(() => status.value === "pending");
 
 const { data: subjectsListData, status } = await useAsyncData(
@@ -69,6 +68,13 @@ const onClickEdit = (item: Subjects.ReadSubjectDTO) => {
     dialogEdit.value = true
 }
 
+const fetchSubjectsList = async () => {
+    subjectsListData.value = await useFetch<Shared.ListData<Subjects.ReadSubjectDTO>>(
+        `/subjects?page=${page.value}&page_size=${pageSize.value}`,
+        {}
+    );
+}
+
 const addConfirm = async (item: Subjects.CreateSubjectDTO) => {
     try {
         const data = await useFetch<Subjects.ReadSubjectDTO>(
@@ -80,11 +86,12 @@ const addConfirm = async (item: Subjects.CreateSubjectDTO) => {
             }
         );
 
-        if(subjectsListData.value && data) {
-            subjectsListData.value.list.push(data)
+        if (data) {
+            fetchSubjectsList();
         }
     
     } catch (error) {
+        useEvent("notify:error", String(error));
         console.log(error);
     }
     dialogAdd.value = false;
@@ -92,16 +99,17 @@ const addConfirm = async (item: Subjects.CreateSubjectDTO) => {
 
 const deleteConfirm = async () => {
     try {
-        if (subjectsListData.value && deletedItem.value) {
+        if (deletedItem.value) {
             await useFetch(
                 `/subjects/${deletedItem.value.id}`, {
                      method: 'DELETE' 
                 }
             );
-            subjectsListData.value.list = subjectsListData.value.list.filter((item: Subjects.ReadSubjectDTO) => item.id !== deletedItem.value.id)
-            
+
+            fetchSubjectsList();
         }
     } catch (error) {
+        useEvent("notify:error", String(error));
         console.log(error)
     }
     dialogDelete.value = false;
@@ -119,12 +127,10 @@ const editConfirm = async (item: Subjects.UpdateSubjectDTO) => {
                 }
             );
 
-            subjectsListData.value.list = subjectsListData.value.list.map((item: Subjects.ReadSubjectDTO) => {
-                if(item.id === data.id) {
-                    return data
-                }
-                return item
-            })
+            if (data) {
+                useEvent("notify:error", String(error));
+                fetchSubjectsList();
+            }
         }
     } catch (error) {
         console.log(error)
