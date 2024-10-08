@@ -51,6 +51,14 @@
             }
         },
         "widgets": {
+            "table": {
+                "actions": "Действия",
+                "buttons": {
+                    "edit": "Изменить",
+                    "delete": "Удалить",
+                    "add": "Добавить"
+                }
+            },
             "schedule": {
                 "today": "Сегодня"
             },
@@ -84,6 +92,21 @@
                     "title": "Название",
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
+                },
+                "edit": {
+                    "createTitle": "Новая специальность",
+                    "deleteTitle": "Подтверждение",
+                    "deleteText": "Вы действительно хотите удалить {id} специальность?",
+                    "editTitle": "Изменить специальность",
+                    "titleWindow": "Новая специальность",
+                    "code": "Код специальности",
+                    "description": "Описание",
+                    "title": "Название",
+                    "create": "Добавить",
+                    "cancel": "Отмена",
+                    "delete": "Удалить",
+                    "save": "Изменить",
+                    "rules": "Обязательное поле"
                 }
             },
             "groups": {
@@ -94,6 +117,21 @@
                     "specialityId": "Специальность",
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
+                },
+                "edit": {
+                    "createTitle": "Новая группа",
+                    "deleteTitle": "Подтверждение",
+                    "deleteText": "Вы действительно хотите удалить {title} группу?",
+                    "editTitle": "Изменить группу",
+                    "titleWindow": "Новая группа",
+                    "title": "Название",
+                    "description": "Описание",
+                    "specialityId": "Специальность",
+                    "create": "Добавить",
+                    "cancel": "Отмена",
+                    "delete": "Удалить",
+                    "save": "Изменить",
+                    "rules": "Обязательное поле"
                 }
             },
             "accounts": {
@@ -106,6 +144,26 @@
                     "roles": "Роли",
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
+                },
+                "edit": {
+                    "createTitle": "Новый аккаунт",
+                    "deleteTitle": "Подтверждение",
+                    "deleteText": "Вы действительно хотите удалить {firstName} {lastName} аккаунт?",
+                    "editTitle": "Изменить аккаунт",
+                    "email": "Почта",
+                    "firstName": "Имя",
+                    "lastName": "Фамилия",
+                    "group": "Группа",
+                    "roles": "Роли",
+                    "create": "Добавить",
+                    "cancel": "Отмена",
+                    "delete": "Удалить",
+                    "save": "Изменить"
+                },
+                "rules": {
+                    "default": "Обязательное поле",
+                    "password": "Пароль должен содержать не менее 6 символов",
+                    "passwordConfirm": "Пароли не совпадают"
                 }
             },
             "subjects": {
@@ -119,6 +177,24 @@
                     "requiredTexts": "Список источников",
                     "insertedAt": "Дата создания",
                     "updatedAt": "Дата обновления"
+                },
+                "edit": {
+                    "createTitle": "Новая дисциплина",
+                    "deleteTitle": "Подтверждение",
+                    "deleteText": "Вы действительно хотите удалить {title} дисциплину?",
+                    "editTitle": "Изменить дисциплину",
+                    "titleWindow": "Новая дисциплина",
+                    "title": "Название",
+                    "shortTitle": "Краткое название",
+                    "description": "Описание",
+                    "objectives": "Цели занятия",
+                    "prerequisites": "Предварительные требования",
+                    "requiredTexts": "Список источников",
+                    "create": "Добавить",
+                    "cancel": "Отмена",
+                    "delete": "Удалить",
+                    "save": "Изменить",
+                    "rules": "Обязательное поле"
                 }
             },
             "lessons": {

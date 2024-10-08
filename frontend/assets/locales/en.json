@@ -51,6 +51,14 @@
             }
         },
         "widgets": {
+            "table": {
+                "actions": "Actions",
+                "buttons": {
+                    "edit": "Edit",
+                    "delete": "Delete",
+                    "add": "Add"
+                }
+            },
             "schedule": {
                 "today": "Today"
             },
@@ -84,6 +92,21 @@
                     "title": "title",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "edit": {
+                    "createTitle": "New Speciality",
+                    "deleteTitle": "Confirmation",
+                    "deleteText": "Do you really want to delete {id} speciality?",
+                    "editTitle": "Change Speciality",
+                    "titleWindow": "New Speciality",
+                    "code": "Speciality code",
+                    "description": "Description",
+                    "title": "Title",
+                    "create": "Add",
+                    "cancel": "Cancel",
+                    "delete": "Delete",
+                    "save": "Change",
+                    "rules": "Required field"
                 }
             },
             "groups": {
@@ -94,6 +117,20 @@
                     "specialityId": "Speciality",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "edit": {
+                    "createTitle": "New Group",
+                    "deleteTitle": "Confirmation",
+                    "deleteText": "Do you really want to delete {title} group",
+                    "editTitle": "Change Group",
+                    "title": "Title",
+                    "description": "Description",
+                    "specialityId": "Speciality",
+                    "create": "Add",
+                    "cancel": "Cancel",
+                    "delete": "Delete",
+                    "save": "Change",
+                    "rules": "Required field"
                 }
             },
             "accounts": {
@@ -106,6 +143,28 @@
                     "roles": "Roles",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "edit": {
+                    "createTitle": "New Account",
+                    "deleteTitle": "Confirmation",
+                    "deleteText": "Do you really want to delete {firstName} {lastName} user?",
+                    "editTitle": "Change User",
+                    "email": "Email",
+                    "firstName": "First name",
+                    "lastName": "Last name",
+                    "group": "Group",
+                    "roles": "Roles",
+                    "password": "Password",
+                    "passwordConfirm": "Password confirm",
+                    "create": "Add",
+                    "cancel": "Cancel",
+                    "delete": "Delete",
+                    "save": "Change"
+                },
+                "rules": {
+                    "default": "Required Field",
+                    "password": "Password must be at least 6 characters",
+                    "passwordConfirm": "Passwords are not equal"
                 }
             },
             "subjects": {
@@ -119,6 +178,24 @@
                     "requiredTexts": "Required texts",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
+                },
+                "edit": {
+                    "createTitle": "New Subject",
+                    "deleteTitle": "Confirmation",
+                    "deleteText": "Do you really want to delete {title}",
+                    "editTitle": "Change Subject",
+                    "title": "Title",
+                    "shortTitle": "Short title",
+                    "description": "Description",
+                    "objectives": "Objectives",
+                    "prerequisites": "Prerequisites",
+                    "requiredTexts": "Required texts",
+                    "teachers": "Teachers",
+                    "create": "Add",
+                    "cancel": "Cancel",
+                    "delete": "Delete",
+                    "save": "Change",
+                    "rules": "Required field"
                 }
             },
             "lessons": {
