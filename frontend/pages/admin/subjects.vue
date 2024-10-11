@@ -19,6 +19,7 @@ import { ListWidget } from "@/components/widgets/subjects";
 definePageMeta({
     layout: "admin"
 });
+const { t } = useI18n();
 
 const page = ref(1);
 const pageSize = ref(10);
@@ -50,7 +51,7 @@ async function handleGetItem(item) {
                 return response;
             }
         } catch (error) {
-            console.error("Ошибка при получении данных:", error);
+            console.error(t("components.pages.errors.getData"), error);
         }
     }
     return null;
@@ -78,7 +79,7 @@ async function handleSaveItem(updatedItem) {
                 subjectsListData.value.list[index] = { ...updatedItem };
             }
         } catch (error) {
-            console.error("Ошибка при отправке данных на сервер:", error);
+            useEvent("notify:error", t("components.pages.errors.saveData"));
         }
     }
 }
@@ -104,7 +105,7 @@ async function handleAddItem(newItem) {
             subjectsListData.value.list.push({ ...response });
         }
     } catch (error) {
-        console.error("Ошибка при отправке данных на сервер:", error);
+        useEvent("notify:error", t("components.pages.errors.saveData"));
     }
 }
 
@@ -114,7 +115,7 @@ async function handleDeleteItem(deleteItem) {
             method: "DELETE"
         });
     } catch (error) {
-        console.error("Ошибка при удалении элемента:", error);
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
     }
 }
 </script>

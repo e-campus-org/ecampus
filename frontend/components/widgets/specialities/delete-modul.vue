@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" max-width="500px">
         <v-card>
             <v-card-title class="headline">{{ name.title }}</v-card-title>
-            <v-card-text> {{ name.text }} "{{ item.title }}"? </v-card-text>
+            <v-card-text>{{ name.text }} "{{ item.title }}"?</v-card-text>
             <v-card-actions>
                 <v-btn text @click="close">{{ name.cancel }}</v-btn>
                 <v-btn text @click="remove">{{ name.delete }}</v-btn>
@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeUnmount } from "vue";
+import { ref, watch } from "vue";
+import { useKeydownListener } from "@/composables/useKeydownListener";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -31,21 +32,11 @@ watch(
     () => props.modelValue,
     newVal => {
         dialog.value = newVal;
-        if (newVal) {
-            addKeydownListener();
-        } else {
-            removeKeydownListener();
-        }
     }
 );
 
 watch(dialog, newVal => {
     emit("update:modelValue", newVal);
-    if (newVal) {
-        addKeydownListener();
-    } else {
-        removeKeydownListener();
-    }
 });
 
 function close() {
@@ -57,21 +48,9 @@ function remove() {
     close();
 }
 
-function handleKeydown(event: KeyboardEvent) {
+useKeydownListener((event: KeyboardEvent) => {
     if (event.key === "Enter") {
         remove();
     }
-}
-
-function addKeydownListener() {
-    window.addEventListener("keydown", handleKeydown);
-}
-
-function removeKeydownListener() {
-    window.removeEventListener("keydown", handleKeydown);
-}
-
-onBeforeUnmount(() => {
-    removeKeydownListener();
 });
 </script>

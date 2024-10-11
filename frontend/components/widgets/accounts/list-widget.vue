@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import EditModal from "./edit-modal.vue";
-import DeleteModal from "./delete-modul.vue";
+import DeleteModal from "./delete-modal.vue";
 import { ref, watch, computed } from "vue";
 
 const props = defineProps<{

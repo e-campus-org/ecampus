@@ -20,6 +20,7 @@ import { ref } from "vue";
 definePageMeta({
     layout: "admin"
 });
+const { t } = useI18n();
 
 const page = ref(1);
 const pageSize = ref(10);
@@ -60,7 +61,7 @@ async function handleSaveItem(updatedItem) {
                 specialitiesListData.value.list[index] = { ...updatedItem };
             }
         } catch (error) {
-            console.error("Ошибка при отправке данных на сервер:", error);
+            useEvent("notify:error", t("components.pages.errors.saveData"));
         }
     }
 }
@@ -83,7 +84,7 @@ async function handleAddItem(newItem) {
             specialitiesListData.value.list.push({ ...response });
         }
     } catch (error) {
-        console.error("Ошибка при отправке данных на сервер:", error);
+        useEvent("notify:error", t("components.pages.errors.saveData"));
     }
 }
 
@@ -93,7 +94,7 @@ async function handleDeleteItem(deleteItem) {
             method: "DELETE"
         });
     } catch (error) {
-        console.error("Ошибка при удалении элемента:", error);
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
     }
 }
 </script>

@@ -42,6 +42,11 @@
             "password": "Password",
             "passwordIsRequired": "Password is required",
             "signIn": "Sign in"
+        },
+        "errors": {
+            "getData": "Error receiving data",
+            "saveData": "Error when sending data to the server",
+            "deleteData": "Error when deleting an element"
         }
     },
     "components": {
@@ -166,7 +171,7 @@
                     "lastName": "LastName is required.",
                     "group": "Group is required.",
                     "rolesRequired": "Roles is required.",
-                    "rolesSame": "You cannot have the roles 'admin' and 'student' or 'teacher' and 'student' at the same time.",
+                    "rolesSame": "You can't have roles 'administrator' and 'student' or 'teacher' and 'student' at the same time.",
                     "password": "Password is required.",
                     "passwordConfirmation": "Password confirmation is required."
                 },

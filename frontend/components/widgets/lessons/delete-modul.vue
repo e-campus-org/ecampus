@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch } from "vue";
+import { useKeydownListener } from "@/composables/useKeydownListener";
 
 const props = defineProps({
     modelValue: Boolean,
@@ -31,21 +32,11 @@ watch(
     () => props.modelValue,
     newVal => {
         dialog.value = newVal;
-        if (newVal) {
-            addKeydownListener();
-        } else {
-            removeKeydownListener();
-        }
     }
 );
 
 watch(dialog, newVal => {
     emit("update:modelValue", newVal);
-    if (newVal) {
-        addKeydownListener();
-    } else {
-        removeKeydownListener();
-    }
 });
 
 function close() {
@@ -57,21 +48,9 @@ function remove() {
     close();
 }
 
-function handleKeydown(event: KeyboardEvent) {
+useKeydownListener((event: KeyboardEvent) => {
     if (event.key === "Enter") {
         remove();
     }
-}
-
-function addKeydownListener() {
-    window.addEventListener("keydown", handleKeydown);
-}
-
-function removeKeydownListener() {
-    window.removeEventListener("keydown", handleKeydown);
-}
-
-onBeforeUnmount(() => {
-    removeKeydownListener();
 });
 </script>
