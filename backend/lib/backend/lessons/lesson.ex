@@ -41,5 +41,6 @@ defmodule Backend.Lessons.Lesson do
     ])
     |> validate_required([:title, :topic, :subject_id, :sort_order])
     |> foreign_key_constraint(:subject_id)
+    |> unique_constraint([:sort_order, :subject_id], name: :lessons_subject_id_sort_order_index)
   end
 end

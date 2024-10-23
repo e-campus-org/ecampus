@@ -21,5 +21,8 @@ defmodule Backend.LessonTopics.LessonTopic do
     |> cast(attrs, [:title, :content, :lesson_id, :sort_order])
     |> validate_required([:title, :lesson_id, :sort_order])
     |> foreign_key_constraint(:lesson_id)
+    |> unique_constraint([:sort_order, :lesson_id],
+      name: :lesson_topics_lesson_id_sort_order_index
+    )
   end
 end
