@@ -51,7 +51,7 @@ async function handleGetItem(item) {
                 return response;
             }
         } catch (error) {
-            console.error(t("components.pages.errors.getData"), error);
+            useEvent("notify:error", t("components.pages.errors.getData"));
         }
     }
     return null;

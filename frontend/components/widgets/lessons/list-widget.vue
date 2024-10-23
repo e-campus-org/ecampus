@@ -46,7 +46,7 @@ import DeleteModal from "./delete-modul.vue";
 import { ref, watch, computed } from "vue";
 
 const props = defineProps<{
-    data: Shared.ListData<Lessons.ReadSpecialityDTO> | null;
+    data: Shared.ListData<Lessons.ReadLessonDTO> | null;
     loading: boolean;
     page: number;
     pageSize: number;
@@ -54,10 +54,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "page-changed", page: number): void;
-    (e: "get-item", item: Lessons.ReadSpecialityDTO): void;
-    (e: "save-item", item: Lessons.ReadSpecialityDTO): void;
-    (e: "add-item", item: Lessons.ReadSpecialityDTO): void;
-    (e: "delete-item", item: Lessons.ReadSpecialityDTO): void;
+    (e: "get-item", item: Lessons.ReadLessonDTO): void;
+    (e: "save-item", item: Lessons.ReadLessonDTO): void;
+    (e: "add-item", item: Lessons.ReadLessonDTO): void;
+    (e: "delete-item", item: Lessons.ReadLessonDTO): void;
 }>();
 
 const isEditModal = ref(false);

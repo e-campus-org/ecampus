@@ -16,6 +16,7 @@
 </template>
 <script setup lang="ts">
 import { ListWidget } from "@/components/widgets/lessons";
+const { t } = useI18n();
 
 definePageMeta({
     layout: "admin"
@@ -55,7 +56,7 @@ async function handleGetItem(item) {
                 return response;
             }
         } catch (error) {
-            console.error("Ошибка при получении данных:", error);
+            useEvent("notify:error", t("components.pages.errors.getData"));
         }
     }
     return null;
@@ -83,13 +84,12 @@ async function handleSaveItem(updatedItem) {
                 lessonsListData.value.list[index] = { ...updatedItem };
             }
         } catch (error) {
-            console.error("Ошибка при отправке данных на сервер:", error);
+            useEvent("notify:error", t("components.pages.errors.saveData"));
         }
     }
 }
 async function handleAddItem(newItem) {
     try {
-        console.log(newItem);
         const payload = {
             lesson: {
                 title: newItem.title,
@@ -110,7 +110,7 @@ async function handleAddItem(newItem) {
             lessonsListData.value.list.push({ ...response });
         }
     } catch (error) {
-        console.error("Ошибка при отправке данных на сервер:", error);
+        useEvent("notify:error", t("components.pages.errors.saveData"));
     }
 }
 
@@ -120,7 +120,7 @@ async function handleDeleteItem(deleteItem) {
             method: "DELETE"
         });
     } catch (error) {
-        console.error("Ошибка при удалении элемента:", error);
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
     }
 }
 </script>
