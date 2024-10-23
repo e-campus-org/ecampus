@@ -103,4 +103,100 @@ defmodule Backend.Polls do
   def change_poll(%Poll{} = poll, attrs \\ %{}) do
     Poll.changeset(poll, attrs)
   end
+
+  alias Backend.Polls.PollQuestion
+
+  @doc """
+  Returns the list of polls.
+
+  ## Examples
+
+      iex> list_poll_questions()
+      [%PollQuestion{}, ...]
+
+  """
+  def list_poll_questions do
+    Repo.all(PollQuestion)
+  end
+
+  @doc """
+  Gets a single poll_question.
+
+  Raises `Ecto.NoResultsError` if the Poll question does not exist.
+
+  ## Examples
+
+      iex> get_poll_question!(123)
+      %PollQuestion{}
+
+      iex> get_poll_question!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_poll_question!(id), do: Repo.get!(PollQuestion, id)
+
+  @doc """
+  Creates a poll_question.
+
+  ## Examples
+
+      iex> create_poll_question(%{field: value})
+      {:ok, %PollQuestion{}}
+
+      iex> create_poll_question(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_poll_question(attrs \\ %{}) do
+    %PollQuestion{}
+    |> PollQuestion.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a poll_question.
+
+  ## Examples
+
+      iex> update_poll_question(poll_question, %{field: new_value})
+      {:ok, %PollQuestion{}}
+
+      iex> update_poll_question(poll_question, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_poll_question(%PollQuestion{} = poll_question, attrs) do
+    poll_question
+    |> PollQuestion.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a poll_question.
+
+  ## Examples
+
+      iex> delete_poll_question(poll_question)
+      {:ok, %PollQuestion{}}
+
+      iex> delete_poll_question(poll_question)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_poll_question(%PollQuestion{} = poll_question) do
+    Repo.delete(poll_question)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking poll_question changes.
+
+  ## Examples
+
+      iex> change_poll_question(poll_question)
+      %Ecto.Changeset{data: %PollQuestion{}}
+
+  """
+  def change_poll_question(%PollQuestion{} = poll_question, attrs \\ %{}) do
+    PollQuestion.changeset(poll_question, attrs)
+  end
 end
