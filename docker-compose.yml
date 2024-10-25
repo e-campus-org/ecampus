@@ -1,70 +1,68 @@
-version: "3.1"
-
 services:
-    e-campus-backend:
-        container_name: e-campus-backend
-        depends_on:
-            - e-campus-postgres
-            - e-campus-minio
-        build:
-            context: ./backend
-            dockerfile: Dockerfile
-        ports:
-            - "4000:4000"
-        environment:
-            - MIX_ENV=${MIX_ENV}
-            - PHX_SERVER=${PHX_SERVER}
-            - POSTGRES_DB=${POSTGRES_DB}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_PORT=5432
-            - POSTGRES_HOSTNAME=e-campus-postgres
-            - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-            - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-            - JWT_TOKEN_SECRET=${JWT_TOKEN_SECRET}
-            - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+  e-campus-backend:
+    container_name: e-campus-backend
+    depends_on:
+      - e-campus-postgres
+      - e-campus-minio
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - MIX_ENV=${MIX_ENV}
+      - PHX_SERVER=${PHX_SERVER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOSTNAME=e-campus-postgres
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - JWT_TOKEN_SECRET=${JWT_TOKEN_SECRET}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
 
-    e-campus-postgres:
-        container_name: e-campus-postgres
-        image: postgres
-        restart: always
-        environment:
-            - POSTGRES_DB=${POSTGRES_DB}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-        volumes:
-            - e-campus-postgres-data:/var/lib/postgresql/data
-        ports:
-            - "${POSTGRES_PORT}:5432"
+  e-campus-postgres:
+    container_name: e-campus-postgres
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - e-campus-postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT}:5432"
 
-    e-campus-minio:
-        container_name: e-campus-minio
-        image: quay.io/minio/minio
-        restart: always
-        ports:
-            - "9990:9000"
-            - "9991:9001"
-        volumes:
-            - e-campus-minio-data:/data
-        environment:
-            - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-            - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-        command: server /data --console-address ":9001"
+  e-campus-minio:
+    container_name: e-campus-minio
+    image: quay.io/minio/minio
+    restart: always
+    ports:
+      - "9990:9000"
+      - "9991:9001"
+    volumes:
+      - e-campus-minio-data:/data
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+    command: server /data --console-address ":9001"
 
-    e-campus-minio-create-buckets:
-        image: minio/mc
-        depends_on:
-            - e-campus-minio
-        entrypoint: >
-            /bin/sh -c "
-            /usr/bin/mc alias set e_campus_minio http://e-campus-minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
-            /usr/bin/mc mb e_campus_minio/public;
-            /usr/bin/mc anonymous set download e_campus_minio/public;
-            /usr/bin/mc mb e_campus_minio/private;
-            exit 0;
-            "
+  e-campus-minio-create-buckets:
+    image: minio/mc
+    depends_on:
+      - e-campus-minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set e_campus_minio http://e-campus-minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      /usr/bin/mc mb e_campus_minio/public;
+      /usr/bin/mc anonymous set download e_campus_minio/public;
+      /usr/bin/mc mb e_campus_minio/private;
+      exit 0;
+      "
 
 volumes:
-    e-campus-postgres-data:
-    e-campus-pgadmin-data:
-    e-campus-minio-data:
+  e-campus-postgres-data:
+  e-campus-pgadmin-data:
+  e-campus-minio-data:

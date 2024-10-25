@@ -102,7 +102,7 @@ defmodule Backend.Accounts do
   """
   def update_account(%Account{} = account, attrs) do
     account
-    |> Account.changeset(attrs)
+    |> Account.changeset(attrs, false)
     |> Repo.update()
   end
 

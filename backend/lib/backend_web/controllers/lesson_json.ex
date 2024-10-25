@@ -24,6 +24,7 @@ defmodule BackendWeb.LessonJSON do
       is_draft: lesson.is_draft,
       hours_count: lesson.hours_count,
       subject_id: lesson.subject_id,
+      sort_order: lesson.sort_order,
       inserted_at: lesson.inserted_at,
       updated_at: lesson.updated_at
     }
@@ -37,6 +38,7 @@ defmodule BackendWeb.LessonJSON do
       topic: lesson.topic,
       is_draft: lesson.is_draft,
       hours_count: lesson.hours_count,
+      sort_order: lesson.sort_order,
       subject_id: lesson.subject_id,
       inserted_at: lesson.inserted_at,
       updated_at: lesson.updated_at
