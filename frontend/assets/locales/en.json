@@ -42,6 +42,11 @@
             "password": "Password",
             "passwordIsRequired": "Password is required",
             "signIn": "Sign in"
+        },
+        "errors": {
+            "getData": "Error receiving data",
+            "saveData": "Error when sending data to the server",
+            "deleteData": "Error when deleting an element"
         }
     },
     "components": {
@@ -89,48 +94,55 @@
                     "id": "ID",
                     "code": "Speciality code",
                     "description": "Description",
-                    "title": "title",
+                    "title": "Title",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 },
-                "edit": {
-                    "createTitle": "New Speciality",
-                    "deleteTitle": "Confirmation",
-                    "deleteText": "Do you really want to delete {id} speciality?",
-                    "editTitle": "Change Speciality",
-                    "titleWindow": "New Speciality",
-                    "code": "Speciality code",
-                    "description": "Description",
-                    "title": "Title",
-                    "create": "Add",
+                "action": {
+                    "delete": "Delete a specialty",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a specialty",
+                    "create_title": "Create a specialty",
+                    "delete_title": "Delete a specialty",
+                    "delete_text": "Do you really want to delete a specialty",
                     "cancel": "Cancel",
-                    "delete": "Delete",
-                    "save": "Change",
-                    "rules": "Required field"
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "code": "Code is required.",
+                    "description": "Description is required."
                 }
             },
             "groups": {
                 "headers": {
                     "id": "ID",
-                    "title": "title",
+                    "title": "Title",
                     "description": "Description",
                     "specialityId": "Speciality",
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 },
-                "edit": {
-                    "createTitle": "New Group",
-                    "deleteTitle": "Confirmation",
-                    "deleteText": "Do you really want to delete {title} group",
-                    "editTitle": "Change Group",
-                    "title": "Title",
-                    "description": "Description",
-                    "specialityId": "Speciality",
-                    "create": "Add",
+                "action": {
+                    "delete": "Delete a group",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a group",
+                    "create_title": "Create a group",
+                    "delete_title": "Delete a group",
+                    "delete_text": "Do you really want to delete a group",
                     "cancel": "Cancel",
-                    "delete": "Delete",
-                    "save": "Change",
-                    "rules": "Required field"
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "specialityId": "SpecialityId is required.",
+                    "description": "Description is required."
                 }
             },
             "accounts": {
@@ -144,27 +156,37 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 },
-                "edit": {
-                    "createTitle": "New Account",
-                    "deleteTitle": "Confirmation",
-                    "deleteText": "Do you really want to delete {firstName} {lastName} user?",
-                    "editTitle": "Change User",
-                    "email": "Email",
-                    "firstName": "First name",
-                    "lastName": "Last name",
-                    "group": "Group",
-                    "roles": "Roles",
-                    "password": "Password",
-                    "passwordConfirm": "Password confirm",
-                    "create": "Add",
-                    "cancel": "Cancel",
-                    "delete": "Delete",
-                    "save": "Change"
+                "action": {
+                    "delete": "Delete a account",
+                    "add": "Add"
                 },
-                "rules": {
-                    "default": "Required Field",
-                    "password": "Password must be at least 6 characters",
-                    "passwordConfirm": "Passwords are not equal"
+                "modal": {
+                    "edit_title": "Edit a account",
+                    "create_title": "Create a account",
+                    "delete_title": "Delete a account",
+                    "delete_text": "Do you really want to delete a account",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete",
+                    "hint": "Select the roles for the user",
+                    "selected": "Selected",
+                    "password": "Password",
+                    "passwordConfirmation": "Password confirmation"
+                },
+                "error": {
+                    "email": "Email is required.",
+                    "firstName": "FirstName is required.",
+                    "lastName": "LastName is required.",
+                    "group": "Group is required.",
+                    "rolesRequired": "Roles is required.",
+                    "rolesSame": "You can't have roles 'administrator' and 'student' or 'teacher' and 'student' at the same time.",
+                    "password": "Password is required.",
+                    "passwordConfirmation": "Password confirmation is required."
+                },
+                "roles": {
+                    "admin": "admin",
+                    "teacher": "teacher",
+                    "student": "student"
                 }
             },
             "subjects": {
@@ -179,23 +201,27 @@
                     "insertedAt": "Creation date",
                     "updatedAt": "Update date"
                 },
-                "edit": {
-                    "createTitle": "New Subject",
-                    "deleteTitle": "Confirmation",
-                    "deleteText": "Do you really want to delete {title}",
-                    "editTitle": "Change Subject",
-                    "title": "Title",
-                    "shortTitle": "Short title",
-                    "description": "Description",
-                    "objectives": "Objectives",
-                    "prerequisites": "Prerequisites",
-                    "requiredTexts": "Required texts",
-                    "teachers": "Teachers",
-                    "create": "Add",
+                "action": {
+                    "delete": "Delete a subject",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a subject",
+                    "create_title": "Create a subject",
+                    "delete_title": "Delete a subject",
+                    "delete_text": "Do you really want to delete a subject",
                     "cancel": "Cancel",
-                    "delete": "Delete",
-                    "save": "Change",
-                    "rules": "Required field"
+                    "save": "Save",
+                    "delete": "Delete"
+                },
+
+                "error": {
+                    "title": "Title is required.",
+                    "shortTitle": "Short title is required.",
+                    "description": "Description is required.",
+                    "objectives": "Objectives is required.",
+                    "prerequisites": "Prerequisites is required.",
+                    "requiredTexts": "Required texts is required."
                 }
             },
             "lessons": {
@@ -214,6 +240,7 @@
                     "headers": {
                         "id": "ID",
                         "title": "Title",
+                        "topic": "Topic",
                         "content": "Content",
                         "objectives": "Objectives",
                         "insertedAt": "Creation date",
@@ -238,6 +265,32 @@
                     "titleIsRequired": "Title is required",
                     "topicIsRequired": "Topic is required",
                     "wrongHours": "Wrong hours count"
+                },
+                "action": {
+                    "delete": "Delete a lessons",
+                    "add": "Add"
+                },
+                "modal": {
+                    "edit_title": "Edit a lessons",
+                    "create_title": "Create a lessons",
+                    "delete_title": "Delete a lessons",
+                    "delete_text": "Do you really want to delete a lessons",
+                    "cancel": "Cancel",
+                    "save": "Save",
+                    "delete": "Delete",
+                    "hint": "Choose whether there is a draft or not"
+                },
+                "error": {
+                    "title": "Title is required.",
+                    "topic": "Topic is required.",
+                    "hours_count": "Hours count is required.",
+                    "is_draft": "Draft is required.",
+                    "objectives": "Objectives is required.",
+                    "subject_id": "Subject is required."
+                },
+                "draft": {
+                    "trueValue": "Yes",
+                    "falseValue": "No"
                 }
             }
         }

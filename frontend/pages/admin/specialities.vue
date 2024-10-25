@@ -1,140 +1,100 @@
 <template>
     <v-container>
         <list-widget
-            v-model:dialog="dialogAdd"
             :data="specialitiesListData"
             :loading="loading"
             :page="page"
             :page-size="pageSize"
             @page-changed="page = $event"
-            @delete-row="onClickDelete"
-            @edit-row="onClickEdit"
-        />
-
-        <modal-add 
-            v-model:dialog="dialogAdd"
-            @add-confirm="addConfirm"
-        />
-
-        <modal-delete 
-            :id="deletedId"
-            v-model:dialog="dialogDelete"
-            @delete-confirm="deleteConfirm"
-        />
-
-        <modal-edit 
-            v-model:dialog="dialogEdit"
-            :item="editedItem || {}"
-            @edit-confirm="editConfirm"
+            @save-item="handleSaveItem"
+            @add-item="handleAddItem"
+            @delete-item="handleDeleteItem"
         />
     </v-container>
 </template>
+
 <script setup lang="ts">
-    import { ListWidget, ModalAdd, ModalDelete, ModalEdit } from "@/components/widgets/specialities";
+import { ListWidget } from "@/components/widgets/specialities";
+import { ref } from "vue";
 
-    definePageMeta({
-        layout: "admin"
-    });
+definePageMeta({
+    layout: "admin"
+});
+const { t } = useI18n();
 
-    const page = ref(1);
-    const pageSize = ref(10);
-    const dialogAdd = ref(false);
-    const dialogDelete = ref(false);
-    const dialogEdit = ref(false);
-    const deletedId = ref<number>();
-    const editedItem = ref<Specialities.ReadSpecialityDTO>();
-    const loading = computed(() => status.value === "pending");
+const page = ref(1);
+const pageSize = ref(10);
 
-    const { data: specialitiesListData, status } = await useAsyncData(
-        "specialities-list-data",
-        () =>
-            useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
-                `/specialities?page=${page.value}&page_size=${pageSize.value}`,
-                {}
-            ),
-        {
-            server: false,
-            watch: [page, pageSize]
-        }
-    );
+const loading = computed(() => status.value === "pending");
 
-    const onClickDelete = (id: number) => {
-        deletedId.value = id
-        dialogDelete.value = true
-    }
-
-    const onClickEdit = (item: Specialities.ReadSpecialityDTO) => {
-        editedItem.value = item
-        dialogEdit.value = true
-    }
-
-    const fetchSpecialitiesList = async () => {
-        specialitiesListData.value = await useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
+const { data: specialitiesListData, status } = await useAsyncData(
+    "specialities-list-data",
+    () =>
+        useFetch<Shared.ListData<Specialities.ReadSpecialityDTO>>(
             `/specialities?page=${page.value}&page_size=${pageSize.value}`,
             {}
-        );
+        ),
+    {
+        server: false,
+        watch: [page, pageSize]
     }
+);
 
-    const addConfirm = async (item: Specialities.CreateSpecialityDTO) => {
+async function handleSaveItem(updatedItem) {
+    const index = specialitiesListData.value?.list?.findIndex(i => i.id === updatedItem.id);
+    if (index !== -1) {
         try {
-            const data = await useFetch<Specialities.ReadSpecialityDTO>(
-                '/specialities', {
-                    method: 'POST',
-                    body: {
-                        speciality: item
-                    }
+            const payload = {
+                speciality: {
+                    title: updatedItem.title,
+                    code: updatedItem.code,
+                    description: updatedItem.description
                 }
-            );
+            };
 
-            if (data) {
-                fetchSpecialitiesList();
-            }
-        
-        } catch (error) {
-            useEvent("notify:error", String(error));
-            console.log(error);
-        }
-        dialogAdd.value = false;
-    }
+            const response = await useFetch(`/specialities/${updatedItem.id}`, {
+                method: "PUT",
+                body: payload
+            });
 
-    const deleteConfirm = async () => {
-        try {
-            if (deletedId.value) {
-                await useFetch(
-                    `/specialities/${deletedId.value}`, {
-                         method: 'DELETE' 
-                    }
-                );
-
-                fetchSpecialitiesList();
+            if (response) {
+                specialitiesListData.value.list[index] = { ...updatedItem };
             }
         } catch (error) {
-            useEvent("notify:error", String(error));
-            console.log(error)
+            useEvent("notify:error", t("components.pages.errors.saveData"));
         }
-        dialogDelete.value = false;
     }
-
-    const editConfirm = async (item: Specialities.UpdateSpecialityDTO) => {
-        try {
-            if (specialitiesListData.value && editedItem.value) {
-                const data = await useFetch(
-                    `/specialities/${editedItem.value.id}`, {
-                        method: 'PUT',
-                        body: {
-                            speciality: item
-                        }
-                    }
-                );
-                
-                if (data) {
-                    useEvent("notify:error", String(error));
-                    fetchSpecialitiesList();
-                }
+}
+async function handleAddItem(newItem) {
+    try {
+        const payload = {
+            speciality: {
+                title: newItem.title,
+                code: newItem.code,
+                description: newItem.description
             }
-        } catch (error) {
-            console.log(error)
+        };
+
+        const response = await useFetch(`/specialities`, {
+            method: "POST",
+            body: payload
+        });
+
+        if (response) {
+            specialitiesListData.value.list.push({ ...response });
         }
-        dialogEdit.value = false
+    } catch (error) {
+        useEvent("notify:error", t("components.pages.errors.saveData"));
     }
+}
+
+async function handleDeleteItem(deleteItem) {
+    try {
+        await useFetch(`/specialities/${deleteItem.id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
+    }
+}
 </script>

@@ -1,152 +1,104 @@
 <template>
     <v-container>
         <list-widget
-            v-model:dialog="dialogAdd"
             :data="accountsListData"
             :loading="loading"
             :page="page"
             :page-size="pageSize"
             @page-changed="page = $event"
-            @row-delete="onClickDelete"
-            @row-edit="onClickEdit"
+            @save-item="handleSaveItem"
+            @add-item="handleAddItem"
+            @delete-item="handleDeleteItem"
         />
-
-        <modal-add 
-            v-model:dialog="dialogAdd"
-            :group-list="groupList"
-            @add-confirm="addConfirm"
-        />
-
-        <modal-delete 
-            v-model:dialog="dialogDelete"
-            :item="deletedAccount || {}"
-            @delete-confirm="deleteConfirm"
-        />
-
-        <modal-edit 
-            v-model:dialog="dialogEdit"
-            :group-list="groupList"
-            :item="editedItem || {}"
-             @edit-confirm="editConfirm"
-        />
-
     </v-container>
 </template>
 <script setup lang="ts">
-    import { ListWidget, ModalAdd, ModalDelete, ModalEdit } from "@/components/widgets/accounts";
+import { ListWidget } from "@/components/widgets/accounts";
 
-    definePageMeta({
-        layout: "admin"
-    });
+definePageMeta({
+    layout: "admin"
+});
+const { t } = useI18n();
 
-    const page = ref(1);
-    const pageSize = ref(10);
-    const dialogDelete = ref(false);
-    const dialogAdd = ref(false);
-    const dialogEdit = ref(false);
-    const deletedAccount = ref<Accounts.ReadAccountDTO>();
-    const editedItem = ref<Accounts.ReadAccountDTO>();
-    const groupList = computed(() => groupsListData.list);
-    const groupsListData = await useFetch<Shared.ListData<Groups.ReadGroupDTO>>(
-        `/groups`,
-        {
-            method: "GET"
-        }
-    );
+const page = ref(1);
+const pageSize = ref(10);
 
-    const loading = computed(() => status.value === "pending");
+const loading = computed(() => status.value === "pending");
 
-    const { data: accountsListData, status } = await useAsyncData(
-        "accounts-list-data",
-        () =>
-            useFetch<Shared.ListData<Accounts.ReadAccountDTO>>(
-                `/accounts?page=${page.value}&page_size=${pageSize.value}`,
-                {}
-            ),
-        {
-            server: false,
-            watch: [page, pageSize]
-        }
-    );
-
-    const onClickDelete = (item: Accounts.ReadAccountDTO) => {
-        deletedAccount.value = item
-        dialogDelete.value = true
-    }
-
-    const onClickEdit = (item: Accounts.ReadAccountDTO) => {
-        editedItem.value = item
-        dialogEdit.value = true
-    }
-
-    const fetchAccountsList = async () => {
-        accountsListData.value = await useFetch<Shared.ListData<Accounts.ReadAccountDTO>>(
+const { data: accountsListData, status } = await useAsyncData(
+    "accounts-list-data",
+    () =>
+        useFetch<Shared.ListData<Accounts.ReadAccountDTO>>(
             `/accounts?page=${page.value}&page_size=${pageSize.value}`,
             {}
-        );
+        ),
+    {
+        server: false,
+        watch: [page, pageSize]
     }
+);
 
-    const addConfirm = async (item: Accounts.CreateAccountDTO) => {
+async function handleSaveItem(updatedItem) {
+    const index = accountsListData.value?.list?.findIndex(i => i.id === updatedItem.id);
+    if (index !== -1) {
         try {
-            const data = await useFetch<Accounts.ReadAccountDTO>(
-                '/accounts', {
-                method: 'POST',
-                body : {
-                    account: item
-                }
+            const payload = {
+                email: updatedItem.email,
+                first_name: updatedItem.firstName,
+                last_name: updatedItem.lastName,
+                group_id: updatedItem.group,
+                roles: updatedItem.roles
+            };
+            const response = await useFetch(`/accounts/${updatedItem.id}`, {
+                method: "PUT",
+                body: payload
             });
 
-            if (data) {
-                fetchAccountsList();
-            }
-        } catch (error) {          
-            useEvent("notify:error", String(error));
-            console.log(error);
-        }
-        dialogAdd.value = false;
-    }
-
-    const deleteConfirm = async () => {
-        try {
-            if (deletedAccount.value) {
-                await useFetch(
-                    `/accounts/${deletedAccount.value.id}`, { 
-                        method: 'DELETE' 
-                    }
-                );
-
-                fetchAccountsList();
-            }
-
-        } catch (error) {
-            useEvent("notify:error", String(error));
-            console.log(error)
-        }
-        dialogDelete.value = false;
-    }
-
-    const editConfirm = async (item: Accounts.UpdateAccountDTO) => {
-        try {
-            if (editedItem.value) {
-                const data = await useFetch<Accounts.ReadAccountDTO>(
-                    `/accounts/${editedItem.value.id}`, {
-                        method: 'PUT',
-                        body: {
-                            account: item
-                        }
-                    }
-                );
-
-                if (data) {
-                    fetchAccountsList();
-                }
+            if (response) {
+                accountsListData.value.list[index] = { ...updatedItem };
             }
         } catch (error) {
-            useEvent("notify:error", String(error));
-            console.log(error)
+            useEvent("notify:error", t("components.pages.errors.saveData"));
         }
-        dialogEdit.value = false
     }
+}
+async function handleAddItem(newItem) {
+    try {
+        const payload = {
+            account: {
+                email: newItem.email,
+                first_name: newItem.firstName,
+                last_name: newItem.lastName,
+                group_id: newItem.group,
+                password: newItem.password,
+                password_confirmation: newItem.passwordConfirmation,
+                roles: newItem.roles
+            }
+        };
 
+        const response = await useFetch(`/accounts`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
 
+        if (response) {
+            accountsListData.value.list.push({ ...response });
+        }
+    } catch (error) {
+        useEvent("notify:error", t("components.pages.errors.saveData"));
+    }
+}
+
+async function handleDeleteItem(deleteItem) {
+    try {
+        await useFetch(`/accounts/${deleteItem.id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
+    }
+}
 </script>
