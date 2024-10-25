@@ -52,6 +52,18 @@ declare namespace Specialities {
         inserted_at: string;
         updated_at: string;
     }
+
+    interface CreateSpecialityDTO {
+        code: string;
+        description: string;
+        title: string;
+    }
+
+    interface UpdateSpecialityDTO {
+        code?: string;
+        description?: string;
+        title?: string;
+    }
 }
 
 declare namespace Groups {
@@ -62,6 +74,18 @@ declare namespace Groups {
         speciality_id: number | null;
         inserted_at: string;
         updated_at: string;
+    }
+
+    interface CreateGroupDTO {
+        title: string;
+        description: string;
+        speciality_id: number | null;
+    }
+
+    interface UpdateGroupDTO {
+        title?: string;
+        description?: string;
+        speciality_id?: number | null;
     }
 }
 
@@ -76,6 +100,24 @@ declare namespace Accounts {
         inserted_at: string;
         updated_at: string;
     }
+
+    interface CreateAccountDTO {
+        email: string;
+        first_name: string;
+        last_name: string;
+        group_id: number | null;
+        roles: string[];
+        password: string;
+        password_confirm: string;
+    }
+
+    interface UpdateAccountDTO {
+        first_name?: string;
+        last_name?: string;
+        group_id?: number | null;
+        roles?: string[];
+        email?: string;
+    }
 }
 
 declare namespace Subjects {
@@ -89,6 +131,25 @@ declare namespace Subjects {
         required_texts: string;
         inserted_at: string;
         updated_at: string;
+    }
+
+    interface CreateSubjectDTO {
+        title: string;
+        short_title: string;
+        description: string;
+        objectives: string;
+        prerequisites: string;
+        required_texts: string;
+        teachers: string[];
+    }
+
+    interface UpdateSubjectDTO {
+        title?: string;
+        short_title?: string;
+        description?: string;
+        objectives?: string;
+        prerequisites?: string;
+        required_texts?: string;
     }
 }
 

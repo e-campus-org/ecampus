@@ -11,16 +11,6 @@ config :backend,
   ecto_repos: [Backend.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-config :backend, :phoenix_swagger,
-  swagger_files: %{
-    "priv/static/swagger.json" => [
-      router: BackendWeb.Router,
-      endpoint: BackendWeb.Endpoint
-    ]
-  }
-
-config :phoenix_swagger, json_library: Jason
-
 # Configures the endpoint
 config :backend, BackendWeb.Endpoint,
   url: [host: "localhost"],
@@ -37,7 +27,7 @@ config :backend, BackendWeb.Endpoint,
       ~r{lib/backend_web/controllers/.*(ex)$}
     ]
   ],
-  reloadable_compilers: [:gettext, :phoenix, :elixir, :phoenix_swagger]
+  reloadable_compilers: [:gettext, :phoenix, :elixir]
 
 # Configures the mailer
 #

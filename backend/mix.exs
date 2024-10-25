@@ -10,7 +10,7 @@ defmodule Backend.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      compilers: Mix.compilers() ++ [:phoenix_swagger]
+      compilers: Mix.compilers()
     ]
   end
 
@@ -51,8 +51,6 @@ defmodule Backend.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:phoenix_swagger, "~> 0.8"},
-      {:ex_json_schema, "~> 0.5"},
       {:guardian, "~> 2.3.2"},
       {:bcrypt_elixir, "~> 3.0"},
       {:flop, "~> 0.25.0"},

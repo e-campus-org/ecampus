@@ -56,6 +56,14 @@
             }
         },
         "widgets": {
+            "table": {
+                "actions": "Actions",
+                "buttons": {
+                    "edit": "Edit",
+                    "delete": "Delete",
+                    "add": "Add"
+                }
+            },
             "schedule": {
                 "today": "Today"
             },

@@ -26,6 +26,23 @@
                     </v-btn>
                 </div>
             </template>
+
+            <template #item.actions="{ item }">
+                    <v-icon
+                        class="me-2"
+                        size="small"
+                        @click="onRowEdit(item)"
+                    >
+                        mdi-pencil
+                    </v-icon>
+                <v-icon
+                    class="me-2"
+                    size="small"
+                    @click="onRowDelete(item)"
+                >
+                    mdi-delete
+                </v-icon>
+            </template>
         </v-data-table>
 
         <edit-modal
@@ -165,6 +182,18 @@ const currentPage = computed({
     get: () => props.page,
     set: page => emit("page-changed", page)
 });
+
+const onRowEdit = (item: Accounts.ReadAccountDTO) => {
+    emit("row-edit", item);
+};
+
+const onRowDelete = (item: Accounts.ReadAccountDTO) => {
+    emit("row-delete", item);
+};
+
+const onRowAdd = () => {
+    dialog.value = true
+}
 
 const headers = computed(() => [
     {

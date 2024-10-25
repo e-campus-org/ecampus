@@ -30,7 +30,10 @@ const loading = computed(() => status.value === "pending");
 const { data: lessonsListData, status } = await useAsyncData(
     "lesson-list-data",
     () =>
-        useFetch<Shared.ListData<Lessons.ReadLessonDTO>>(`/lessons?page=${page.value}&page_size=${pageSize.value}`, {}),
+        useFetch<Shared.ListData<Lessons.ReadLessonDTO>>(
+            `/lessons?page=${page.value}&page_size=${pageSize.value}`, 
+            {}
+        ),
     {
         server: false,
         watch: [page, pageSize]
