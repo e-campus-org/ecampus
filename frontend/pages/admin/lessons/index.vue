@@ -11,6 +11,7 @@
             @save-item="handleSaveItem"
             @add-item="handleAddItem"
             @delete-item="handleDeleteItem"
+            @questions-delete="handleDeleteQuestions"
         />
     </v-container>
 </template>
@@ -50,13 +51,18 @@ async function handleGetItem(item) {
     const index = lessonsListData.value?.list?.findIndex(i => i.id === item.id);
     if (index !== -1) {
         try {
-            const response = await useFetch(`/lessons/${item.id}`, {
+            const lessons = await useFetch(`/lessons/${item.id}`, {
                 method: "GET"
             });
+            const lessonTopics = await useFetch(`/lesson_topics`, {
+                method: "GET"
+            });
+            const lessonTopicsFilter = lessonTopics?.list?.filter(lessonTopic => lessonTopic.lesson_id === item.id);
 
-            if (response) {
-                lessonsListData.value.list[index] = response;
-                return response;
+            if (lessons && lessonTopics && lessonTopicsFilter) {
+                lessonsListData.value.list[index] = {...lessons, questions: lessonTopicsFilter};
+
+                return lessons;
             }
         } catch (error) {
             useEvent("notify:error", t("components.pages.errors.getData"));
@@ -68,20 +74,34 @@ async function handleSaveItem(updatedItem) {
     const index = lessonsListData.value?.list?.findIndex(i => i.id === updatedItem.id);
     if (index !== -1) {
         try {
-            const payload = {
+            const payloadLessons = {
                 lesson: {
                     title: updatedItem.title,
-                    topic: updatedItem.topic,
-                    hours_count: updatedItem.hours_count,
-                    is_draft: updatedItem.is_draft,
-                    objectives: updatedItem.objectives,
-                    subject_id: updatedItem.subject_id
+                    is_draft:updatedItem.is_draft,
+                    topic:updatedItem.topic,
+                    subject_id:updatedItem.subject_id
                 }
             };
+            
             const response = await useFetch(`/lessons/${updatedItem.id}`, {
                 method: "PUT",
-                body: payload
+                body: payloadLessons
             });
+
+            for (const item of updatedItem.questions) {
+                const payloadLessonsTopics = {
+                    lesson_topic: {
+                        title: item.title,
+                        description:item.description,
+                        objectives:item.objectives
+                    }
+                };
+
+                await useFetch(`/lesson_topics/${item.id}`, {
+                    method: "PUT",
+                    body: payloadLessonsTopics
+                });
+            }
 
             if (response) {
                 lessonsListData.value.list[index] = { ...updatedItem };
@@ -91,6 +111,7 @@ async function handleSaveItem(updatedItem) {
         }
     }
 }
+
 async function handleAddItem(newItem) {
     try {
         const payload = {
@@ -99,7 +120,6 @@ async function handleAddItem(newItem) {
                 topic: newItem.topic,
                 hours_count: newItem.hours_count,
                 is_draft: newItem.is_draft,
-                objectives: newItem.objectives,
                 subject_id: newItem.subject_id
             }
         };
@@ -109,17 +129,45 @@ async function handleAddItem(newItem) {
             body: payload
         });
 
-        if (response) {
+        if (response && response.id) {
+            for (const item of newItem.questions) {
+                const payloadLessonsTopics = {
+                    lesson_topic: {
+                        title: item.title,
+                        description: item.description,
+                        objectives: item.objectives,
+                        content: {},
+                        lesson_id: response.id 
+                    }
+                };
+
+                await useFetch(`/lesson_topics`, {
+                    method: "POST",
+                    body: payloadLessonsTopics
+                });
+            }
+
             lessonsListData.value.list.push({ ...response });
-        }
+        } 
     } catch (error) {
         useEvent("notify:error", t("components.pages.errors.saveData"));
     }
 }
 
+
 async function handleDeleteItem(deleteItem) {
     try {
         await useFetch(`/lessons/${deleteItem.id}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        useEvent("notify:error", t("components.pages.errors.deleteData"));
+    }
+}
+async function handleDeleteQuestions(deleteId:number) {
+    try {
+        console.log(deleteId)
+        await useFetch(`/lesson_topics/${deleteId}`, {
             method: "DELETE"
         });
     } catch (error) {
