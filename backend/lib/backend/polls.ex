@@ -18,10 +18,21 @@ defmodule Backend.Polls do
       [%Poll{}, ...]
 
   """
-  def list_polls(params \\ %{}),
-    do:
-      Flop.validate_and_run(Poll, params, for: Poll)
-      |> with_pagination()
+  def list_polls(params \\ %{}) do
+    filters = []
+
+    Poll
+    |> preload([:poll_questions, poll_questions: [:poll_answers]])
+    |> Flop.validate_and_run(
+      %{
+        page: Map.get(params, "page", 1),
+        page_size: Map.get(params, "page_size", 10),
+        filters: filters
+      },
+      for: Poll
+    )
+    |> with_pagination()
+  end
 
   @doc """
   Gets a single poll.
@@ -198,5 +209,101 @@ defmodule Backend.Polls do
   """
   def change_poll_question(%PollQuestion{} = poll_question, attrs \\ %{}) do
     PollQuestion.changeset(poll_question, attrs)
+  end
+
+  alias Backend.Polls.PollAnswer
+
+  @doc """
+  Returns the list of poll_answers.
+
+  ## Examples
+
+      iex> list_poll_answers()
+      [%PollAnswer{}, ...]
+
+  """
+  def list_poll_answers do
+    Repo.all(PollAnswer)
+  end
+
+  @doc """
+  Gets a single poll_answer.
+
+  Raises `Ecto.NoResultsError` if the Poll answer does not exist.
+
+  ## Examples
+
+      iex> get_poll_answer!(123)
+      %PollAnswer{}
+
+      iex> get_poll_answer!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_poll_answer!(id), do: Repo.get!(PollAnswer, id)
+
+  @doc """
+  Creates a poll_answer.
+
+  ## Examples
+
+      iex> create_poll_answer(%{field: value})
+      {:ok, %PollAnswer{}}
+
+      iex> create_poll_answer(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_poll_answer(attrs \\ %{}) do
+    %PollAnswer{}
+    |> PollAnswer.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a poll_answer.
+
+  ## Examples
+
+      iex> update_poll_answer(poll_answer, %{field: new_value})
+      {:ok, %PollAnswer{}}
+
+      iex> update_poll_answer(poll_answer, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_poll_answer(%PollAnswer{} = poll_answer, attrs) do
+    poll_answer
+    |> PollAnswer.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a poll_answer.
+
+  ## Examples
+
+      iex> delete_poll_answer(poll_answer)
+      {:ok, %PollAnswer{}}
+
+      iex> delete_poll_answer(poll_answer)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_poll_answer(%PollAnswer{} = poll_answer) do
+    Repo.delete(poll_answer)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking poll_answer changes.
+
+  ## Examples
+
+      iex> change_poll_answer(poll_answer)
+      %Ecto.Changeset{data: %PollAnswer{}}
+
+  """
+  def change_poll_answer(%PollAnswer{} = poll_answer, attrs \\ %{}) do
+    PollAnswer.changeset(poll_answer, attrs)
   end
 end

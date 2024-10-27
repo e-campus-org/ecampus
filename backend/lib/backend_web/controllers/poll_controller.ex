@@ -49,4 +49,15 @@ defmodule BackendWeb.PollController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def create_question(conn, %{"id" => id, "question" => question_params}) do
+    with question <-
+           question_params
+           |> Map.put("poll_id", String.to_integer(id))
+           |> Polls.create_poll_question() do
+      conn
+      |> put_status(:created)
+      |> render(:show_question, question: question)
+    end
+  end
 end

@@ -116,4 +116,60 @@ defmodule Backend.PollsTest do
       assert %Ecto.Changeset{} = Polls.change_poll_question(poll_question)
     end
   end
+
+  describe "poll_answers" do
+    alias Backend.Polls.PollAnswer
+
+    import Backend.PollsFixtures
+
+    @invalid_attrs %{title: nil, subtitle: nil}
+
+    test "list_poll_answers/0 returns all poll_answers" do
+      poll_answer = poll_answer_fixture()
+      assert Polls.list_poll_answers() == [poll_answer]
+    end
+
+    test "get_poll_answer!/1 returns the poll_answer with given id" do
+      poll_answer = poll_answer_fixture()
+      assert Polls.get_poll_answer!(poll_answer.id) == poll_answer
+    end
+
+    test "create_poll_answer/1 with valid data creates a poll_answer" do
+      valid_attrs = %{title: "some title", subtitle: "some subtitle"}
+
+      assert {:ok, %PollAnswer{} = poll_answer} = Polls.create_poll_answer(valid_attrs)
+      assert poll_answer.title == "some title"
+      assert poll_answer.subtitle == "some subtitle"
+    end
+
+    test "create_poll_answer/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Polls.create_poll_answer(@invalid_attrs)
+    end
+
+    test "update_poll_answer/2 with valid data updates the poll_answer" do
+      poll_answer = poll_answer_fixture()
+      update_attrs = %{title: "some updated title", subtitle: "some updated subtitle"}
+
+      assert {:ok, %PollAnswer{} = poll_answer} = Polls.update_poll_answer(poll_answer, update_attrs)
+      assert poll_answer.title == "some updated title"
+      assert poll_answer.subtitle == "some updated subtitle"
+    end
+
+    test "update_poll_answer/2 with invalid data returns error changeset" do
+      poll_answer = poll_answer_fixture()
+      assert {:error, %Ecto.Changeset{}} = Polls.update_poll_answer(poll_answer, @invalid_attrs)
+      assert poll_answer == Polls.get_poll_answer!(poll_answer.id)
+    end
+
+    test "delete_poll_answer/1 deletes the poll_answer" do
+      poll_answer = poll_answer_fixture()
+      assert {:ok, %PollAnswer{}} = Polls.delete_poll_answer(poll_answer)
+      assert_raise Ecto.NoResultsError, fn -> Polls.get_poll_answer!(poll_answer.id) end
+    end
+
+    test "change_poll_answer/1 returns a poll_answer changeset" do
+      poll_answer = poll_answer_fixture()
+      assert %Ecto.Changeset{} = Polls.change_poll_answer(poll_answer)
+    end
+  end
 end

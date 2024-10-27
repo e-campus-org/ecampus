@@ -1,4 +1,5 @@
 defmodule BackendWeb.PollJSON do
+  alias Backend.Polls.PollQuestion
   alias Backend.Polls.Poll
 
   @doc """
@@ -24,8 +25,20 @@ defmodule BackendWeb.PollJSON do
       id: poll.id,
       title: poll.title,
       description: poll.description,
+      questions: for(question <- poll.poll_questions, do: data_question(question)),
       inserted_at: poll.inserted_at,
       updated_at: poll.updated_at
+    }
+  end
+
+  defp data_question(%PollQuestion{} = poll_question) do
+    %{
+      id: poll_question.id,
+      title: poll_question.title,
+      subtitle: poll_question.subtitle,
+      poll_id: poll_question.poll_id,
+      inserted_at: poll_question.inserted_at,
+      updated_at: poll_question.updated_at
     }
   end
 end

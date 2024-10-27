@@ -34,4 +34,19 @@ defmodule Backend.PollsFixtures do
 
     poll_question
   end
+
+  @doc """
+  Generate a poll_answer.
+  """
+  def poll_answer_fixture(attrs \\ %{}) do
+    {:ok, poll_answer} =
+      attrs
+      |> Enum.into(%{
+        subtitle: "some subtitle",
+        title: "some title"
+      })
+      |> Backend.Polls.create_poll_answer()
+
+    poll_answer
+  end
 end
