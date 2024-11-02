@@ -7,8 +7,6 @@ defmodule Backend.Polls.PollAnswer do
     field :subtitle, :string
     belongs_to :poll_question, Backend.Polls.PollQuestion
 
-    has_many :poll_answers, Backend.Polls.PollAnswer
-
     timestamps(type: :utc_datetime)
   end
 

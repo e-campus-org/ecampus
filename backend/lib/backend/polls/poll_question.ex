@@ -1,4 +1,5 @@
 defmodule Backend.Polls.PollQuestion do
+  alias Backend.Polls.PollAnswer
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -8,6 +9,8 @@ defmodule Backend.Polls.PollQuestion do
     field :subtitle, :string
     belongs_to :poll, Backend.Polls.Poll
 
+    has_many :poll_answers, Backend.Polls.PollAnswer
+
     timestamps(type: :utc_datetime)
   end
 
@@ -15,6 +18,7 @@ defmodule Backend.Polls.PollQuestion do
   def changeset(poll_question, attrs, required \\ true) do
     poll_question
     |> cast(attrs, [:title, :subtitle, :type, :poll_id])
+    |> cast_assoc(:poll_answers, with: &PollAnswer.changeset/2)
     |> maybe_validate_required(required)
     |> foreign_key_constraint(:poll_id)
   end

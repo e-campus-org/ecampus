@@ -63,9 +63,13 @@ defmodule Backend.Polls do
 
   """
   def create_poll(attrs \\ %{}) do
-    %Poll{}
-    |> Poll.changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %Poll{}
+      |> Poll.changeset(attrs)
+
+    with {:ok, poll} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(poll, [:poll_questions, poll_questions: [:poll_answers]])}
+    end
   end
 
   @doc """
@@ -81,9 +85,13 @@ defmodule Backend.Polls do
 
   """
   def update_poll(%Poll{} = poll, attrs) do
-    poll
-    |> Poll.changeset(attrs, false)
-    |> Repo.update()
+    changeset =
+      poll
+      |> Poll.changeset(attrs)
+
+    with {:ok, poll} <- Repo.update(changeset) do
+      {:ok, Repo.preload(poll, [:poll_questions, poll_questions: [:poll_answers]])}
+    end
   end
 
   @doc """
