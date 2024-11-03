@@ -48,7 +48,8 @@ defmodule Backend.Polls do
       ** (Ecto.NoResultsError)
 
   """
-  def get_poll!(id), do: Repo.get!(Poll, id)
+  def get_poll!(id),
+    do: Repo.get!(Poll, id) |> Repo.preload([:poll_questions, poll_questions: [:poll_answers]])
 
   @doc """
   Creates a poll.
@@ -152,7 +153,7 @@ defmodule Backend.Polls do
       ** (Ecto.NoResultsError)
 
   """
-  def get_poll_question!(id), do: Repo.get!(PollQuestion, id)
+  def get_poll_question!(id), do: Repo.get!(PollQuestion, id) |> Repo.preload([:poll_answers])
 
   @doc """
   Creates a poll_question.
@@ -167,9 +168,13 @@ defmodule Backend.Polls do
 
   """
   def create_poll_question(attrs \\ %{}) do
-    %PollQuestion{}
-    |> PollQuestion.changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %PollQuestion{}
+      |> PollQuestion.changeset(attrs)
+
+    with {:ok, poll_question} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(poll_question, [:poll_answers])}
+    end
   end
 
   @doc """
@@ -185,9 +190,13 @@ defmodule Backend.Polls do
 
   """
   def update_poll_question(%PollQuestion{} = poll_question, attrs) do
-    poll_question
-    |> PollQuestion.changeset(attrs)
-    |> Repo.update()
+    changeset =
+      poll_question
+      |> PollQuestion.changeset(attrs)
+
+    with {:ok, poll_question} <- Repo.update(changeset) do
+      {:ok, Repo.preload(poll_question, [:poll_answers])}
+    end
   end
 
   @doc """

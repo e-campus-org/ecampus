@@ -13,14 +13,14 @@ defmodule Backend.Polls.PollAnswer do
   @doc false
   def changeset(poll_answer, attrs, required \\ true) do
     poll_answer
-    |> cast(attrs, [:title, :subtitle, :poll_question_id])
+    |> cast(attrs, [:title, :subtitle])
     |> maybe_validate_required(required)
     |> foreign_key_constraint(:poll_question_id)
   end
 
   defp maybe_validate_required(changeset, true) do
     changeset
-    |> validate_required([:title, :poll_question_id])
+    |> validate_required([:title])
   end
 
   defp maybe_validate_required(changeset, false), do: changeset
