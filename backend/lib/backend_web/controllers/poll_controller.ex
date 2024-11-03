@@ -1,6 +1,7 @@
 defmodule BackendWeb.PollController do
   use BackendWeb, :controller
 
+  alias Backend.Polls.PollQuestion
   alias Backend.Polls
   alias Backend.Polls.Poll
 
@@ -46,6 +47,41 @@ defmodule BackendWeb.PollController do
     poll = Polls.get_poll!(id)
 
     with {:ok, %Poll{}} <- Polls.delete_poll(poll) do
+      send_resp(conn, :no_content, "")
+    end
+  end
+
+  def create_question(conn, %{"id" => id, "question" => question_params}) do
+    with {:ok, %PollQuestion{} = question} <-
+           question_params
+           |> Map.put("poll_id", String.to_integer(id))
+           |> Polls.create_poll_question() do
+      conn
+      |> put_status(:created)
+      |> render(:show_question, question: question)
+    end
+  end
+
+  def update_question(conn, %{
+        "id" => id,
+        "question_id" => question_id,
+        "question" => question_params
+      }) do
+    question_params = Map.put(question_params, "poll_id", String.to_integer(id))
+
+    with {:ok, %PollQuestion{} = question} <-
+           Polls.get_poll_question!(question_id)
+           |> Polls.update_poll_question(question_params) do
+      render(conn, :show_question, question: question)
+    end
+  end
+
+  def delete_question(conn, %{"id" => id, "question_id" => question_id}) do
+    with {:ok, %PollQuestion{}} <-
+           Polls.delete_poll_question(%PollQuestion{
+             poll_id: String.to_integer(id),
+             id: String.to_integer(question_id)
+           }) do
       send_resp(conn, :no_content, "")
     end
   end
