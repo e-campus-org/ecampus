@@ -4,10 +4,6 @@ import dbtester.service as service
 
 router = APIRouter()
 
-@router.get("/home")
-def get_home():
-    return  { "status": "привет сексуалка" }
-
 @router.post("/tasks/create", response_model=TaskResponse)
 async def create_task(task: TaskCreate):
     return service.create_task(task)
