@@ -323,4 +323,129 @@ defmodule Backend.Polls do
   def change_poll_answer(%PollAnswer{} = poll_answer, attrs \\ %{}) do
     PollAnswer.changeset(poll_answer, attrs)
   end
+
+  alias Backend.Polls.PollResult
+
+  @doc """
+  Returns the list of poll_results.
+
+  ## Examples
+
+      iex> list_poll_results()
+      [%PollResult{}, ...]
+
+  """
+  def list_poll_results do
+    Repo.all(PollResult)
+  end
+
+  @doc """
+  Gets a single poll_result.
+
+  Raises `Ecto.NoResultsError` if the Poll result does not exist.
+
+  ## Examples
+
+      iex> get_poll_result!(123)
+      %PollResult{}
+
+      iex> get_poll_result!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_poll_result!(id),
+    do: Repo.get!(PollResult, id) |> Repo.preload([:poll_questions, :poll_answers, :accounts])
+
+  @doc """
+  Creates a poll_result.
+
+  ## Examples
+
+      iex> create_poll_result(%{field: value})
+      {:ok, %PollResult{}}
+
+      iex> create_poll_result(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_poll_result(attrs) do
+    question = get_poll_question!(attrs["poll_questions_id"])
+
+    case question.type do
+      :single -> create_single_poll_result(attrs)
+      :multiple -> create_multiple_poll_result(attrs)
+      :open -> create_open_poll_result(attrs)
+    end
+  end
+
+  defp create_single_poll_result(attrs) do
+    %PollResult{}
+    |> PollResult.single_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  defp create_multiple_poll_result(attrs) do
+    changesets =
+      %PollResult{}
+      |> PollResult.multiple_changeset(attrs)
+
+    Repo.transaction(fn ->
+      Enum.each(changesets, &Repo.insert(&1, []))
+    end)
+  end
+
+  defp create_open_poll_result(attrs) do
+    attrs |> IO.inspect()
+
+    %PollResult{}
+    |> PollResult.open_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a poll_result.
+
+  ## Examples
+
+      iex> update_poll_result(poll_result, %{field: new_value})
+      {:ok, %PollResult{}}
+
+      iex> update_poll_result(poll_result, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_poll_result(%PollResult{} = poll_result, attrs) do
+    poll_result
+    |> PollResult.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a poll_result.
+
+  ## Examples
+
+      iex> delete_poll_result(poll_result)
+      {:ok, %PollResult{}}
+
+      iex> delete_poll_result(poll_result)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_poll_result(%PollResult{} = poll_result) do
+    Repo.delete(poll_result)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking poll_result changes.
+
+  ## Examples
+
+      iex> change_poll_result(poll_result)
+      %Ecto.Changeset{data: %PollResult{}}
+
+  """
+  def change_poll_result(%PollResult{} = poll_result, attrs \\ %{}) do
+    PollResult.changeset(poll_result, attrs)
+  end
 end

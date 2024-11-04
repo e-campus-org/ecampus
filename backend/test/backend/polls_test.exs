@@ -172,4 +172,58 @@ defmodule Backend.PollsTest do
       assert %Ecto.Changeset{} = Polls.change_poll_answer(poll_answer)
     end
   end
+
+  describe "poll_results" do
+    alias Backend.Polls.PollResult
+
+    import Backend.PollsFixtures
+
+    @invalid_attrs %{open_question_text: nil}
+
+    test "list_poll_results/0 returns all poll_results" do
+      poll_result = poll_result_fixture()
+      assert Polls.list_poll_results() == [poll_result]
+    end
+
+    test "get_poll_result!/1 returns the poll_result with given id" do
+      poll_result = poll_result_fixture()
+      assert Polls.get_poll_result!(poll_result.id) == poll_result
+    end
+
+    test "create_poll_result/1 with valid data creates a poll_result" do
+      valid_attrs = %{open_question_text: "some open_question_text"}
+
+      assert {:ok, %PollResult{} = poll_result} = Polls.create_poll_result(valid_attrs)
+      assert poll_result.open_question_text == "some open_question_text"
+    end
+
+    test "create_poll_result/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Polls.create_poll_result(@invalid_attrs)
+    end
+
+    test "update_poll_result/2 with valid data updates the poll_result" do
+      poll_result = poll_result_fixture()
+      update_attrs = %{open_question_text: "some updated open_question_text"}
+
+      assert {:ok, %PollResult{} = poll_result} = Polls.update_poll_result(poll_result, update_attrs)
+      assert poll_result.open_question_text == "some updated open_question_text"
+    end
+
+    test "update_poll_result/2 with invalid data returns error changeset" do
+      poll_result = poll_result_fixture()
+      assert {:error, %Ecto.Changeset{}} = Polls.update_poll_result(poll_result, @invalid_attrs)
+      assert poll_result == Polls.get_poll_result!(poll_result.id)
+    end
+
+    test "delete_poll_result/1 deletes the poll_result" do
+      poll_result = poll_result_fixture()
+      assert {:ok, %PollResult{}} = Polls.delete_poll_result(poll_result)
+      assert_raise Ecto.NoResultsError, fn -> Polls.get_poll_result!(poll_result.id) end
+    end
+
+    test "change_poll_result/1 returns a poll_result changeset" do
+      poll_result = poll_result_fixture()
+      assert %Ecto.Changeset{} = Polls.change_poll_result(poll_result)
+    end
+  end
 end
