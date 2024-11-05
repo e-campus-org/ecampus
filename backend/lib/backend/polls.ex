@@ -323,4 +323,100 @@ defmodule Backend.Polls do
   def change_poll_answer(%PollAnswer{} = poll_answer, attrs \\ %{}) do
     PollAnswer.changeset(poll_answer, attrs)
   end
+
+  alias Backend.Polls.PollResult
+
+  @doc """
+  Returns the list of poll_results.
+
+  ## Examples
+
+      iex> list_poll_results()
+      [%PollResult{}, ...]
+
+  """
+  def list_poll_results do
+    Repo.all(PollResult)
+  end
+
+  @doc """
+  Gets a single poll_result.
+
+  Raises `Ecto.NoResultsError` if the Poll result does not exist.
+
+  ## Examples
+
+      iex> get_poll_result!(123)
+      %PollResult{}
+
+      iex> get_poll_result!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_poll_result!(id),
+    do: Repo.get!(PollResult, id) |> Repo.preload([:poll_questions, :poll_answers, :accounts])
+
+  @doc """
+  Creates a poll_result.
+
+  ## Examples
+
+      iex> create_poll_result(%{field: value})
+      {:ok, %PollResult{}}
+
+      iex> create_poll_result(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+
+  def create_poll_result(attrs),
+    do:
+      attrs
+      |> can_create_poll_result?()
+      |> create_poll_result(attrs)
+
+  defp create_poll_result(true, attrs) do
+    question = get_poll_question!(attrs["poll_questions_id"])
+
+    case question.type do
+      :single -> create_single_poll_result(attrs)
+      :multiple -> create_multiple_poll_result(attrs)
+      :open -> create_open_poll_result(attrs)
+    end
+  end
+
+  defp create_poll_result(false, _), do: {:already_exists}
+
+  defp can_create_poll_result?(attrs) do
+    with %{"poll_questions_id" => poll_questions_id, "accounts_id" => accounts_id} = attrs do
+      !Repo.exists?(
+        from r in PollResult,
+          where: r.poll_questions_id == ^poll_questions_id and r.accounts_id == ^accounts_id
+      )
+    end
+  end
+
+  defp create_single_poll_result(attrs) do
+    %PollResult{}
+    |> PollResult.single_changeset(attrs)
+    |> Repo.insert()
+  end
+
+  defp create_multiple_poll_result(attrs) do
+    changesets =
+      %PollResult{}
+      |> PollResult.multiple_changeset(attrs)
+
+    Repo.transaction(fn ->
+      Enum.each(changesets, &Repo.insert(&1, []))
+    end)
+  end
+
+  defp create_open_poll_result(attrs) do
+    attrs |> IO.inspect()
+
+    %PollResult{}
+    |> PollResult.open_changeset(attrs)
+    |> Repo.insert()
+  end
 end

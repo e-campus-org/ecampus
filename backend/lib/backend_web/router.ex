@@ -90,6 +90,7 @@ defmodule BackendWeb.Router do
     post("/polls/:id/questions", PollController, :create_question)
     put("/polls/:id/questions/:question_id", PollController, :update_question)
     delete("/polls/:id/questions/:question_id", PollController, :delete_question)
+    post("/polls/:id/questions/:question_id/answer_question", PollController, :answer_question)
   end
 
   # Other scopes may use custom stacks.

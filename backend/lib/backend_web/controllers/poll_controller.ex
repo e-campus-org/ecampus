@@ -9,7 +9,8 @@ defmodule BackendWeb.PollController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher)
+  plug(:is_teacher when action not in [:answer_poll_question])
+  plug(:is_student when action in [:answer_poll_question])
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Polls.list_polls(params)
@@ -83,6 +84,18 @@ defmodule BackendWeb.PollController do
              id: String.to_integer(question_id)
            }) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def answer_question(conn, %{"id" => _, "question_id" => question_id, "answer" => answer_params}) do
+    %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
+
+    case answer_params
+         |> Map.put("poll_questions_id", String.to_integer(question_id))
+         |> Map.put("accounts_id", account_id)
+         |> Polls.create_poll_result() do
+      {:ok, _} -> send_resp(conn, :created, "")
+      {:already_exists} -> send_resp(conn, :conflict, "")
     end
   end
 end
