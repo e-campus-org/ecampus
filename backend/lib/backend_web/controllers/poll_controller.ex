@@ -1,7 +1,6 @@
 defmodule BackendWeb.PollController do
   use BackendWeb, :controller
 
-  alias Backend.Polls.PollResult
   alias Backend.Polls.PollQuestion
   alias Backend.Polls
   alias Backend.Polls.Poll
