@@ -254,7 +254,6 @@ declare namespace Classes {
         description: string;
         lesson_id: number;
         questions: ReadClassQuizQuestionDTO[];
-        estimation: Record<string, number>;
     }
 
     interface ReadClassLessonInfoDTO {

@@ -12,7 +12,6 @@ defmodule Backend.QuizzesFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-        estimation: %{},
         title: "some title"
       })
       |> Backend.Quizzes.create_quiz()

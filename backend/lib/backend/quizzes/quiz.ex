@@ -10,7 +10,6 @@ defmodule Backend.Quizzes.Quiz do
   schema "quizzes" do
     field(:description, :string)
     field(:title, :string)
-    field(:estimation, :map)
     belongs_to(:lesson, Backend.Lessons.Lesson)
 
     many_to_many(:questions, Backend.Quizzes.Question,
@@ -24,7 +23,7 @@ defmodule Backend.Quizzes.Quiz do
   @doc false
   def changeset(quiz, attrs) do
     quiz
-    |> cast(attrs, [:title, :description, :estimation, :lesson_id])
+    |> cast(attrs, [:title, :description, :lesson_id])
     |> validate_required([:title, :lesson_id])
     |> foreign_key_constraint(:lesson_id)
   end

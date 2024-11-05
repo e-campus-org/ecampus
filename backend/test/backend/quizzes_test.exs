@@ -8,7 +8,7 @@ defmodule Backend.QuizzesTest do
 
     import Backend.QuizzesFixtures
 
-    @invalid_attrs %{description: nil, title: nil, estimation: nil}
+    @invalid_attrs %{description: nil, title: nil}
 
     test "list_quizzes/0 returns all quizzes" do
       quiz = quiz_fixture()
@@ -21,12 +21,11 @@ defmodule Backend.QuizzesTest do
     end
 
     test "create_quiz/1 with valid data creates a quiz" do
-      valid_attrs = %{description: "some description", title: "some title", estimation: %{}}
+      valid_attrs = %{description: "some description", title: "some title"}
 
       assert {:ok, %Quiz{} = quiz} = Quizzes.create_quiz(valid_attrs)
       assert quiz.description == "some description"
       assert quiz.title == "some title"
-      assert quiz.estimation == %{}
     end
 
     test "create_quiz/1 with invalid data returns error changeset" do
@@ -35,12 +34,15 @@ defmodule Backend.QuizzesTest do
 
     test "update_quiz/2 with valid data updates the quiz" do
       quiz = quiz_fixture()
-      update_attrs = %{description: "some updated description", title: "some updated title", estimation: %{}}
+
+      update_attrs = %{
+        description: "some updated description",
+        title: "some updated title"
+      }
 
       assert {:ok, %Quiz{} = quiz} = Quizzes.update_quiz(quiz, update_attrs)
       assert quiz.description == "some updated description"
       assert quiz.title == "some updated title"
-      assert quiz.estimation == %{}
     end
 
     test "update_quiz/2 with invalid data returns error changeset" do

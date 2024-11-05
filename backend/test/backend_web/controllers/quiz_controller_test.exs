@@ -7,15 +7,13 @@ defmodule BackendWeb.QuizControllerTest do
 
   @create_attrs %{
     description: "some description",
-    title: "some title",
-    estimation: %{}
+    title: "some title"
   }
   @update_attrs %{
     description: "some updated description",
-    title: "some updated title",
-    estimation: %{}
+    title: "some updated title"
   }
-  @invalid_attrs %{description: nil, title: nil, estimation: nil}
+  @invalid_attrs %{description: nil, title: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -38,7 +36,6 @@ defmodule BackendWeb.QuizControllerTest do
       assert %{
                "id" => ^id,
                "description" => "some description",
-               "estimation" => %{},
                "title" => "some title"
              } = json_response(conn, 200)["data"]
     end
@@ -61,7 +58,6 @@ defmodule BackendWeb.QuizControllerTest do
       assert %{
                "id" => ^id,
                "description" => "some updated description",
-               "estimation" => %{},
                "title" => "some updated title"
              } = json_response(conn, 200)["data"]
     end

@@ -5,7 +5,7 @@
                 <div>{{ $t("components.widgets.my.class.quiz") }}</div>
                 <div>
                     <span>{{ totalAnsweredQuestion }} / {{ totalQuestions }}</span>
-                    <span v-if="mark" class="ml-2">{{ $t("components.widgets.my.class.mark", { mark }) }}</span>
+                    <span v-if="totalGrade" class="ml-2">{{ $t("components.widgets.my.class.mark", { totalGrade }) }}</span>
                 </div>
             </div>
         </template>
@@ -140,27 +140,6 @@ const canAnswer = computed(() => {
 });
 
 const showAnswerButton = computed(() => currentQuestion.value?.your_answer?.length === 0);
-
-const mark = computed(() => {
-    if (totalAnsweredQuestion.value === totalQuestions.value) {
-        const estimationArr = [];
-        for (const key of Object.keys(props.quiz.estimation)) {
-            estimationArr.push({
-                key,
-                value: props.quiz.estimation[key]
-            });
-        }
-        estimationArr.sort((a, b) => b.value - a.value);
-        for (const { key, value } of estimationArr) {
-            if (totalGrade.value >= value) {
-                return key;
-            }
-        }
-        return null;
-    } else {
-        return null;
-    }
-});
 
 function startQuiz() {
     started.value = true;
