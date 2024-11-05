@@ -166,7 +166,6 @@ async function handleDeleteItem(deleteItem) {
 }
 async function handleDeleteQuestions(deleteId:number) {
     try {
-        console.log(deleteId)
         await useFetch(`/lesson_topics/${deleteId}`, {
             method: "DELETE"
         });
