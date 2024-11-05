@@ -4,8 +4,7 @@ defmodule BackendWeb.QuizController do
   alias Backend.Quizzes
   alias Backend.Quizzes.Quiz
 
-  alias Backend.Questions
-  alias Backend.QuizzesQuestions.QuizQuestion
+  alias Backend.Quizzes.QuizQuestion
 
   import Backend.Auth.Plugs
 
@@ -68,7 +67,7 @@ defmodule BackendWeb.QuizController do
     question_params = Map.put(question_params, "quiz_id", String.to_integer(id))
 
     quiz =
-      Questions.get_question!(question_id)
+      Quizzes.get_question!(question_id)
       |> Quizzes.update_question(question_params)
 
     render(conn, :show, quiz: quiz)

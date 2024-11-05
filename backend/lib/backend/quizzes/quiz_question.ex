@@ -1,10 +1,10 @@
-defmodule Backend.QuizzesQuestions.QuizQuestion do
+defmodule Backend.Quizzes.QuizQuestion do
   use Ecto.Schema
   import Ecto.Changeset
 
   @primary_key false
   schema "quizzes_questions" do
-    belongs_to(:questions, Backend.Questions.Question,
+    belongs_to(:questions, Backend.Quizzes.Question,
       foreign_key: :question_id,
       primary_key: true
     )

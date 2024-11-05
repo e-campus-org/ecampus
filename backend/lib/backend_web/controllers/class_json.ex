@@ -2,10 +2,10 @@ defmodule BackendWeb.ClassJSON do
   alias Backend.Classes.Class
   alias Backend.LessonTopics.LessonTopic
   alias Backend.Quizzes.Quiz
-  alias Backend.Questions.Question
-  alias Backend.Questions.Answer
+  alias Backend.Quizzes.Question
+  alias Backend.Quizzes.Answer
   alias Backend.Accounts.Account
-  alias Backend.AnsweredQuestions.AnsweredQuestion
+  alias Backend.Quizzes.AnsweredQuestion
 
   @doc """
   Renders a list of classes.

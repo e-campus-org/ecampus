@@ -1,4 +1,4 @@
-defmodule Backend.Questions.Answer do
+defmodule Backend.Quizzes.Answer do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -14,7 +14,7 @@ defmodule Backend.Questions.Answer do
     field(:is_correct, :boolean, default: false)
     field(:correct_value, :string)
     field(:sequence_order_number, :integer)
-    belongs_to(:question, Backend.Questions.Question)
+    belongs_to(:question, Backend.Quizzes.Question)
 
     timestamps(type: :utc_datetime)
   end

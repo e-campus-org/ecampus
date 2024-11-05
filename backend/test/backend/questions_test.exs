@@ -4,7 +4,7 @@ defmodule Backend.QuestionsTest do
   alias Backend.Questions
 
   describe "questions" do
-    alias Backend.Questions.Question
+    alias Backend.Quizzes.Question
 
     import Backend.QuestionsFixtures
 
@@ -21,7 +21,13 @@ defmodule Backend.QuestionsTest do
     end
 
     test "create_question/1 with valid data creates a question" do
-      valid_attrs = %{type: :single, title: "some title", subtitle: "some subtitle", grade: 42, answers: %{}}
+      valid_attrs = %{
+        type: :single,
+        title: "some title",
+        subtitle: "some subtitle",
+        grade: 42,
+        answers: %{}
+      }
 
       assert {:ok, %Question{} = question} = Questions.create_question(valid_attrs)
       assert question.type == :single
@@ -37,7 +43,14 @@ defmodule Backend.QuestionsTest do
 
     test "update_question/2 with valid data updates the question" do
       question = question_fixture()
-      update_attrs = %{type: :multiple, title: "some updated title", subtitle: "some updated subtitle", grade: 43, answers: %{}}
+
+      update_attrs = %{
+        type: :multiple,
+        title: "some updated title",
+        subtitle: "some updated subtitle",
+        grade: 43,
+        answers: %{}
+      }
 
       assert {:ok, %Question{} = question} = Questions.update_question(question, update_attrs)
       assert question.type == :multiple

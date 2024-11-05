@@ -25,7 +25,7 @@ defmodule Backend.Accounts.Account do
 
     many_to_many(:taught_groups, Backend.Groups.Group, join_through: "taught_subjects")
 
-    many_to_many(:answered_questions, Backend.Questions.Question,
+    many_to_many(:answered_questions, Backend.Quizzes.Question,
       join_through: "answered_questions",
       join_keys: [student_id: :id, question_id: :id]
     )

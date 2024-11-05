@@ -1,4 +1,4 @@
-defmodule Backend.AnsweredQuestions.AnsweredQuestion do
+defmodule Backend.Quizzes.AnsweredQuestion do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -11,7 +11,7 @@ defmodule Backend.AnsweredQuestions.AnsweredQuestion do
       primary_key: true
     )
 
-    belongs_to(:questions, Backend.Questions.Question,
+    belongs_to(:questions, Backend.Quizzes.Question,
       foreign_key: :question_id,
       primary_key: true
     )

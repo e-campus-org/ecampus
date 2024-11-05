@@ -10,11 +10,11 @@ defmodule Backend.Quizzes do
 
   alias Backend.Quizzes.Quiz
 
-  alias Backend.Questions.Question
+  alias Backend.Quizzes.Question
 
-  alias Backend.QuizzesQuestions.QuizQuestion
+  alias Backend.Quizzes.QuizQuestion
 
-  alias Backend.AnsweredQuestions.AnsweredQuestion
+  alias Backend.Quizzes.AnsweredQuestion
 
   @doc """
   Returns the list of quizzes.
@@ -140,6 +140,22 @@ defmodule Backend.Quizzes do
   def change_quiz(%Quiz{} = quiz, attrs \\ %{}) do
     Quiz.changeset(quiz, attrs)
   end
+
+  @doc """
+  Gets a single question.
+
+  Raises `Ecto.NoResultsError` if the Question does not exist.
+
+  ## Examples
+
+      iex> get_question!(123)
+      %Question{}
+
+      iex> get_question!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_question!(id), do: Repo.get!(Question, id) |> Repo.preload([:answers])
 
   @doc """
   Creates a question.

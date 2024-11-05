@@ -1,8 +1,8 @@
-defmodule Backend.Questions.Question do
+defmodule Backend.Quizzes.Question do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Backend.Questions.Answer
+  alias Backend.Quizzes.Answer
 
   @derive {
     Flop.Schema,
@@ -15,7 +15,7 @@ defmodule Backend.Questions.Question do
     field(:subtitle, :string)
     field(:grade, :integer)
     field(:show_correct_answer, :boolean)
-    has_many(:answers, Backend.Questions.Answer)
+    has_many(:answers, Backend.Quizzes.Answer)
 
     many_to_many(:quizzes, Backend.Quizzes.Quiz,
       join_through: "quizzes_questions",
@@ -27,8 +27,8 @@ defmodule Backend.Questions.Question do
       join_keys: [student_id: :id, question_id: :id]
     )
 
-    has_many(:answered_questions, Backend.AnsweredQuestions.AnsweredQuestion)
-    has_many(:quizzes_questions, Backend.QuizzesQuestions.QuizQuestion)
+    has_many(:answered_questions, Backend.Quizzes.AnsweredQuestion)
+    has_many(:quizzes_questions, Backend.Quizzes.QuizQuestion)
 
     timestamps(type: :utc_datetime)
   end

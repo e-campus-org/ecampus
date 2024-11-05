@@ -13,7 +13,7 @@ defmodule Backend.Quizzes.Quiz do
     field(:estimation, :map)
     belongs_to(:lesson, Backend.Lessons.Lesson)
 
-    many_to_many(:questions, Backend.Questions.Question,
+    many_to_many(:questions, Backend.Quizzes.Question,
       join_through: "quizzes_questions",
       join_keys: [quiz_id: :id, question_id: :id]
     )
