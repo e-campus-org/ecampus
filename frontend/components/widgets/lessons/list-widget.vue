@@ -35,6 +35,7 @@
             v-model="isEditModal"
             :item="selectedItem"
             @save="addEdit"
+            @questions-delete="questionsDelete"
         />
         <delete-modal v-model="isDeleteModal" :item="selectedItem" @delete="deleteItem" :name="deleteModalNames" />
     </div>
@@ -58,6 +59,8 @@ const emit = defineEmits<{
     (e: "save-item", item: Lessons.ReadLessonDTO): void;
     (e: "add-item", item: Lessons.ReadLessonDTO): void;
     (e: "delete-item", item: Lessons.ReadLessonDTO): void;
+    (e: "questions-delete", id: number): void;
+
 }>();
 
 const isEditModal = ref(false);
@@ -75,7 +78,9 @@ function openEditModal(item: any) {
         }
     }, 400);
 }
-
+function questionsDelete(id:number){
+    emit("questions-delete", id);
+}
 function openDeleteModal(item: any) {
     isNewItem.value = false;
     selectedItem.value = { ...item };
@@ -88,17 +93,24 @@ function openAddModal() {
         id: null,
         title: "",
         code: "",
-        description: ""
+        description: "",
+        questions:[]
     };
     isEditModal.value = true;
+    
 }
 
 function addEdit(editedItem: any) {
+    const trueValue = t("components.widgets.lessons.draft.trueValue");
+
+    editedItem.is_draft = editedItem.is_draft === trueValue ? true : false;
+
     if (isNewItem.value) {
-        emit("add-item", editedItem);
+        emit("add-item", editedItem); 
     } else {
-        emit("save-item", editedItem);
+        emit("save-item", editedItem); 
     }
+
     closeModal();
     isNewItem.value = false;
 }
@@ -145,7 +157,11 @@ const editModalErrors = computed(() => ({
     hours_count: t("components.widgets.lessons.error.hours_count"),
     is_draft: t("components.widgets.lessons.error.is_draft"),
     objectives: t("components.widgets.lessons.error.objectives"),
-    subject_id: t("components.widgets.lessons.error.subject_id")
+    subject_id: t("components.widgets.lessons.error.subject_id"),
+
+    question_title: t("components.widgets.lessons.error.is_draft"),
+    question_description: t("components.widgets.lessons.error.objectives"),
+    question_objectives: t("components.widgets.lessons.error.subject_id")
 }));
 const editModalNames = computed(() => ({
     title: isNewItem.value
@@ -235,7 +251,6 @@ const sortedItems = computed(() => {
             };
 
             item.is_draft = draftMap[item.is_draft.toString()] || item.is_draft;
-
             return item;
         });
 });
