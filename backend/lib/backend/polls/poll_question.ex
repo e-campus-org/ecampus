@@ -17,7 +17,7 @@ defmodule Backend.Polls.PollQuestion do
   end
 
   @doc false
-  def changeset(poll_question, attrs, required \\ true) do
+  def changeset(poll_question, attrs) do
     attrs =
       attrs
       |> Map.put("poll_answers", Map.get(attrs, "answers"))
@@ -26,7 +26,7 @@ defmodule Backend.Polls.PollQuestion do
     poll_question
     |> cast(attrs, [:title, :subtitle, :type, :poll_id])
     |> maybe_cast_assoc_answers(attrs)
-    |> maybe_validate_required(required)
+    |> validate_required([:title, :type, :poll_id])
     |> foreign_key_constraint(:poll_id)
   end
 
@@ -39,11 +39,4 @@ defmodule Backend.Polls.PollQuestion do
         changeset
     end
   end
-
-  defp maybe_validate_required(changeset, true) do
-    changeset
-    |> validate_required([:title, :type, :poll_id])
-  end
-
-  defp maybe_validate_required(changeset, false), do: changeset
 end

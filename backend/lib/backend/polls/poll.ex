@@ -22,16 +22,9 @@ defmodule Backend.Polls.Poll do
   end
 
   @doc false
-  def changeset(poll, attrs, required \\ true) do
+  def changeset(poll, attrs) do
     poll
     |> cast(attrs, [:title, :description])
-    |> maybe_validate_required(required)
-  end
-
-  defp maybe_validate_required(changeset, true) do
-    changeset
     |> validate_required([:title])
   end
-
-  defp maybe_validate_required(changeset, false), do: changeset
 end
