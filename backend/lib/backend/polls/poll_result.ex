@@ -26,7 +26,7 @@ defmodule Backend.Polls.PollResult do
   def multiple_changeset(poll_result, attrs) do
     with {:ok, answer_ids} <- Map.fetch(attrs, "answer_ids") do
       Enum.map(answer_ids, fn answer_id ->
-        single_changeset(poll_result, Map.put(attrs, "poll_answers_id", answer_id))
+        single_changeset(poll_result, Map.put(attrs, "answer_id", answer_id))
       end)
     end
   end
