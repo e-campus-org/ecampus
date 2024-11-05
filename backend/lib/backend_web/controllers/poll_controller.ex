@@ -91,12 +91,12 @@ defmodule BackendWeb.PollController do
   def answer_question(conn, %{"id" => _, "question_id" => question_id, "answer" => answer_params}) do
     %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
 
-    with {:ok, _} <-
-           answer_params
-           |> Map.put("poll_questions_id", String.to_integer(question_id))
-           |> Map.put("accounts_id", account_id)
-           |> Polls.create_poll_result() do
-      send_resp(conn, :created, "")
+    case answer_params
+         |> Map.put("poll_questions_id", String.to_integer(question_id))
+         |> Map.put("accounts_id", account_id)
+         |> Polls.create_poll_result() do
+      {:ok, _} -> send_resp(conn, :created, "")
+      {:already_exists} -> send_resp(conn, :conflict, "")
     end
   end
 end

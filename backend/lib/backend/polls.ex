@@ -368,13 +368,31 @@ defmodule Backend.Polls do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_poll_result(attrs) do
+
+  def create_poll_result(attrs),
+    do:
+      attrs
+      |> can_create_poll_result?()
+      |> create_poll_result(attrs)
+
+  defp create_poll_result(true, attrs) do
     question = get_poll_question!(attrs["poll_questions_id"])
 
     case question.type do
       :single -> create_single_poll_result(attrs)
       :multiple -> create_multiple_poll_result(attrs)
       :open -> create_open_poll_result(attrs)
+    end
+  end
+
+  defp create_poll_result(false, _), do: {:already_exists}
+
+  defp can_create_poll_result?(attrs) do
+    with %{"poll_questions_id" => poll_questions_id, "accounts_id" => accounts_id} = attrs do
+      !Repo.exists?(
+        from r in PollResult,
+          where: r.poll_questions_id == ^poll_questions_id and r.accounts_id == ^accounts_id
+      )
     end
   end
 
