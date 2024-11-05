@@ -65,7 +65,6 @@ defmodule BackendWeb.QuizController do
         "question_id" => question_id,
         "question" => question_params
       }) do
-    id |> IO.inspect()
     question_params = Map.put(question_params, "quiz_id", String.to_integer(id))
 
     quiz =

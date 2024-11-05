@@ -26,23 +26,6 @@
                     </v-btn>
                 </div>
             </template>
-
-            <template #item.actions="{ item }">
-                    <v-icon
-                        class="me-2"
-                        size="small"
-                        @click="onRowEdit(item)"
-                    >
-                        mdi-pencil
-                    </v-icon>
-                <v-icon
-                    class="me-2"
-                    size="small"
-                    @click="onRowDelete(item)"
-                >
-                    mdi-delete
-                </v-icon>
-            </template>
         </v-data-table>
 
         <edit-modal

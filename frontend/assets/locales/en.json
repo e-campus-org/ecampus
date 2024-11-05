@@ -56,14 +56,6 @@
             }
         },
         "widgets": {
-            "table": {
-                "actions": "Actions",
-                "buttons": {
-                    "edit": "Edit",
-                    "delete": "Delete",
-                    "add": "Add"
-                }
-            },
             "schedule": {
                 "today": "Today"
             },
@@ -251,6 +243,8 @@
                         "createTitle": "Create lesson topic",
                         "save": "Save changes",
                         "cancel": "Cancel",
+                        "next":"Next",
+                        "back":"Back",
                         "titleIsRequired": "Title is required"
                     }
                 },
@@ -286,7 +280,11 @@
                     "hours_count": "Hours count is required.",
                     "is_draft": "Draft is required.",
                     "objectives": "Objectives is required.",
-                    "subject_id": "Subject is required."
+                    "subject_id": "Subject is required.",
+
+                    "question_title": "Title is required",
+                    "question_description": "Description is required",
+                    "question_objectives": "Objectives is required"
                 },
                 "draft": {
                     "trueValue": "Yes",
