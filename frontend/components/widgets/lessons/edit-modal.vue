@@ -146,8 +146,6 @@ watch(
     newVal => {
         dialog.value = newVal;
         if (newVal && props.item) {
-
-            console.log(props.item)
             
             editedItem.id = props.item.id;
             editedItem.title = props.item.title;
