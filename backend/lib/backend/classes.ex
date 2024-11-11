@@ -80,7 +80,6 @@ defmodule Backend.Classes do
           :topics,
           :quizzes,
           :subject,
-          quizzes: [:questions, questions: [:answers, :answered_questions, :quizzes_questions]],
           subject: [:teachers]
         ]
       ])

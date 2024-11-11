@@ -85,8 +85,7 @@ defmodule BackendWeb.ClassJSON do
       id: quiz.id,
       title: quiz.title,
       description: quiz.description,
-      lesson_id: quiz.lesson_id,
-      questions: for(question <- quiz.questions, do: data_question(question, quiz.id))
+      lesson_id: quiz.lesson_id
     }
   end
 

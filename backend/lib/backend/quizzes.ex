@@ -226,6 +226,46 @@ defmodule Backend.Quizzes do
     |> Repo.delete()
   end
 
+  def start_quiz(%{
+        quiz_id: quiz_id,
+        student_id: student_id
+      }),
+      do:
+        Repo.get!(Quiz, quiz_id)
+        |> Repo.preload([:questions, questions: [:answers]])
+        |> shuffle_and_get_question()
+        |> create_empty_answered_questions(student_id)
+        |> insert_empty_answered_questions()
+
+  defp insert_empty_answered_questions(quiz) do
+    Repo.transaction(fn ->
+      Enum.each(quiz.questions, &Repo.insert(&1, []))
+    end)
+  end
+
+  defp create_empty_answered_questions(%Quiz{} = quiz, student_id),
+    do: %{
+      quiz
+      | questions:
+          Enum.map(quiz.questions, fn question ->
+            %AnsweredQuestion{}
+            |> AnsweredQuestion.changeset(%{
+              quiz_id: quiz.id,
+              question_id: question.id,
+              student_id: student_id,
+              answer: nil
+            })
+          end)
+    }
+
+  defp shuffle_and_get_question(%Quiz{} = quiz),
+    do: %{
+      quiz
+      | questions:
+          Enum.shuffle(quiz.questions)
+          |> Enum.take(quiz.questions_per_attempt)
+    }
+
   def answer_question(%{
         quiz_id: quiz_id,
         question_id: question_id,
