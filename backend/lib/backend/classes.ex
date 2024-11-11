@@ -98,9 +98,13 @@ defmodule Backend.Classes do
 
   """
   def create_class(attrs \\ %{}) do
-    %Class{}
-    |> Class.changeset(attrs)
-    |> Repo.insert()
+    changeset =
+      %Class{}
+      |> Class.changeset(attrs)
+
+    with {:ok, class} <- Repo.insert(changeset) do
+      {:ok, get_class!(class.id)}
+    end
   end
 
   @doc """
@@ -116,9 +120,13 @@ defmodule Backend.Classes do
 
   """
   def update_class(%Class{} = class, attrs) do
-    class
-    |> Class.changeset(attrs)
-    |> Repo.update()
+    changeset =
+      class
+      |> Class.changeset(attrs)
+
+    with {:ok, class} <- Repo.update(changeset) do
+      {:ok, get_class!(class.id)}
+    end
   end
 
   @doc """
