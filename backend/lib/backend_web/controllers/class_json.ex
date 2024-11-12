@@ -2,10 +2,7 @@ defmodule BackendWeb.ClassJSON do
   alias Backend.Classes.Class
   alias Backend.LessonTopics.LessonTopic
   alias Backend.Quizzes.Quiz
-  alias Backend.Quizzes.Question
-  alias Backend.Quizzes.Answer
   alias Backend.Accounts.Account
-  alias Backend.Quizzes.AnsweredQuestion
 
   @doc """
   Renders a list of classes.
@@ -88,57 +85,6 @@ defmodule BackendWeb.ClassJSON do
       lesson_id: quiz.lesson_id
     }
   end
-
-  defp data_question(%Question{} = question, quiz_id) do
-    %{
-      id: question.id,
-      type: question.type,
-      title: question.title,
-      order:
-        case question.quizzes_questions
-             |> Enum.find(fn qq -> qq.quiz_id == quiz_id end) do
-          %{order: order} -> order
-          _ -> 1
-        end,
-      subtitle:
-        case {question.answered_questions, question.show_correct_answer} do
-          {[_ | _], true} -> question.subtitle
-          _ -> nil
-        end,
-      grade: question.grade,
-      answers:
-        for(
-          answer <- question.answers,
-          do:
-            data_answer(
-              answer,
-              length(question.answered_questions) > 0 and question.show_correct_answer
-            )
-        ),
-      your_answer:
-        for(
-          answered_question <- question.answered_questions,
-          do: data_answered_question(answered_question, question.show_correct_answer)
-        )
-    }
-  end
-
-  defp data_answer(%Answer{} = answer, show_subtitle) do
-    %{
-      id: answer.id,
-      title: answer.title,
-      subtitle:
-        case show_subtitle do
-          true -> answer.subtitle
-          _ -> nil
-        end
-    }
-  end
-
-  defp data_answered_question(%AnsweredQuestion{} = answer, true), do: answer.answer
-
-  defp data_answered_question(%AnsweredQuestion{} = answer, false),
-    do: %{answer_id: Map.get(answer.answer, "answer_id"), grade: Map.get(answer.answer, "grade")}
 
   defp data_account(%Account{} = account) do
     %{
