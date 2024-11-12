@@ -95,6 +95,13 @@ defmodule BackendWeb.QuizController do
     end
   end
 
+  def get_started_quiz(conn, %{"id" => id}) do
+    %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
+
+    quiz = Quizzes.get_started_quiz(%{quiz_id: String.to_integer(id), student_id: account_id})
+    render(conn, :show, quiz: quiz)
+  end
+
   def answer_question(conn, %{"id" => id, "question_id" => question_id, "answer" => answer}) do
     %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
 

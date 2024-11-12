@@ -226,6 +226,21 @@ defmodule Backend.Quizzes do
     |> Repo.delete()
   end
 
+  def get_started_quiz(%{
+        quiz_id: quiz_id,
+        student_id: student_id
+      }) do
+    Repo.get!(Backend.Quizzes.Quiz, quiz_id)
+    |> Repo.preload(
+      questions:
+        from(q in Backend.Quizzes.Question,
+          join: aq in assoc(q, :answered_questions),
+          where: aq.student_id == ^student_id
+        )
+    )
+    |> Repo.preload(questions: [:answers])
+  end
+
   def start_quiz(%{
         quiz_id: quiz_id,
         student_id: student_id

@@ -82,6 +82,7 @@ defmodule BackendWeb.Router do
     delete("/quizzes/:id/questions/:question_id", QuizController, :delete_question)
     post("/quizzes/:id/questions/:question_id/answer_question", QuizController, :answer_question)
     post("/quizzes/:id/start", QuizController, :start_quiz)
+    get("/quizzes/:id/started", QuizController, :get_started_quiz)
 
     get("/polls", PollController, :index)
     get("/polls/:id", PollController, :show)
