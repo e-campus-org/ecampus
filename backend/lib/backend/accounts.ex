@@ -121,17 +121,4 @@ defmodule Backend.Accounts do
   def delete_account(%Account{} = account) do
     Repo.delete(account)
   end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking account changes.
-
-  ## Examples
-
-      iex> change_account(account)
-      %Ecto.Changeset{data: %Account{}}
-
-  """
-  def change_account(%Account{} = account, attrs \\ %{}) do
-    Account.changeset(account, attrs)
-  end
 end

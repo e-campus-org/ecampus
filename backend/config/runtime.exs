@@ -1,7 +1,11 @@
 import Config
 import Dotenvy
 
-source!([".env", System.get_env()])
+case config_env() do
+  :dev -> source!([".env.dev", System.get_env()])
+  :prod -> source!([".env.prod", System.get_env()])
+  :test -> source!([".env.test", System.get_env()])
+end
 
 # Configure your database
 config :backend, Backend.Repo,
@@ -10,6 +14,8 @@ config :backend, Backend.Repo,
   hostname: env!("POSTGRES_HOSTNAME", :string),
   port: env!("POSTGRES_PORT", :integer),
   database: env!("POSTGRES_DB", :string),
+  pool:
+    if(config_env() == :test, do: Ecto.Adapters.SQL.Sandbox, else: DBConnection.ConnectionPool),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
