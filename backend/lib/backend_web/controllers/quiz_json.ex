@@ -16,6 +16,8 @@ defmodule BackendWeb.QuizJSON do
   """
   def show(%{quiz: quiz}), do: data(quiz)
 
+  def show_student_quiz(%{quiz: quiz}), do: data_student_quiz(quiz)
+
   def show_question(%{question: question}), do: data_question(question)
 
   def show_student_question(%{question: question}), do: data_student_question(question)
@@ -27,6 +29,18 @@ defmodule BackendWeb.QuizJSON do
       description: quiz.description,
       lesson_id: quiz.lesson_id,
       questions: for(question <- quiz.questions, do: data_question(question)),
+      inserted_at: quiz.inserted_at,
+      updated_at: quiz.updated_at
+    }
+  end
+
+  defp data_student_quiz(%Quiz{} = quiz) do
+    %{
+      id: quiz.id,
+      title: quiz.title,
+      description: quiz.description,
+      lesson_id: quiz.lesson_id,
+      questions: for(question <- quiz.questions, do: data_student_question(question)),
       inserted_at: quiz.inserted_at,
       updated_at: quiz.updated_at
     }
@@ -63,13 +77,26 @@ defmodule BackendWeb.QuizJSON do
       title: question.title,
       subtitle: question.subtitle,
       grade: question.grade,
-      answers: for(answer <- question.answers, do: data_student_answer(answer)),
-      your_answer:
+      answers: for(answer <- question.answers, do: data_student_answer(answer))
+    }
+    |> maybe_add_your_answer(question.answered_questions)
+  end
+
+  defp maybe_add_your_answer(data, answered_questions) do
+    has_answered = Enum.any?(answered_questions, fn aq -> not is_nil(aq.answer) end)
+
+    if has_answered do
+      Map.put(
+        data,
+        :your_answer,
         for(
-          answered_question <- question.answered_questions,
+          answered_question <- answered_questions,
           do: data_answered_question(answered_question)
         )
-    }
+      )
+    else
+      data
+    end
   end
 
   defp data_student_answer(%Answer{} = answer) do

@@ -10,6 +10,7 @@ defmodule Backend.Quizzes.Quiz do
   schema "quizzes" do
     field(:description, :string)
     field(:title, :string)
+    field(:questions_per_attempt, :integer)
     belongs_to(:lesson, Backend.Lessons.Lesson)
 
     many_to_many(:questions, Backend.Quizzes.Question,

@@ -226,27 +226,86 @@ defmodule Backend.Quizzes do
     |> Repo.delete()
   end
 
-  def answer_question(%{
+  def get_started_quiz(%{
         quiz_id: quiz_id,
+        student_id: student_id
+      }) do
+    Repo.get!(Backend.Quizzes.Quiz, quiz_id)
+    |> Repo.preload(
+      questions:
+        from(q in Backend.Quizzes.Question,
+          join: aq in assoc(q, :answered_questions),
+          where: aq.student_id == ^student_id
+        )
+    )
+    |> Repo.preload(questions: [:answers, :answered_questions])
+  end
+
+  def start_quiz(%{
+        quiz_id: quiz_id,
+        student_id: student_id
+      }),
+      do:
+        Repo.get!(Quiz, quiz_id)
+        |> Repo.preload([:questions, questions: [:answers]])
+        |> shuffle_and_get_question()
+        |> create_empty_answered_questions(student_id)
+        |> insert_empty_answered_questions()
+
+  defp insert_empty_answered_questions(quiz) do
+    Repo.transaction(fn ->
+      Enum.each(quiz.questions, &Repo.insert(&1, []))
+    end)
+  end
+
+  defp create_empty_answered_questions(%Quiz{} = quiz, student_id),
+    do: %{
+      quiz
+      | questions:
+          Enum.map(quiz.questions, fn question ->
+            %AnsweredQuestion{}
+            |> AnsweredQuestion.changeset(%{
+              quiz_id: quiz.id,
+              question_id: question.id,
+              student_id: student_id,
+              answer: nil
+            })
+          end)
+    }
+
+  defp shuffle_and_get_question(%Quiz{} = quiz),
+    do: %{
+      quiz
+      | questions:
+          Enum.shuffle(quiz.questions)
+          |> Enum.take(quiz.questions_per_attempt)
+    }
+
+  def answer_question(%{
         question_id: question_id,
         student_id: student_id,
         answer: answer
       }) do
-    with processed_answer <-
-           Repo.get!(Question, question_id)
+    with processed_answer when not is_nil(processed_answer) <-
+           from(q in Backend.Quizzes.Question,
+             join: aq in assoc(q, :answered_questions),
+             where: aq.student_id == ^student_id and is_nil(aq.answer)
+           )
+           |> Repo.one()
            |> Repo.preload([:answers])
            |> apply_answer(answer) do
-      %AnsweredQuestion{}
-      |> AnsweredQuestion.changeset(%{
-        quiz_id: quiz_id,
-        question_id: question_id,
-        student_id: student_id,
-        answer: processed_answer
-      })
-      |> Repo.insert()
-    end
+      Repo.update_all(
+        from(aq in AnsweredQuestion,
+          where: aq.student_id == ^student_id and aq.question_id == ^question_id
+        ),
+        set: [answer: processed_answer, updated_at: DateTime.utc_now()]
+      )
 
-    Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])
+      {:ok, Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])}
+    else
+      nil ->
+        {:error, "Already answered"}
+    end
   end
 
   defp apply_answer(%{type: :single} = question, %{"answer_id" => answer_id} = answer) do
@@ -288,6 +347,8 @@ defmodule Backend.Quizzes do
         })
     end
   end
+
+  defp apply_answer(nil, _), do: nil
 
   defp apply_answer(_question, answer) do
     Map.merge(answer, %{grade: 0})

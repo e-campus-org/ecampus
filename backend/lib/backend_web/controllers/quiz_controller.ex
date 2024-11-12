@@ -83,17 +83,35 @@ defmodule BackendWeb.QuizController do
     end
   end
 
-  def answer_question(conn, %{"id" => id, "question_id" => question_id, "answer" => answer}) do
+  def start_quiz(conn, %{"id" => id}) do
     %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
 
-    question =
-      Quizzes.answer_question(%{
-        quiz_id: String.to_integer(id),
-        question_id: String.to_integer(question_id),
-        student_id: account_id,
-        answer: answer
-      })
+    case Quizzes.start_quiz(%{
+           quiz_id: String.to_integer(id),
+           student_id: account_id
+         }) do
+      {:ok, _} -> send_resp(conn, :created, "")
+      {:error, _} -> send_resp(conn, :conflict, "")
+    end
+  end
 
-    render(conn, :show_student_question, question: question)
+  def get_started_quiz(conn, %{"id" => id}) do
+    %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
+
+    quiz = Quizzes.get_started_quiz(%{quiz_id: String.to_integer(id), student_id: account_id})
+    render(conn, :show_student_quiz, quiz: quiz)
+  end
+
+  def answer_question(conn, %{"question_id" => question_id, "answer" => answer}) do
+    %{private: %{:guardian_default_resource => %{"account" => %{"id" => account_id}}}} = conn
+
+    case Quizzes.answer_question(%{
+           question_id: String.to_integer(question_id),
+           student_id: account_id,
+           answer: answer
+         }) do
+      {:ok, question} -> render(conn, :show_student_question, question: question)
+      {:error, _} -> send_resp(conn, :conflict, "")
+    end
   end
 end
