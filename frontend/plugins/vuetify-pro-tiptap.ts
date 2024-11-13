@@ -29,6 +29,7 @@ import {
     Clear,
     History
 } from "vuetify-pro-tiptap";
+import { Conversation, SpeechBubble } from "@/extensions";
 import "vuetify-pro-tiptap/style.css";
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -80,7 +81,9 @@ export default defineNuxtPlugin(nuxtApp => {
             Blockquote,
             HorizontalRule,
             CodeBlock.configure({ divider: true }),
-            History.configure({ divider: true })
+            History.configure({ divider: true }),
+            Conversation,
+            SpeechBubble
         ]
     });
 

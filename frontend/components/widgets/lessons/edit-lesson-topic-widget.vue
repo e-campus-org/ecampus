@@ -64,6 +64,8 @@ const emit = defineEmits<{
     (e: "lesson-topic-changed", lesson: Lessons.UpdateLessonTopicDTO | Lessons.CreateLessonTopicDTO): void;
 }>();
 
+const editor = ref();
+
 const { t } = useI18n();
 
 const { handleSubmit, resetForm } = useForm({
