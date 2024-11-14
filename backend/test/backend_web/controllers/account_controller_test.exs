@@ -81,41 +81,41 @@ defmodule BackendWeb.AccountControllerTest do
     end
   end
 
-  # describe "update account" do
-  #   setup [:create_account]
+  describe "update account" do
+    setup [:create_account]
 
-  #   test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
-  #     conn = put(conn, ~p"/api/accounts/#{account}", account: @update_attrs)
-  #     assert %{"id" => ^id} = json_response(conn, 200)["data"]
+    test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
+      conn = put(conn, ~p"/api/accounts/#{account}", account: @update_attrs)
+      assert %{"id" => ^id} = json_response(conn, 200)
 
-  #     conn = get(conn, ~p"/api/accounts/#{id}")
+      conn = get(conn, ~p"/api/accounts/#{id}")
 
-  #     assert %{
-  #              "id" => ^id,
-  #              "email" => "some updated email",
-  #              "first_name" => "some updated first_name",
-  #              "last_name" => "some updated last_name"
-  #            } = json_response(conn, 200)["data"]
-  #   end
+      assert %{
+               "id" => ^id,
+               "email" => "some@updated.email.com",
+               "first_name" => "some updated first_name",
+               "last_name" => "some updated last_name"
+             } = json_response(conn, 200)
+    end
 
-  #   test "renders errors when data is invalid", %{conn: conn, account: account} do
-  #     conn = put(conn, ~p"/api/accounts/#{account}", account: @invalid_attrs)
-  #     assert json_response(conn, 422)["errors"] != %{}
-  #   end
-  # end
+    test "renders errors when data is invalid", %{conn: conn, account: account} do
+      conn = put(conn, ~p"/api/accounts/#{account}", account: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
 
-  # describe "delete account" do
-  #   setup [:create_account]
+  describe "delete account" do
+    setup [:create_account]
 
-  #   test "deletes chosen account", %{conn: conn, account: account} do
-  #     conn = delete(conn, ~p"/api/accounts/#{account}")
-  #     assert response(conn, 204)
+    test "deletes chosen account", %{conn: conn, account: account} do
+      conn = delete(conn, ~p"/api/accounts/#{account}")
+      assert response(conn, 204)
 
-  #     assert_error_sent 404, fn ->
-  #       get(conn, ~p"/api/accounts/#{account}")
-  #     end
-  #   end
-  # end
+      assert_error_sent 404, fn ->
+        get(conn, ~p"/api/accounts/#{account}")
+      end
+    end
+  end
 
   defp create_account(_) do
     account = account_fixture()
