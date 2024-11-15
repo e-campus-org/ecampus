@@ -52,7 +52,30 @@ defmodule BackendWeb.AccountController do
     render(conn, :show, account: account)
   end
 
-  def update(conn, %{"id" => id, "account" => account_params}) do
+  def update(conn, %{"id" => id, "account" => _account_params} = params) do
+    case Guardian.Plug.current_resource(conn) do
+      %{"account" => %{"roles" => roles, "id" => account_id}} when is_list(roles) ->
+        cond do
+          Enum.member?(roles, "admin") ->
+            apply_update(conn, params)
+
+          !Enum.member?(roles, "admin") and id == account_id ->
+            apply_update(conn, params)
+
+          true ->
+            conn
+            |> put_status(:forbidden)
+            |> json(%{error: "You can update only your account"})
+        end
+
+      _ ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Something went wrong"})
+    end
+  end
+
+  defp apply_update(conn, %{"id" => id, "account" => account_params}) do
     account = Accounts.get_account!(id)
 
     with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do

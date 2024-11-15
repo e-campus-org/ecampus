@@ -1,4 +1,4 @@
-defmodule BackendWeb.AccountControllerTest do
+defmodule BackendWeb.AccountControllerAdminTest do
   use BackendWeb.ConnCase
 
   import Backend.Auth.Guardian
@@ -13,7 +13,7 @@ defmodule BackendWeb.AccountControllerTest do
     first_name: "some first_name",
     password: "qwerty",
     password_confirmation: "qwerty",
-    roles: ["admin"]
+    roles: [:admin]
   }
   @update_attrs %{
     email: "some@updated.email.com",
@@ -29,16 +29,10 @@ defmodule BackendWeb.AccountControllerTest do
     email: "admin@ecampus.com",
     password: "qwerty",
     password_confirmation: "qwerty",
-    roles: ["admin"]
+    roles: [:admin]
   }
 
   setup %{conn: conn} do
-    user_claims = %{
-      "id" => @admin_account.id,
-      "email" => @admin_account.email,
-      "roles" => @admin_account.roles
-    }
-
     {:ok, _, token} = create_token(@admin_account)
 
     conn =
