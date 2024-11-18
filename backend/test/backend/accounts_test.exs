@@ -21,6 +21,25 @@ defmodule Backend.AccountsTest do
       assert Accounts.get_account!(account.id) == account
     end
 
+    test "default_admin_exists?/0 returns true if default admin exists" do
+      account_fixture()
+      assert Accounts.default_admin_exists?() == true
+    end
+
+    test "default_admin_exists?/0 returns false if default admin  not exists" do
+      assert Accounts.default_admin_exists?() == false
+    end
+
+    test "get_account_by_email/1 returns the account with given email" do
+      account = account_fixture()
+      assert Accounts.get_account_by_email(account.email) == {:ok, account}
+    end
+
+    test "get_account_by_email/1 returns the error with wrong email" do
+      account = account_fixture()
+      assert Accounts.get_account_by_email(account.email <> "qwe") == {:error, :not_found}
+    end
+
     test "create_account/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Accounts.create_account(@invalid_attrs)
     end

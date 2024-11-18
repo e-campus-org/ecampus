@@ -30,7 +30,7 @@ defmodule BackendWeb.AccountController do
   end
 
   def init(conn, %{"account" => account_params}) do
-    Accounts.is_default_admin_exists?()
+    Accounts.default_admin_exists?()
     |> do_init(conn, account_params)
   end
 

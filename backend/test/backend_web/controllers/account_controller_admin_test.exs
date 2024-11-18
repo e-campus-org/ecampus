@@ -32,18 +32,18 @@ defmodule BackendWeb.AccountControllerAdminTest do
     roles: [:admin]
   }
 
-  setup %{conn: conn} do
-    {:ok, _, token} = create_token(@admin_account)
-
-    conn =
-      conn
-      |> put_req_header("accept", "application/json")
-      |> put_req_header("authorization", "Bearer #{token}")
-
-    {:ok, conn: conn}
-  end
-
   describe "index" do
+    setup %{conn: conn} do
+      {:ok, _, token} = create_token(@admin_account)
+
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
+        |> put_req_header("authorization", "Bearer #{token}")
+
+      {:ok, conn: conn}
+    end
+
     test "lists all accounts", %{conn: conn} do
       conn = get(conn, ~p"/api/accounts")
       assert json_response(conn, 200)["list"] == []
@@ -51,6 +51,17 @@ defmodule BackendWeb.AccountControllerAdminTest do
   end
 
   describe "create account" do
+    setup %{conn: conn} do
+      {:ok, _, token} = create_token(@admin_account)
+
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
+        |> put_req_header("authorization", "Bearer #{token}")
+
+      {:ok, conn: conn}
+    end
+
     test "renders account when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/accounts", account: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)
@@ -75,8 +86,34 @@ defmodule BackendWeb.AccountControllerAdminTest do
     end
   end
 
+  describe "init" do
+    setup %{conn: conn} do
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
+
+      {:ok, conn: conn}
+    end
+
+    test "inti creates initial admin account", %{conn: conn} do
+      conn = post(conn, ~p"/api/accounts/init", account: @create_attrs)
+      assert conn.status == 201
+    end
+  end
+
   describe "update account" do
     setup [:create_account]
+
+    setup %{conn: conn} do
+      {:ok, _, token} = create_token(@admin_account)
+
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
+        |> put_req_header("authorization", "Bearer #{token}")
+
+      {:ok, conn: conn}
+    end
 
     test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
       conn = put(conn, ~p"/api/accounts/#{account}", account: @update_attrs)
@@ -100,6 +137,17 @@ defmodule BackendWeb.AccountControllerAdminTest do
 
   describe "delete account" do
     setup [:create_account]
+
+    setup %{conn: conn} do
+      {:ok, _, token} = create_token(@admin_account)
+
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
+        |> put_req_header("authorization", "Bearer #{token}")
+
+      {:ok, conn: conn}
+    end
 
     test "deletes chosen account", %{conn: conn, account: account} do
       conn = delete(conn, ~p"/api/accounts/#{account}")

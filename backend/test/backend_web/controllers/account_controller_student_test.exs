@@ -1,4 +1,4 @@
-defmodule BackendWeb.AccountControllerTeacherTest do
+defmodule BackendWeb.AccountControllerStudentTest do
   use BackendWeb.ConnCase
 
   import Backend.Auth.Guardian
@@ -28,7 +28,7 @@ defmodule BackendWeb.AccountControllerTeacherTest do
     email: "admin@ecampus.com",
     password: "qwerty",
     password_confirmation: "qwerty",
-    roles: [:teacher]
+    roles: [:student]
   }
 
   setup %{conn: conn} do
@@ -126,7 +126,7 @@ defmodule BackendWeb.AccountControllerTeacherTest do
   end
 
   defp create_account(_) do
-    account = account_fixture(%{roles: [:teacher]})
+    account = account_fixture(%{roles: [:student]})
     %{account: account}
   end
 end

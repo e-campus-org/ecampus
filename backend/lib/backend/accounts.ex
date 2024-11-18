@@ -44,10 +44,10 @@ defmodule Backend.Accounts do
 
   ## Examples
 
-      iex> is_default_admin_exists?()
+      iex> default_admin_exists?()
       true
   """
-  def is_default_admin_exists?() do
+  def default_admin_exists?() do
     query = from(a in Account, where: :admin in a.roles)
     Repo.exists?(query)
   end
