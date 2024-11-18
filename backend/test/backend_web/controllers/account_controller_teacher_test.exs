@@ -93,34 +93,37 @@ defmodule BackendWeb.AccountControllerTeacherTest do
     end
   end
 
-  #   describe "update your account" do
-  #     setup [:create_account]
+  describe "update your account" do
+    setup [:create_account]
 
-  #     setup %{conn: conn, account: %Account{id: id} = account} do
-  #       {:ok, _, token} = create_token(%{@account | id: id})
+    setup %{conn: conn, account: %Account{id: id} = account} do
+      conn =
+        conn
+        |> put_req_header("accept", "application/json")
 
-  #       conn =
-  #         conn
-  #         |> put_req_header("accept", "application/json")
-  #         |> put_req_header("authorization", "Bearer #{token}")
+      {:ok, conn: conn}
+    end
 
-  #       {:ok, conn: conn}
-  #     end
+    test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = account} do
+      {:ok, _, token} = create_token(account)
 
-  #     test "renders account when data is valid", %{conn: conn, account: %Account{id: id} = _account} do
-  #       conn = put(conn, ~p"/api/accounts/#{id}", account: @update_attrs)
-  #       assert %{"id" => ^id} = json_response(conn, 200)
+      conn =
+        conn
+        |> put_req_header("authorization", "Bearer #{token}")
+        |> put(~p"/api/accounts/#{id}", account: @update_attrs)
 
-  #         conn = get(conn, ~p"/api/accounts/#{id}")
+      assert %{"id" => ^id} = json_response(conn, 200)
 
-  #         assert %{
-  #                  "id" => ^id,
-  #                  "email" => "some@updated.email.com",
-  #                  "first_name" => "some updated first_name",
-  #                  "last_name" => "some updated last_name"
-  #                } = json_response(conn, 200)
-  #     end
-  #   end
+      conn = get(conn, ~p"/api/accounts/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "email" => "some@updated.email.com",
+               "first_name" => "some updated first_name",
+               "last_name" => "some updated last_name"
+             } = json_response(conn, 200)
+    end
+  end
 
   defp create_account(_) do
     account = account_fixture(%{roles: [:teacher]})

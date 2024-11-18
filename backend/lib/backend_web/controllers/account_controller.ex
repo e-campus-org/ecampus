@@ -59,7 +59,7 @@ defmodule BackendWeb.AccountController do
           Enum.member?(roles, "admin") ->
             apply_update(conn, params)
 
-          !Enum.member?(roles, "admin") and id == account_id ->
+          !Enum.member?(roles, "admin") and account_id == String.to_integer(id) ->
             apply_update(conn, params)
 
           true ->
