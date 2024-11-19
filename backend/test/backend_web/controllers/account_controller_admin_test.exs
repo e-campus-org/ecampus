@@ -5,7 +5,11 @@ defmodule BackendWeb.AccountControllerAdminTest do
 
   import Backend.AccountsFixtures
 
+  import Backend.GroupsFixtures
+
   alias Backend.Accounts.Account
+
+  alias Backend.Groups.Group
 
   @create_attrs %{
     email: "some@email.com",
@@ -51,6 +55,8 @@ defmodule BackendWeb.AccountControllerAdminTest do
   end
 
   describe "create account" do
+    setup [:create_group]
+
     setup %{conn: conn} do
       {:ok, _, token} = create_token(@admin_account)
 
@@ -80,8 +86,36 @@ defmodule BackendWeb.AccountControllerAdminTest do
              } = json_response(conn, 200)
     end
 
+    test "renders account when data is valid and group id is correct", %{
+      conn: conn,
+      group: %Group{id: group_id}
+    } do
+      conn =
+        post(conn, ~p"/api/accounts", account: Map.put(@create_attrs, :group_id, group_id))
+
+      assert %{"id" => id} = json_response(conn, 201)
+
+      expected_email = @create_attrs.email
+      expected_first_name = @create_attrs.first_name
+      expected_last_name = @create_attrs.last_name
+
+      conn = get(conn, ~p"/api/accounts/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "email" => ^expected_email,
+               "first_name" => ^expected_first_name,
+               "last_name" => ^expected_last_name
+             } = json_response(conn, 200)
+    end
+
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, ~p"/api/accounts", account: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "renders error where group_id is invalid", %{conn: conn} do
+      conn = post(conn, ~p"/api/accounts", account: Map.put(@create_attrs, :group_id, 0))
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -102,7 +136,7 @@ defmodule BackendWeb.AccountControllerAdminTest do
   end
 
   describe "update account" do
-    setup [:create_account]
+    setup [:create_account, :create_group]
 
     setup %{conn: conn} do
       {:ok, _, token} = create_token(@admin_account)
@@ -129,8 +163,35 @@ defmodule BackendWeb.AccountControllerAdminTest do
              } = json_response(conn, 200)
     end
 
+    test "renders account when data is valid and group id is correct", %{
+      conn: conn,
+      account: %Account{id: id},
+      group: %Group{id: group_id}
+    } do
+      conn =
+        put(conn, ~p"/api/accounts/#{id}", account: Map.put(@update_attrs, :group_id, group_id))
+
+      assert %{"id" => ^id} = json_response(conn, 200)
+
+      conn = get(conn, ~p"/api/accounts/#{id}")
+
+      assert %{
+               "id" => ^id,
+               "email" => "some@updated.email.com",
+               "first_name" => "some updated first_name",
+               "last_name" => "some updated last_name"
+             } = json_response(conn, 200)
+    end
+
     test "renders errors when data is invalid", %{conn: conn, account: account} do
       conn = put(conn, ~p"/api/accounts/#{account}", account: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+
+    test "renders error where groupd id is invalid", %{conn: conn, account: account} do
+      conn =
+        put(conn, ~p"/api/accounts/#{account}", account: Map.put(@update_attrs, :group_id, 0))
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -162,5 +223,10 @@ defmodule BackendWeb.AccountControllerAdminTest do
   defp create_account(_) do
     account = account_fixture()
     %{account: account}
+  end
+
+  defp create_group(_) do
+    group = group_fixture()
+    %{group: group}
   end
 end

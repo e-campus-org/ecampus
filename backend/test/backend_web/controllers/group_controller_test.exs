@@ -94,7 +94,7 @@ defmodule BackendWeb.GroupControllerTest do
     end
 
     test "renders error where speciality_id is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/groups", group: Map.put(@create_attrs, :speciality_id, 123))
+      conn = post(conn, ~p"/api/groups", group: Map.put(@create_attrs, :speciality_id, 0))
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -150,7 +150,7 @@ defmodule BackendWeb.GroupControllerTest do
 
     test "renders error where speciality_id is invalid", %{conn: conn, group: group} do
       conn =
-        put(conn, ~p"/api/groups/#{group}", group: Map.put(@update_attrs, :speciality_id, 123))
+        put(conn, ~p"/api/groups/#{group}", group: Map.put(@update_attrs, :speciality_id, 0))
 
       assert json_response(conn, 422)["errors"] != %{}
     end
