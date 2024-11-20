@@ -34,26 +34,26 @@
                     />
                 </client-only>
             </v-col>
+            <h3>{{$t('components.widgets.lessons.topics.edit.preview') }}</h3>
+            <v-divider class="my-4" />
+            <v-col cols="12">
+                <client-only>
+                    <vuetify-viewer
+                        :value="content.value.value"
+                    />
+                </client-only>
+            </v-col>
         </v-row>
         <v-btn class="mt-4" type="submit" :loading="loading">
             {{ $t("components.widgets.lessons.edit.save") }}
         </v-btn>
     </v-form>
 </template>
+
 <script setup lang="ts">
 import { useField, useForm } from "vee-validate";
-
-/**
- * :hide-toolbar="hideToolbar"
-          :disable-toolbar="disableToolbar"
-          :outlined="outlined"
-          :dense="dense"
-          :error-messages="errorMessages"
-          rounded
-          :max-height="465"
-          :max-width="maxWidth"
-          :extensions="extensions"
- */
+import { watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
     topic: Lessons.ReadLessonTopicDTO | null;
@@ -70,7 +70,6 @@ const { handleSubmit, resetForm } = useForm({
     initialValues: {
         title: "",
         content: "",
-        description: ""
     },
     validationSchema: {
         title(v: string) {
@@ -103,7 +102,6 @@ watch(
                 values: {
                     title: newValue?.title || "",
                     content: newValue?.content || "",
-                    description: newValue?.description || ""
                 }
             });
         }

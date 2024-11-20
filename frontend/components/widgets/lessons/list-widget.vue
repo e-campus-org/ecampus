@@ -45,6 +45,7 @@
 import EditModal from "./edit-modal.vue";
 import DeleteModal from "./delete-modul.vue";
 import { ref, watch, computed } from "vue";
+import { useRouter } from "vue-router"; 
 
 const props = defineProps<{
     data: Shared.ListData<Lessons.ReadLessonDTO> | null;
@@ -67,16 +68,11 @@ const isEditModal = ref(false);
 const isDeleteModal = ref(false);
 const selectedItem = ref({});
 const isNewItem = ref(false);
+const router = useRouter();
 
 function openEditModal(item: any) {
-    emit("get-item", item);
-    setTimeout(() => {
-        const data = props.data?.list.find(el => el.id === item.id);
-        if (data) {
-            selectedItem.value = data;
-            isEditModal.value = true;
-        }
-    }, 400);
+    isEditModal.value = false; 
+    router.push(`/admin/lessons/${item.id}`); 
 }
 function questionsDelete(id:number){
     emit("questions-delete", id);
@@ -97,7 +93,6 @@ function openAddModal() {
         questions:[]
     };
     isEditModal.value = true;
-    
 }
 
 function addEdit(editedItem: any) {
@@ -106,7 +101,10 @@ function addEdit(editedItem: any) {
     editedItem.is_draft = editedItem.is_draft === trueValue ? true : false;
 
     if (isNewItem.value) {
-        emit("add-item", editedItem); 
+        emit("add-item", editedItem);
+        setTimeout(()=>{        
+            openEditModal(props.data?.list[props.data.list.length - 1])
+        },50)
     } else {
         emit("save-item", editedItem); 
     }
