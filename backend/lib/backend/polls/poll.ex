@@ -16,6 +16,8 @@ defmodule Backend.Polls.Poll do
       join_keys: [lesson_id: :id, poll_id: :id]
     )
 
+    has_many :poll_questions, Backend.Polls.PollQuestion
+
     timestamps(type: :utc_datetime)
   end
 
