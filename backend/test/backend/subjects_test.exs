@@ -6,6 +6,14 @@ defmodule Backend.SubjectsTest do
   describe "subjects" do
     alias Backend.Subjects.Subject
 
+    alias Backend.Accounts.Account
+
+    alias Backend.Groups.Group
+
+    import Backend.GroupsFixtures
+
+    import Backend.AccountsFixtures
+
     import Backend.SubjectsFixtures
 
     @invalid_attrs %{
@@ -89,9 +97,56 @@ defmodule Backend.SubjectsTest do
       assert %Ecto.Changeset{} = Subjects.change_subject(subject)
     end
 
-    # TODO: implement test
-    # test "link_subject_with_teacher_and_group/1 returns list of taught subjects" do
+    test "link_subject_with_teacher_and_group/1 returns correct taught subject entity" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
 
-    # end
+      assert {:ok, %{subject_id: ^subject_id, taught_by_id: ^teacher_id, group_id: ^group_id}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id,
+                 group_id: group_id
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong group_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id,
+                 group_id: group_id + 1
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong teacher_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id + 1,
+                 group_id: group_id
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong subject_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id + 1,
+                 taught_by_id: teacher_id,
+                 group_id: group_id
+               })
+    end
   end
 end
