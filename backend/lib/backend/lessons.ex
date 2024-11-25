@@ -112,17 +112,4 @@ defmodule Backend.Lessons do
     |> Ecto.Changeset.no_assoc_constraint(:topics)
     |> Repo.delete()
   end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking lesson changes.
-
-  ## Examples
-
-      iex> change_lesson(lesson)
-      %Ecto.Changeset{data: %Lesson{}}
-
-  """
-  def change_lesson(%Lesson{} = lesson, attrs \\ %{}) do
-    Lesson.changeset(lesson, attrs)
-  end
 end

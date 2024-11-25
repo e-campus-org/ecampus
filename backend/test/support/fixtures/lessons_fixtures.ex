@@ -11,7 +11,6 @@ defmodule Backend.LessonsFixtures do
     {:ok, lesson} =
       attrs
       |> Enum.into(%{
-        description: "some description",
         is_draft: true,
         title: "some title",
         topic: "some topic"
