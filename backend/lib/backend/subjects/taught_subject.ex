@@ -1,4 +1,4 @@
-defmodule Backend.TaughtSubjects.TaughtSubject do
+defmodule Backend.Subjects.TaughtSubject do
   use Ecto.Schema
   import Ecto.Changeset
 

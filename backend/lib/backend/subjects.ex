@@ -8,7 +8,7 @@ defmodule Backend.Subjects do
   alias Backend.Repo
 
   alias Backend.Subjects.Subject
-  alias Backend.TaughtSubjects.TaughtSubject
+  alias Backend.Subjects.TaughtSubject
 
   @doc """
   Returns the list of subjects.
