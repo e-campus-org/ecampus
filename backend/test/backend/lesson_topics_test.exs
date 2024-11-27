@@ -12,10 +12,6 @@ defmodule Backend.LessonTopicsTest do
   import Backend.SubjectsFixtures
 
   describe "lesson_topics" do
-    alias Backend.LessonTopics.LessonTopic
-
-    import Backend.LessonTopicsFixtures
-
     @invalid_attrs %{title: nil, content: nil, lesson_id: nil}
 
     test "list_lesson_topics/0 returns all lesson_topics" do
