@@ -111,17 +111,4 @@ defmodule Backend.LessonTopics do
   def delete_lesson_topic(%LessonTopic{} = lesson_topic) do
     Repo.delete(lesson_topic)
   end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking lesson_topic changes.
-
-  ## Examples
-
-      iex> change_lesson_topic(lesson_topic)
-      %Ecto.Changeset{data: %LessonTopic{}}
-
-  """
-  def change_lesson_topic(%LessonTopic{} = lesson_topic, attrs \\ %{}) do
-    LessonTopic.changeset(lesson_topic, attrs)
-  end
 end
