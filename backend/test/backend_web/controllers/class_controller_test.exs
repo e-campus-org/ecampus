@@ -72,8 +72,10 @@ defmodule BackendWeb.ClassControllerTest do
 
       conn = get(conn, ~p"/api/classes/#{id}")
 
-      expected_begin_date = @create_attrs.begin_date
+      expected_begin_date = DateTime.to_iso8601(@create_attrs.begin_date)
       expected_classroom = @create_attrs.classroom
+
+      expected_begin_date |> IO.inspect()
 
       assert %{
                "id" => ^id,
@@ -100,7 +102,7 @@ defmodule BackendWeb.ClassControllerTest do
       group: %{id: group_id}
     } do
       conn =
-        put(conn, ~p"/api/classes/#{class}",
+        put(conn, ~p"/api/classes/#{id}",
           class: %{@update_attrs | lesson_id: lesson_id, group_id: group_id}
         )
 
@@ -108,8 +110,8 @@ defmodule BackendWeb.ClassControllerTest do
 
       conn = get(conn, ~p"/api/classes/#{id}")
 
-      expected_begin_date = @create_attrs.begin_date
-      expected_classroom = @create_attrs.classroom
+      expected_begin_date = DateTime.to_iso8601(@update_attrs.begin_date)
+      expected_classroom = @update_attrs.classroom
 
       assert %{
                "id" => ^id,
@@ -145,7 +147,7 @@ defmodule BackendWeb.ClassControllerTest do
     test "renders class when data is valid", %{
       conn: conn,
       class: %{id: id},
-      account: %{id: account_id} = account,
+      account: %{id: account_id},
       group: %{id: group_id}
     } do
       conn =
@@ -154,9 +156,8 @@ defmodule BackendWeb.ClassControllerTest do
           "group_id" => group_id
         })
 
-      assert %{teachers: teachers, id: id} = json_response(conn, 200)
-      assert id == class.id
-      assert Enum.at(teachers, 0) == account
+      assert %{"teachers" => teachers, "id" => ^id} = json_response(conn, 200)
+      assert %{"id" => ^account_id} = Enum.at(teachers, 0)
     end
   end
 
