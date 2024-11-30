@@ -12,7 +12,8 @@ defmodule Backend.QuizzesFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-        title: "some title"
+        title: "some title",
+        questions_per_attempt: 10
       })
       |> Backend.Quizzes.create_quiz()
 

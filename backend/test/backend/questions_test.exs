@@ -15,11 +15,6 @@ defmodule Backend.QuestionsTest do
     #   assert Questions.list_questions() == [question]
     # end
 
-    # test "get_question!/1 returns the question with given id" do
-    #   question = question_fixture()
-    #   assert Questions.get_question!(question.id) == question
-    # end
-
     # test "create_question/1 with valid data creates a question" do
     #   valid_attrs = %{
     #     type: :single,
