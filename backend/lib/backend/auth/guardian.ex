@@ -29,7 +29,7 @@ defmodule Backend.Auth.Guardian do
     Bcrypt.verify_pass(password, password_hash)
   end
 
-  defp create_token(account) do
+  def create_token(account) do
     user_claims = %{"id" => account.id, "email" => account.email, "roles" => account.roles}
 
     {:ok, token, _claims} =

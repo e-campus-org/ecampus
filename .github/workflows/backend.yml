@@ -1,0 +1,58 @@
+name: Frontend Workflows
+
+on:
+    push:
+        branches:
+            - develop
+            - main
+    pull_request:
+        branches:
+            - develop
+            - main
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+
+        defaults:
+            run:
+                working-directory: backend
+
+        steps:
+            - name: Check out source
+              uses: actions/checkout@v2
+
+            - name: Set up Elixir
+              id: beam
+              uses: erlef/setup-beam@v1
+              with:
+                  otp-version: "24.1"
+                  elixir-version: "1.14"
+
+            - name: Restore PLT cache
+              id: plt_cache
+              uses: actions/cache/restore@v3
+              with:
+                  key: |
+                      plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+                  restore-keys: |
+                      plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-
+                  path: |
+                      priv/plts
+
+            - name: Create PLTs
+              if: steps.plt_cache.outputs.cache-hit != 'true'
+              run: mix dialyzer --plt
+
+            - name: Save PLT cache
+              id: plt_cache_save
+              uses: actions/cache/save@v3
+              if: steps.plt_cache.outputs.cache-hit != 'true'
+              with:
+                  key: |
+                      plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-${{ hashFiles('**/mix.lock') }}
+                  path: |
+                      priv/plts
+
+            - name: Run dialyzer
+              run: mix dialyzer --format github --format dialyxir

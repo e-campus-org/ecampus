@@ -24,8 +24,8 @@ defmodule Backend.Quizzes.Quiz do
   @doc false
   def changeset(quiz, attrs) do
     quiz
-    |> cast(attrs, [:title, :description, :lesson_id])
-    |> validate_required([:title, :lesson_id])
+    |> cast(attrs, [:title, :description, :lesson_id, :questions_per_attempt])
+    |> validate_required([:title, :lesson_id, :questions_per_attempt])
     |> foreign_key_constraint(:lesson_id)
   end
 end

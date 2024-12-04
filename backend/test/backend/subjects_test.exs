@@ -6,13 +6,29 @@ defmodule Backend.SubjectsTest do
   describe "subjects" do
     alias Backend.Subjects.Subject
 
+    alias Backend.Accounts.Account
+
+    alias Backend.Groups.Group
+
+    import Backend.GroupsFixtures
+
+    import Backend.AccountsFixtures
+
     import Backend.SubjectsFixtures
 
-    @invalid_attrs %{description: nil, title: nil, short_title: nil, prerequisites: nil, objectives: nil, required_texts: nil}
+    @invalid_attrs %{
+      description: nil,
+      title: nil,
+      short_title: nil,
+      prerequisites: nil,
+      objectives: nil,
+      required_texts: nil
+    }
 
     test "list_subjects/0 returns all subjects" do
       subject = subject_fixture()
-      assert Subjects.list_subjects() == [subject]
+      {:ok, %{list: list}} = Subjects.list_subjects()
+      assert Enum.map(list, fn s -> %{s | teachers: []} end) == [subject]
     end
 
     test "get_subject!/1 returns the subject with given id" do
@@ -21,7 +37,14 @@ defmodule Backend.SubjectsTest do
     end
 
     test "create_subject/1 with valid data creates a subject" do
-      valid_attrs = %{description: "some description", title: "some title", short_title: "some short_title", prerequisites: "some prerequisites", objectives: "some objectives", required_texts: "some required_texts"}
+      valid_attrs = %{
+        description: "some description",
+        title: "some title",
+        short_title: "some short_title",
+        prerequisites: "some prerequisites",
+        objectives: "some objectives",
+        required_texts: "some required_texts"
+      }
 
       assert {:ok, %Subject{} = subject} = Subjects.create_subject(valid_attrs)
       assert subject.description == "some description"
@@ -38,7 +61,15 @@ defmodule Backend.SubjectsTest do
 
     test "update_subject/2 with valid data updates the subject" do
       subject = subject_fixture()
-      update_attrs = %{description: "some updated description", title: "some updated title", short_title: "some updated short_title", prerequisites: "some updated prerequisites", objectives: "some updated objectives", required_texts: "some updated required_texts"}
+
+      update_attrs = %{
+        description: "some updated description",
+        title: "some updated title",
+        short_title: "some updated short_title",
+        prerequisites: "some updated prerequisites",
+        objectives: "some updated objectives",
+        required_texts: "some updated required_texts"
+      }
 
       assert {:ok, %Subject{} = subject} = Subjects.update_subject(subject, update_attrs)
       assert subject.description == "some updated description"
@@ -64,6 +95,58 @@ defmodule Backend.SubjectsTest do
     test "change_subject/1 returns a subject changeset" do
       subject = subject_fixture()
       assert %Ecto.Changeset{} = Subjects.change_subject(subject)
+    end
+
+    test "link_subject_with_teacher_and_group/1 returns correct taught subject entity" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:ok, %{subject_id: ^subject_id, taught_by_id: ^teacher_id, group_id: ^group_id}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id,
+                 group_id: group_id
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong group_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id,
+                 group_id: group_id + 1
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong teacher_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id,
+                 taught_by_id: teacher_id + 1,
+                 group_id: group_id
+               })
+    end
+
+    test "link_subject_with_teacher_and_group/1 fails with wrong subject_id" do
+      subject_id = subject_fixture().id
+      teacher_id = account_fixture(%{roles: [:teacher]}).id
+      group_id = group_fixture().id
+
+      assert {:error, %Ecto.Changeset{}} =
+               Subjects.link_subject_with_teacher_and_group(%{
+                 subject_id: subject_id + 1,
+                 taught_by_id: teacher_id,
+                 group_id: group_id
+               })
     end
   end
 end

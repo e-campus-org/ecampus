@@ -12,7 +12,8 @@ defmodule Backend.SpecialitiesTest do
 
     test "list_specialities/0 returns all specialities" do
       speciality = speciality_fixture()
-      assert Specialities.list_specialities() == [speciality]
+      {:ok, %{list: list}} = Specialities.list_specialities()
+      assert list == [speciality]
     end
 
     test "get_speciality!/1 returns the speciality with given id" do
@@ -35,9 +36,16 @@ defmodule Backend.SpecialitiesTest do
 
     test "update_speciality/2 with valid data updates the speciality" do
       speciality = speciality_fixture()
-      update_attrs = %{code: "some updated code", description: "some updated description", title: "some updated title"}
 
-      assert {:ok, %Speciality{} = speciality} = Specialities.update_speciality(speciality, update_attrs)
+      update_attrs = %{
+        code: "some updated code",
+        description: "some updated description",
+        title: "some updated title"
+      }
+
+      assert {:ok, %Speciality{} = speciality} =
+               Specialities.update_speciality(speciality, update_attrs)
+
       assert speciality.code == "some updated code"
       assert speciality.description == "some updated description"
       assert speciality.title == "some updated title"
@@ -45,7 +53,10 @@ defmodule Backend.SpecialitiesTest do
 
     test "update_speciality/2 with invalid data returns error changeset" do
       speciality = speciality_fixture()
-      assert {:error, %Ecto.Changeset{}} = Specialities.update_speciality(speciality, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Specialities.update_speciality(speciality, @invalid_attrs)
+
       assert speciality == Specialities.get_speciality!(speciality.id)
     end
 

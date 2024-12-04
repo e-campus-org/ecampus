@@ -11,7 +11,6 @@ defmodule Backend.AccountsFixtures do
     {:ok, account} =
       attrs
       |> Enum.into(%{
-        email: "some email",
         first_name: "some first_name",
         last_name: "some last_name",
         email: "some@email.com",
@@ -22,5 +21,7 @@ defmodule Backend.AccountsFixtures do
       |> Backend.Accounts.create_account()
 
     account
+    |> Map.put(:password, nil)
+    |> Map.put(:password_confirmation, nil)
   end
 end

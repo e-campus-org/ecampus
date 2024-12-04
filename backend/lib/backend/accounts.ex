@@ -44,10 +44,10 @@ defmodule Backend.Accounts do
 
   ## Examples
 
-      iex> is_default_admin_exists?()
+      iex> default_admin_exists?()
       true
   """
-  def is_default_admin_exists?() do
+  def default_admin_exists?() do
     query = from(a in Account, where: :admin in a.roles)
     Repo.exists?(query)
   end
@@ -120,18 +120,5 @@ defmodule Backend.Accounts do
   """
   def delete_account(%Account{} = account) do
     Repo.delete(account)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking account changes.
-
-  ## Examples
-
-      iex> change_account(account)
-      %Ecto.Changeset{data: %Account{}}
-
-  """
-  def change_account(%Account{} = account, attrs \\ %{}) do
-    Account.changeset(account, attrs)
   end
 end

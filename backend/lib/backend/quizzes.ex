@@ -129,19 +129,6 @@ defmodule Backend.Quizzes do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking quiz changes.
-
-  ## Examples
-
-      iex> change_quiz(quiz)
-      %Ecto.Changeset{data: %Quiz{}}
-
-  """
-  def change_quiz(%Quiz{} = quiz, attrs \\ %{}) do
-    Quiz.changeset(quiz, attrs)
-  end
-
-  @doc """
   Gets a single question.
 
   Raises `Ecto.NoResultsError` if the Question does not exist.

@@ -1,7 +1,7 @@
 defmodule BackendWeb.SubjectController do
   use BackendWeb, :controller
 
-  alias Backend.TaughtSubjects.TaughtSubject
+  alias Backend.Subjects.TaughtSubject
   alias Backend.Subjects
   alias Backend.Subjects.Subject
 

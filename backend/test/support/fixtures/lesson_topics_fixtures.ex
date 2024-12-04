@@ -11,7 +11,7 @@ defmodule Backend.LessonTopicsFixtures do
     {:ok, lesson_topic} =
       attrs
       |> Enum.into(%{
-        content: "some content",
+        content: %{},
         title: "some title"
       })
       |> Backend.LessonTopics.create_lesson_topic()

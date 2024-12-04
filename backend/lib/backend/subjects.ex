@@ -8,7 +8,7 @@ defmodule Backend.Subjects do
   alias Backend.Repo
 
   alias Backend.Subjects.Subject
-  alias Backend.TaughtSubjects.TaughtSubject
+  alias Backend.Subjects.TaughtSubject
 
   @doc """
   Returns the list of subjects.
@@ -135,7 +135,7 @@ defmodule Backend.Subjects do
       |> TaughtSubject.changeset(attrs)
 
     with {:ok, taught_subject} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(taught_subject, [:subject])}
+      {:ok, Repo.preload(taught_subject, [:subject, subject: [:teachers]])}
     end
   end
 end

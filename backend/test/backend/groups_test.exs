@@ -12,7 +12,8 @@ defmodule Backend.GroupsTest do
 
     test "list_groups/0 returns all groups" do
       group = group_fixture()
-      assert Groups.list_groups() == [group]
+      {:ok, %{list: list}} = Groups.list_groups()
+      assert list == [group]
     end
 
     test "get_group!/1 returns the group with given id" do

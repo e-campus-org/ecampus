@@ -1,6 +1,8 @@
 defmodule BackendWeb.SpecialityControllerTest do
   use BackendWeb.ConnCase
 
+  import Backend.Auth.Guardian
+
   import Backend.SpecialitiesFixtures
 
   alias Backend.Specialities.Speciality
@@ -17,21 +19,44 @@ defmodule BackendWeb.SpecialityControllerTest do
   }
   @invalid_attrs %{code: nil, description: nil, title: nil}
 
+  @admin_account %{
+    id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    email: "admin@ecampus.com",
+    password: "qwerty",
+    password_confirmation: "qwerty",
+    roles: ["admin"]
+  }
+
   setup %{conn: conn} do
-    {:ok, conn: put_req_header(conn, "accept", "application/json")}
+    user_claims = %{
+      "id" => @admin_account.id,
+      "email" => @admin_account.email,
+      "roles" => @admin_account.roles
+    }
+
+    {:ok, _, token} = create_token(@admin_account)
+
+    conn =
+      conn
+      |> put_req_header("accept", "application/json")
+      |> put_req_header("authorization", "Bearer #{token}")
+
+    {:ok, conn: conn}
   end
 
   describe "index" do
     test "lists all specialities", %{conn: conn} do
       conn = get(conn, ~p"/api/specialities")
-      assert json_response(conn, 200)["data"] == []
+      assert json_response(conn, 200)["list"] == []
     end
   end
 
   describe "create speciality" do
     test "renders speciality when data is valid", %{conn: conn} do
       conn = post(conn, ~p"/api/specialities", speciality: @create_attrs)
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert %{"id" => id} = json_response(conn, 201)
 
       conn = get(conn, ~p"/api/specialities/#{id}")
 
@@ -40,7 +65,7 @@ defmodule BackendWeb.SpecialityControllerTest do
                "code" => "some code",
                "description" => "some description",
                "title" => "some title"
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
@@ -52,9 +77,12 @@ defmodule BackendWeb.SpecialityControllerTest do
   describe "update speciality" do
     setup [:create_speciality]
 
-    test "renders speciality when data is valid", %{conn: conn, speciality: %Speciality{id: id} = speciality} do
+    test "renders speciality when data is valid", %{
+      conn: conn,
+      speciality: %Speciality{id: id} = speciality
+    } do
       conn = put(conn, ~p"/api/specialities/#{speciality}", speciality: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      assert %{"id" => ^id} = json_response(conn, 200)
 
       conn = get(conn, ~p"/api/specialities/#{id}")
 
@@ -63,7 +91,7 @@ defmodule BackendWeb.SpecialityControllerTest do
                "code" => "some updated code",
                "description" => "some updated description",
                "title" => "some updated title"
-             } = json_response(conn, 200)["data"]
+             } = json_response(conn, 200)
     end
 
     test "renders errors when data is invalid", %{conn: conn, speciality: speciality} do

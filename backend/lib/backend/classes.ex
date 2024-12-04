@@ -145,19 +145,6 @@ defmodule Backend.Classes do
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking class changes.
-
-  ## Examples
-
-      iex> change_class(class)
-      %Ecto.Changeset{data: %Class{}}
-
-  """
-  def change_class(%Class{} = class, attrs \\ %{}) do
-    Class.changeset(class, attrs)
-  end
-
-  @doc """
   Links subject with teacher and group.
 
   ## Examples
