@@ -12,11 +12,15 @@ on:
 
 jobs:
     lint:
-        runs-on: ubuntu24
+        runs-on: ubuntu-latest
 
         defaults:
             run:
                 working-directory: backend
+        strategy:
+            matrix:
+                otp: ["25.0.4"]
+                elixir: ["1.14.1"]
 
         steps:
             - name: Check out source
@@ -26,8 +30,8 @@ jobs:
               id: beam
               uses: erlef/setup-beam@v1
               with:
-                  otp-version: "24.2"
-                  elixir-version: "1.14"
+                  otp-version: ${{matrix.otp}}
+                  elixir-version: ${{matrix.elixir}}
 
             - name: Restore PLT cache
               id: plt_cache
