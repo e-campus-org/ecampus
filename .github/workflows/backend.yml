@@ -12,7 +12,7 @@ on:
 
 jobs:
     lint:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
 
         defaults:
             run:
@@ -26,7 +26,7 @@ jobs:
               id: beam
               uses: erlef/setup-beam@v1
               with:
-                  otp-version: "24.1"
+                  otp-version: "24.2"
                   elixir-version: "1.14"
 
             - name: Restore PLT cache

@@ -280,6 +280,9 @@ defmodule Backend.Quizzes do
          |> Repo.one()
          |> Repo.preload([:answers])
          |> apply_answer(answer) do
+      nil ->
+        {:error, "Already answered"}
+
       processed_answer ->
         Repo.update_all(
           from(aq in AnsweredQuestion,
@@ -289,9 +292,6 @@ defmodule Backend.Quizzes do
         )
 
         {:ok, Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])}
-
-      nil ->
-        {:error, "Already answered"}
     end
   end
 
