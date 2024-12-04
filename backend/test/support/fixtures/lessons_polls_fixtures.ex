@@ -10,9 +10,7 @@ defmodule Backend.LessonsPollsFixtures do
   def lesson_poll_fixture(attrs \\ %{}) do
     {:ok, lesson_poll} =
       attrs
-      |> Enum.into(%{
-
-      })
+      |> Enum.into(%{})
       |> Backend.LessonsPolls.create_lesson_poll()
 
     lesson_poll
