@@ -1,0 +1,27 @@
+Выборка с условием WHERE:
+{
+    "initial_script": "CREATE TABLE employees (id INT, name VARCHAR(50), salary INT);\nINSERT INTO employees VALUES (1, 'John', 1000), (2, 'Alice', 2000), (3, 'Bob', 1500);",
+    "tests": ["def test_high_salary(get_result): assert sorted(get_result) == sorted([('Alice',)])"],
+    "answer": "SELECT name FROM employees WHERE salary > 1500;"
+}
+
+Группировка и агрегация:
+{
+    "initial_script": "CREATE TABLE orders (product_id INT, quantity INT);\nINSERT INTO orders VALUES (1, 5), (2, 3), (1, 2), (3, 1), (2, 4);",
+    "tests": ["def test_group_sum(get_result): assert sorted(get_result) == sorted([(1, 7), (2, 7), (3, 1)])"],
+    "answer": "SELECT product_id, SUM(quantity) FROM orders GROUP BY product_id;"
+}
+
+Объединение таблиц:
+{
+    "initial_script": "CREATE TABLE students (id INT, name VARCHAR(50));\nCREATE TABLE grades (student_id INT, grade INT);\nINSERT INTO students VALUES (1, 'Alex'), (2, 'Maria');\nINSERT INTO grades VALUES (1, 90), (2, 95);",
+    "tests": ["def test_join(get_result): assert sorted(get_result) == sorted([('Alex', 90), ('Maria', 95)])"],
+    "answer": "SELECT students.name, grades.grade FROM students JOIN grades ON students.id = grades.student_id;"
+}
+
+Подзапросы:
+{
+    "initial_script": "CREATE TABLE products (id INT, name VARCHAR(50), price INT);\nINSERT INTO products VALUES (1, 'Phone', 500), (2, 'Laptop', 1000), (3, 'Tablet', 300);",
+    "tests": ["def test_above_avg(get_result): assert sorted(get_result) == sorted([('Laptop',)])"],
+    "answer": "SELECT name FROM products WHERE price > (SELECT AVG(price) FROM products);"
+}

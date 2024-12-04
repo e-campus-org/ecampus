@@ -1,0 +1,8 @@
+fastapi[all]
+requests
+celery
+redis
+pymongo
+pytest
+psycopg2
+testcontainers
