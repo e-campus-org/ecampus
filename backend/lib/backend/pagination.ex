@@ -1,4 +1,8 @@
 defmodule Backend.Pagination do
+  @moduledoc """
+  Pagination module to use in contexts
+  """
+
   def with_pagination(
         {:ok,
          {list,

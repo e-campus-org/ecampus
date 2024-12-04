@@ -10,8 +10,8 @@ defmodule BackendWeb.QuizController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action not in [:answer_question])
-  plug(:is_student when action in [:answer_question])
+  plug(:teacher? when action not in [:answer_question])
+  plug(:student? when action in [:answer_question])
 
   def index(conn, params) do
     data = Quizzes.list_quizzes(params)

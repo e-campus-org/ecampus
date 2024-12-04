@@ -8,7 +8,7 @@ defmodule BackendWeb.ClassController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action in [:create, :update, :delete])
+  plug(:teacher? when action in [:create, :update, :delete])
 
   def index(conn, params) do
     data = Classes.list_classes(params)

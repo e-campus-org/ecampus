@@ -1,4 +1,8 @@
 defmodule Backend.Auth.Guardian do
+  @moduledoc """
+  JWT management module
+  """
+
   use Guardian, otp_app: :backend
 
   alias Backend.Accounts

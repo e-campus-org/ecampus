@@ -1,4 +1,8 @@
 defmodule Backend.Auth.Pipeline do
+  @moduledoc """
+  Pipeline description module
+  """
+
   use Guardian.Plug.Pipeline,
     otp_app: :backend,
     module: Backend.Auth.Guardian,

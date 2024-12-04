@@ -1,4 +1,8 @@
 defmodule Backend.Accounts.Account do
+  @moduledoc """
+  Account schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

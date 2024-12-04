@@ -1,4 +1,8 @@
 defmodule Backend.LessonsPolls.LessonPoll do
+  @moduledoc """
+  LessonPoll schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

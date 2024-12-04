@@ -75,8 +75,6 @@ defmodule BackendWeb.ClassControllerTest do
       expected_begin_date = DateTime.to_iso8601(@create_attrs.begin_date)
       expected_classroom = @create_attrs.classroom
 
-      expected_begin_date |> IO.inspect()
-
       assert %{
                "id" => ^id,
                "begin_date" => ^expected_begin_date,

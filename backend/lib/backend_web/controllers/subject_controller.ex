@@ -9,8 +9,8 @@ defmodule BackendWeb.SubjectController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action in [:create, :update, :delete])
-  plug(:is_admin when action in [:link_subject_with_teacher_and_group])
+  plug(:teacher? when action in [:create, :update, :delete])
+  plug(:admin? when action in [:link_subject_with_teacher_and_group])
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Subjects.list_subjects(params)

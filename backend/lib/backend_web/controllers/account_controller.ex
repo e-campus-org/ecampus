@@ -8,7 +8,7 @@ defmodule BackendWeb.AccountController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_admin when action in [:create, :delete])
+  plug(:admin? when action in [:create, :delete])
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Accounts.list_accounts(params)

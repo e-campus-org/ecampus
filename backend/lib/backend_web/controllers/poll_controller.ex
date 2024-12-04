@@ -9,8 +9,8 @@ defmodule BackendWeb.PollController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher when action not in [:answer_poll_question])
-  plug(:is_student when action in [:answer_poll_question])
+  plug(:teacher? when action not in [:answer_poll_question])
+  plug(:student? when action in [:answer_poll_question])
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Polls.list_polls(params)

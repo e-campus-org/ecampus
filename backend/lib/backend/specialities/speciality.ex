@@ -1,4 +1,8 @@
 defmodule Backend.Specialities.Speciality do
+  @moduledoc """
+  Speciality schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -273,23 +273,23 @@ defmodule Backend.Quizzes do
         student_id: student_id,
         answer: answer
       }) do
-    with processed_answer when not is_nil(processed_answer) <-
-           from(q in Backend.Quizzes.Question,
-             join: aq in assoc(q, :answered_questions),
-             where: aq.student_id == ^student_id and is_nil(aq.answer)
-           )
-           |> Repo.one()
-           |> Repo.preload([:answers])
-           |> apply_answer(answer) do
-      Repo.update_all(
-        from(aq in AnsweredQuestion,
-          where: aq.student_id == ^student_id and aq.question_id == ^question_id
-        ),
-        set: [answer: processed_answer, updated_at: DateTime.utc_now()]
-      )
+    case from(q in Backend.Quizzes.Question,
+           join: aq in assoc(q, :answered_questions),
+           where: aq.student_id == ^student_id and is_nil(aq.answer)
+         )
+         |> Repo.one()
+         |> Repo.preload([:answers])
+         |> apply_answer(answer) do
+      processed_answer ->
+        Repo.update_all(
+          from(aq in AnsweredQuestion,
+            where: aq.student_id == ^student_id and aq.question_id == ^question_id
+          ),
+          set: [answer: processed_answer, updated_at: DateTime.utc_now()]
+        )
 
-      {:ok, Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])}
-    else
+        {:ok, Repo.get!(Question, question_id) |> Repo.preload([:answers, :answered_questions])}
+
       nil ->
         {:error, "Already answered"}
     end
@@ -314,24 +314,22 @@ defmodule Backend.Quizzes do
 
     answer_ids = answer_ids |> Enum.sort()
 
-    cond do
-      answer_ids == correct_ids ->
-        Map.merge(answer, %{grade: question.grade, correct: answer_ids})
+    if answer_ids == correct_ids do
+      Map.merge(answer, %{grade: question.grade, correct: answer_ids})
+    else
+      points_per_answer = question.grade / length(correct_ids)
 
-      true ->
-        points_per_answer = question.grade / length(correct_ids)
+      correct_count =
+        answer_ids
+        |> Enum.filter(&Enum.member?(correct_ids, &1))
+        |> length()
 
-        correct_count =
-          answer_ids
-          |> Enum.filter(&Enum.member?(correct_ids, &1))
-          |> length()
+      incorrect_count = length(answer_ids) - correct_count
 
-        incorrect_count = length(answer_ids) - correct_count
-
-        Map.merge(answer, %{
-          grade: max(0, points_per_answer * (correct_count - incorrect_count)),
-          correct: correct_ids
-        })
+      Map.merge(answer, %{
+        grade: max(0, points_per_answer * (correct_count - incorrect_count)),
+        correct: correct_ids
+      })
     end
   end
 

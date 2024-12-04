@@ -1,11 +1,15 @@
 defmodule Backend.Auth.Plugs do
+  @moduledoc """
+  Plugs module for authentication purposes
+  """
+
   import Plug.Conn
 
-  def is_admin(conn, _opts), do: has_role("admin", conn)
+  def admin?(conn, _opts), do: has_role("admin", conn)
 
-  def is_teacher(conn, _opts), do: has_role("teacher", conn)
+  def teacher?(conn, _opts), do: has_role("teacher", conn)
 
-  def is_student(conn, _opts), do: has_role("student", conn)
+  def student?(conn, _opts), do: has_role("student", conn)
 
   defp has_role(role, conn) do
     %{private: %{:guardian_default_resource => %{"account" => %{"roles" => roles}}}} = conn

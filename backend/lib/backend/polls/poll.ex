@@ -1,4 +1,8 @@
 defmodule Backend.Polls.Poll do
+  @moduledoc """
+  Poll schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

@@ -8,7 +8,7 @@ defmodule BackendWeb.LessonController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_teacher)
+  plug(:teacher?)
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Lessons.list_lessons(params)

@@ -1,4 +1,8 @@
 defmodule Backend.Subjects.TaughtSubject do
+  @moduledoc """
+  TaughtSubject schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

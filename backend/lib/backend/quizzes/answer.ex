@@ -1,4 +1,8 @@
 defmodule Backend.Quizzes.Answer do
+  @moduledoc """
+  Answer schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 

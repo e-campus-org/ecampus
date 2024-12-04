@@ -8,7 +8,7 @@ defmodule BackendWeb.SpecialityController do
 
   action_fallback(BackendWeb.FallbackController)
 
-  plug(:is_admin when action in [:create, :update, :delete])
+  plug(:admin? when action in [:create, :update, :delete])
 
   def index(conn, %{"page" => _page, "page_size" => _page_size} = params) do
     data = Specialities.list_specialities(params)

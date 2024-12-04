@@ -388,7 +388,7 @@ defmodule Backend.Polls do
   defp create_poll_result(false, _), do: {:already_exists}
 
   defp can_create_poll_result?(attrs) do
-    with %{"poll_questions_id" => poll_questions_id, "accounts_id" => accounts_id} = attrs do
+    with %{"poll_questions_id" => poll_questions_id, "accounts_id" => accounts_id} <- attrs do
       !Repo.exists?(
         from r in PollResult,
           where: r.poll_questions_id == ^poll_questions_id and r.accounts_id == ^accounts_id
@@ -413,8 +413,6 @@ defmodule Backend.Polls do
   end
 
   defp create_open_poll_result(attrs) do
-    attrs |> IO.inspect()
-
     %PollResult{}
     |> PollResult.open_changeset(attrs)
     |> Repo.insert()

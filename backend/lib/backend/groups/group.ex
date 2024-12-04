@@ -1,4 +1,8 @@
 defmodule Backend.Groups.Group do
+  @moduledoc """
+  Group schema module
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
 
