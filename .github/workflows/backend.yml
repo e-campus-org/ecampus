@@ -25,6 +25,11 @@ jobs:
                     --health-retries 5
 
         runs-on: ubuntu-24.04
+
+        defaults:
+            run:
+                working-directory: backend
+
         name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
         strategy:
             matrix:
@@ -93,6 +98,8 @@ jobs:
                 otp: ["25.0.4"]
                 elixir: ["1.14.1"]
 
+        name: Lint on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+
         steps:
             - name: Check out source
               uses: actions/checkout@v2
@@ -114,6 +121,9 @@ jobs:
                       plt-${{ runner.os }}-${{ steps.beam.outputs.otp-version }}-${{ steps.beam.outputs.elixir-version }}-
                   path: |
                       priv/plts
+
+            - name: Install dependencies
+              run: mix deps.get
 
             - name: Create PLTs
               if: steps.plt_cache.outputs.cache-hit != 'true'
