@@ -56,17 +56,6 @@
                                 :label="`title ${index + 1}`"
                                 :error-messages="questionErrorMessages[index]?.title"
                             />
-                            <v-text-field
-                                v-model="question.description"
-                                :label="`description ${index + 1}`"
-                                :error-messages="questionErrorMessages[index]?.description"
-                            />
-                            <v-text-field
-                                v-model="question.objectives"
-                                :label="`objectives ${index + 1}`"
-                                :error-messages="questionErrorMessages[index]?.objectives"
-                            />
-                            
                             <v-btn icon @click="removeQuestion(index)">
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
@@ -212,23 +201,12 @@ function validateInputs() {
     editedItem.questions.forEach((question, index) => {
         const errors = {
             title: [],
-            description: [],
-            objectives: []
         };
 
         if (!question.title) {
             errors.title.push(`${props.err.question_title} ` + (index + 1));
             isValid = false;
         }
-        if (!question.description) {
-            errors.description.push(`${props.err.question_description} ` + (index + 1));
-            isValid = false;
-        }
-        if (!question.objectives) {
-            errors.objectives.push(`${props.err.question_objectives} ` + (index + 1));
-            isValid = false;
-        }
-
         questionErrorMessages.value.push(errors);
     });
 

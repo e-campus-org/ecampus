@@ -91,9 +91,10 @@ async function handleSaveItem(updatedItem) {
             for (const item of updatedItem.questions) {
                 const payloadLessonsTopics = {
                     lesson_topic: {
-                        title: item.title,
-                        description:item.description,
-                        objectives:item.objectives
+                        title: item?.title,
+                        content: item?.content,
+                        lesson_id: item?.lesson_id,
+                        sort_order: item?.sort_order
                     }
                 };
 
@@ -133,10 +134,7 @@ async function handleAddItem(newItem) {
             for (const item of newItem.questions) {
                 const payloadLessonsTopics = {
                     lesson_topic: {
-                        title: item.title,
-                        description: item.description,
-                        objectives: item.objectives,
-                        content: {},
+                        title: item?.title,
                         lesson_id: response.id 
                     }
                 };

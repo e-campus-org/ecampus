@@ -156,7 +156,7 @@ declare namespace Subjects {
 declare namespace Lessons {
     interface CreateLessonDTO {
         is_draft: boolean;
-        objectives: string;
+        // objectives: string;
         subject_id: number;
         title: string;
         topic: string;
@@ -180,16 +180,12 @@ declare namespace Lessons {
 
     interface CreateLessonTopicDTO {
         title: string;
-        description: string;
-        objectives: string;
         content: string;
         lesson_id: number;
     }
 
     interface UpdateLessonTopicDTO {
         title?: string;
-        description?: string;
-        objectives?: string;
         content?: string;
         lesson_id?: number;
     }

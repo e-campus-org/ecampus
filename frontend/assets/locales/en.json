@@ -245,7 +245,8 @@
                         "cancel": "Cancel",
                         "next":"Next",
                         "back":"Back",
-                        "titleIsRequired": "Title is required"
+                        "titleIsRequired": "Title is required",
+                        "preview":"Preview"
                     }
                 },
                 "edit": {
@@ -267,6 +268,8 @@
                 "modal": {
                     "edit_title": "Edit a lessons",
                     "create_title": "Create a lessons",
+                    "delete_topic_title": "Delete a lessons topic",
+                    "delete_topic_text": "Do you really want to delete a lessons topic",
                     "delete_title": "Delete a lessons",
                     "delete_text": "Do you really want to delete a lessons",
                     "cancel": "Cancel",

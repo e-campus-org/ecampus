@@ -13,16 +13,19 @@
         </v-row>
         <v-row class="w-100">
             <v-col cols="12">
-                <v-text-field
-                    v-model="subject.value.value"
+                <v-select
                     class="w-100"
-                    clearable
-                    :error-messages="subject.errorMessage.value"
                     :label="$t('components.widgets.lessons.headers.subjectId')"
+                    :items="subjectItems"
+                    item-value="id"      
+                    item-text="title"     
+                    v-model="subject.value.value"
+                    :error-messages="subject.errorMessage.value"
                     :loading="loading"
                     :disabled="loading"
                 />
             </v-col>
+
             <v-col cols="12">
                 <v-text-field
                     v-model="title.value.value"
@@ -45,18 +48,6 @@
                     :disabled="loading"
                 />
             </v-col>
-            <v-col cols="12">
-                <v-textarea
-                    v-model="objectives.value.value"
-                    class="w-100"
-                    clearable
-                    :error-messages="objectives.errorMessage.value"
-                    :label="$t('components.widgets.lessons.headers.objectives')"
-                    :loading="loading"
-                    :disabled="loading"
-                />
-            </v-col>
-
             <v-col cols="12" sm="6" md="4" lg="3">
                 <v-text-field
                     v-model="hours.value.value"
@@ -87,10 +78,12 @@
 </template>
 <script setup lang="ts">
 import { useField, useForm } from "vee-validate";
+import { computed, watch } from 'vue';
 
 const props = defineProps<{
     lesson: Lessons.ReadLessonDTO | null;
     loading: boolean;
+    subjects: ListData<ReadSubjectDTO> | null;
 }>();
 
 const emit = defineEmits<{
@@ -101,10 +94,9 @@ const { t } = useI18n();
 
 const { handleSubmit, resetForm } = useForm({
     initialValues: {
-        subject: "",
+        subject: "",     
         title: "",
         topic: "",
-        objectives: "",
         hours: "2",
         draft: true
     },
@@ -133,9 +125,6 @@ const { handleSubmit, resetForm } = useForm({
         draft(_: string) {
             return true;
         },
-        objectives(_: string) {
-            return true;
-        },
         hours(v: number) {
             if (!/^\d+$/.test(v + "")) {
                 return t("components.widgets.lessons.edit.wrongHours");
@@ -145,19 +134,24 @@ const { handleSubmit, resetForm } = useForm({
     }
 });
 
+const subjectItems = computed(() => {
+    return props.subjects?.list?.map(subject => ({
+        id: subject.id,
+        title: subject.title  
+    })) || [];
+});
+
 const subject = useField("subject");
 const title = useField("title");
 const topic = useField("topic");
 const draft = useField("draft");
-const objectives = useField("objectives");
 const hours = useField("hours");
 
 const submit = handleSubmit(values => {
     emit("lesson-changed", {
-        subject_id: parseInt(values.subject, 10),
+        subject_id: parseInt(values.subject, 10), 
         title: values.title,
         topic: values.topic,
-        objectives: values.objectives,
         hours_count: parseInt(values.hours, 10),
         is_draft: values.draft
     });
@@ -166,17 +160,20 @@ const submit = handleSubmit(values => {
 watch(
     () => props.lesson,
     newValue => {
-        if (newValue) {
+        if (newValue ) {
+            setTimeout(()=>{ 
+            const selectedSubject = subjectItems.value.find(item => item.id == newValue.subject_id);
             resetForm({
                 values: {
-                    subject: newValue?.subject_id?.toString?.() || "",
-                    title: newValue?.title || "",
-                    topic: newValue?.topic || "",
-                    objectives: newValue?.objectives || "",
-                    hours: newValue?.hours_count?.toString?.() || "2",
-                    draft: newValue?.is_draft || true
+                    subject: selectedSubject ? selectedSubject.title.toString() : "", 
+                    title: newValue.title || "",
+                    topic: newValue.topic || "",
+                    hours: newValue.hours_count?.toString() || "2",
+                    draft: newValue.is_draft || true
                 }
-            });
+                });
+            },200)
+           
         }
     }
 );
